@@ -32,6 +32,8 @@ gem 'unicorn'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'bootstrap-sass', '3.2.0.0'
+
 group :development, :test do
   gem 'rspec-rails', '3.0.0'
   gem 'pry-rails'
