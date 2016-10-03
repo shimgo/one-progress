@@ -34,6 +34,7 @@ gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap-sass', '3.2.0.0'
+gem 'haml-rails', '0.9.0'
 gem 'omniauth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 
