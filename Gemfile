@@ -38,9 +38,10 @@ gem 'omniauth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 
 group :development, :test do
-  gem 'rspec-rails', '3.5.0'
-  gem 'pry-rails'
   gem 'pry-nav'
+  gem 'pry-rails'
+  gem 'rspec-rails', '~> 3.5.0'
+  gem 'yard'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
