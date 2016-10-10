@@ -1,0 +1,7 @@
+%div.page-header 未済のタスク
+%div.list-group
+  - @untouched_tasks.each do |task|
+    %h4.list-group-item-heading
+      = task.content
+    %p.list-group-item-text
+      = task.target_time.strftime("%H:%M") 

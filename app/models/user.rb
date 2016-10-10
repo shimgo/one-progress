@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :created_tasks, class_name: 'Task', foreign_key: 'user_id'
+
   def self.find_or_create_from_auth_hash(auth_hash)
     provider  = auth_hash[:provider]
     uid       = auth_hash[:uid]

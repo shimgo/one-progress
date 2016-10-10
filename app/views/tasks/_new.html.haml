@@ -1,0 +1,14 @@
+= form_for(@task, class: 'form-horizontal', role: 'form') do |f|
+  - if @task.errors.any?
+    %div.alert.alert-danger
+      %ul
+        - @task.errors.full_messages.each do |msg|
+          %li
+            = msg
+  %div.form-group
+    = f.label :content
+    = f.text_field :content, class: 'form-control'
+  %div.form-group
+    = f.label :target_time
+    = f.datetime_select :target_time, discard_year: true, discard_month: true, discard_day: true, minute_step: 15, default: Time.utc(0, 1, 1, 0, 0, 0)
+  = f.submit '作成', class: 'btn btn-default', data: {disable_with: '作成中'}
