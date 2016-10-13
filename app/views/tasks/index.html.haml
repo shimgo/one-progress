@@ -1,8 +1,11 @@
 %div.row
   %div.col-md-3.sidebar
     %div.nav.nav-sidebar
-      = render "new"
-      = render "index_owned"
+      - if flash[:notice]
+        %div.alert.alert-success
+          = flash[:notice]
+      = render partial: "new", locals: {task: @task}
+      = render partial: "index_owned", locals: {untouched_tasks: @untouched_tasks}
   %div.col-md-9.main
     %div.list-group
       - @all_tasks_in_progress.each do |task|
