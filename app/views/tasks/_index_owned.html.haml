@@ -1,0 +1,45 @@
+%div.page-header
+  未済のタスク
+%div.list-group
+  - untouched_tasks.each do |task|
+    %h4.list-group-item-heading
+      = task.content
+    %p.list-group-item-text
+      = task.target_time.strftime("%H:%M") 
+    %button.btn.btn-primary{'data-toggle' => "modal", 'data-target' => "#updateTask_#{task.id.to_s}"}
+      編集
+    %button.btn.btn-danger{'data-toggle' => "modal", 'data-target' => "#deleteTask_#{task.id.to_s}"}
+      削除
+      
+    %div.modal.fade.updateTask{'id' => "updateTask_#{task.id.to_s}", 'tabindex' => "-1", 'role' => "dialog", 'aria-labelledby' => "dialogHeader", 'aria-hidden' => "true"}
+      %div.modal-dialog
+        %div.modal-content
+          %div.modal-header
+            %button.close{'type' => "button", 'data-dismiss' => "modal", 'aria-hidden' => "true"}
+              &times;
+            %h4#dialogHeader.modal-title
+              タスクの編集
+            = form_for(task, url: task_path(task), remote: true) do |f|
+              %div.modal-body
+                %div.form-group
+                  = f.label :content
+                  = f.text_field :content, class: 'form-control'
+                %div.form-group
+                  = f.label :target_time
+                  = f.datetime_select :target_time, discard_year: true, discard_month: true, discard_day: true, minute_step: 10, default: Time.utc(0, 1, 1, 0, 0, 0)
+              %div.modal-footer
+                %button.btn.btn-default{'type' => "button", 'data-dismiss' => "modal"}
+                  キャンセル
+                = f.button('更新', id: 'updateTask', class: 'btn btn-primary', data: {disable_with: '更新中...'})
+
+    %div.modal.fade.deleteTask{'id' => "deleteTask_#{task.id.to_s}", 'tabindex' => "-1", 'role' => "dialog", 'aria-labelledby' => "dialogHeader", 'aria-hidden' => "true"}
+      %div.modal-dialog.modal-sm
+        %div.modal-content
+          %div.modal-header
+            削除しますか？
+          %div.modal-footer
+            %button.btn.btn-default{'type' => "button", 'data-dismiss' => "modal"}
+              キャンセル
+            = link_to('削除', task_path(task), class: "btn btn-danger", method: :delete)
+
+
