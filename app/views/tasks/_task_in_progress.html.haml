@@ -1,0 +1,25 @@
+%div.col-md-6
+  %div.panel.panel-default
+    %div.panel-body
+      %div.col-xs-2
+        = link_to(url_for_twitter(task.owner)) do
+          = image_tag @task.owner.image_url
+      %div.col-xs-10
+        = link_to(url_for_twitter(task.owner)) do
+          = task.owner.nickname
+        %br
+        = task.content
+    %div.panel-footer
+      %div.row
+        %div.col-sm-6
+          %div.small.text-muted
+            開始:  
+            = task.started_at.strftime("%Y/%m/%d %H:%M") 
+            %br
+            目標: 
+            = task.finish_targeted_at.strftime("%Y/%m/%d %H:%M")
+          %div.small.text-muted
+            %br
+        %div.col-sm-6.text-right
+          = link_to('中断', suspend_task_path(task), class: "btn btn-primary", method: :patch)
+          = link_to('完了', finish_task_path(task), class: "btn btn-primary", method: :patch)

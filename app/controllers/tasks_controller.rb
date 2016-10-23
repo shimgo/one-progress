@@ -15,12 +15,53 @@ class TasksController < ApplicationController
     redirect_to root_path, notice: 'タスクを削除しました'
   end
 
+  def finish
+    @task = current_user.created_tasks.find(params[:id])
+    if @task.finish
+      redirect_to root_path, notice: "タスクを完了しました"
+    else
+      render json: { messages: task.errors.full_messages }, 
+        status: :unprocessable_entity
+    end
+  end
+  
   def index
     user = current_user || User.new
 
     @all_tasks_in_progress = Task.in_progress
     @untouched_tasks       = user.created_tasks.untouched
+    @suspended_tasks       = user.created_tasks.suspended
     @task                  = user.created_tasks.new
+  end
+
+  def resume
+    @task = current_user.created_tasks.find(params[:id])
+    if @task.resume
+      redirect_to root_path, notice: 'タスクを再開しました'
+    else
+      render json: { messages: task.errors.full_messages }, 
+        status: :unprocessable_entity
+    end
+  end
+
+  def start
+    @task = current_user.created_tasks.find(params[:id])
+    if @task.start
+      redirect_to root_path, notice: 'タスクを開始しました'
+    else
+      render json: { messages: task.errors.full_messages }, 
+        status: :unprocessable_entity
+    end
+  end
+
+  def suspend
+    @task = current_user.created_tasks.find(params[:id])
+    if @task.suspend
+      redirect_to root_path, notice: 'タスクを中断しました'
+    else
+      render json: { messages: task.errors.full_messages }, 
+        status: :unprocessable_entity
+    end
   end
 
   def update
@@ -39,4 +80,5 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:content, :target_time)
   end
+
 end

@@ -11,17 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161007070525) do
+ActiveRecord::Schema.define(version: 20161023102127) do
 
   create_table "tasks", force: :cascade do |t|
-    t.integer  "user_id",      limit: 4
-    t.string   "content",      limit: 255, null: false
-    t.time     "target_time",              null: false
-    t.datetime "elapsed_time"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "user_id",            limit: 4
+    t.integer  "status",             limit: 4
+    t.string   "content",            limit: 255, null: false
+    t.time     "target_time",                    null: false
+    t.time     "elapsed_time"
+    t.datetime "suspended_at"
+    t.datetime "resumed_at"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "finish_targeted_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "tasks", ["user_id"], name: "index_tasks_on_user_id", using: :btree
