@@ -12,48 +12,65 @@ class Task < ActiveRecord::Base
 
   belongs_to :owner, class_name: 'User', foreign_key: 'user_id'
 
-  validates :content, length: { maximum: 300 }, presence: true
+  validates :content, length: { maximum: 200 }, presence: true
+  validates :target_time, presence: true
 
   scope :in_progress, -> { where(status: statuses.values_at(:started, :resumed)) }
 
-  def finish
-    update(
+  def finish(called_at = Time.zone.now)
+    unless ['started', 'resumed'].include?(self.status)
+      raise "statusはstartedまたはresumedである必要があります。(status: #{self.status})" 
+    end
+
+    update!(
       status: :finished, 
-      finished_at: Time.zone.now,
-      elapsed_time: calculate_elapsed_time
+      finished_at: called_at,
+      elapsed_time: calculate_elapsed_time(called_at)
     )
   end
 
-  def resume
+  def resume(called_at = Time.zone.now)
+    unless self.status == 'suspended'
+      raise "statusはsuspendedである必要があります。(status: #{self.status})" 
+    end
+
     remaining_time = target_time - elapsed_time
-    update(
+    update!(
       status: :resumed,
-      resumed_at: Time.zone.now,
-      finish_targeted_at: remaining_time < 0 ? Time.zone.now : Time.zone.now + remaining_time
+      resumed_at: called_at,
+      finish_targeted_at: remaining_time < 0 ? called_at : called_at + remaining_time
     )
   end
 
-  def start
-    update(
+  def start(called_at = Time.zone.now)
+    unless ['untouched', 'suspended'].include?(self.status)
+      raise "statusはuntouchedまたはsuspendedである必要があります。(status: #{self.status})" 
+    end
+
+    update!(
       status: :started,
-      started_at: Time.zone.now, 
-      finish_targeted_at: Time.zone.now + to_duration(target_time)
+      started_at: called_at, 
+      finish_targeted_at: called_at + to_duration(target_time)
     )
   end
 
-  def suspend
-    update(
+  def suspend(called_at = Time.zone.now)
+    unless ['started', 'resumed'].include?(self.status)
+      raise "statusはstartedまたはresumedである必要があります。(status: #{self.status})" 
+    end
+
+    update!(
       status: :suspended, 
-      suspended_at: Time.zone.now,
-      elapsed_time: calculate_elapsed_time
+      suspended_at: called_at,
+      elapsed_time: calculate_elapsed_time(called_at)
     )
   end
 
   private
 
-  def calculate_elapsed_time
+  def calculate_elapsed_time(called_at)
     self.elapsed_time ||= Time.at(0)
-    self.elapsed_time + (Time.now - (resumed_at || started_at)).to_i
+    self.elapsed_time + (called_at - (resumed_at || started_at)).to_i
   end
 
   def to_duration(time)
