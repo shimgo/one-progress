@@ -5,9 +5,9 @@
         %div.alert.alert-success
           = flash[:notice]
       = render partial: "new", locals: {task: @task}
-      = render partial: "index_owned", locals: {untouched_tasks: @untouched_tasks}
+      %h4 未着手
+      = render partial: "stopped_task", collection: @untouched_tasks, as: :task
+      %h4 保留中
+      = render partial: "stopped_task", collection: @suspended_tasks, as: :task
   %div.col-md-9.main
-    %div.list-group
-      - @all_tasks_in_progress.each do |task|
-        %h4.list-group-item-heading
-          = task.content
+    = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task
