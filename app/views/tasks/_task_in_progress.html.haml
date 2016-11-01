@@ -3,10 +3,10 @@
     %div.panel-body
       %div.col-xs-2
         = link_to(url_for_twitter(task.owner)) do
-          = image_tag @task.owner.image_url
+          = image_tag task.owner.image_url
       %div.col-xs-10
         = link_to(url_for_twitter(task.owner)) do
-          = task.owner.nickname
+          = task.owner.username
         %br
         = task.content
     %div.panel-footer
