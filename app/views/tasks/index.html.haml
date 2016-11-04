@@ -6,11 +6,12 @@
           %div.alert.alert-success
             = flash[:notice]
         - if current_user.twitter_user
-          = link_to(url_for_twitter(task.owner)) do
-            = image_tag task.owner.image_url
+          = link_to(url_for_twitter(current_user)) do
+            = image_tag current_user.image_url
             %strong
               = current_user.username
         - else
+          = image_tag 'guest_user.png'
           %strong
             = current_user.username
         = render partial: "new", locals: {task: @task}

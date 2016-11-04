@@ -5,12 +5,14 @@
         - if task.owner.twitter_user
           = link_to(url_for_twitter(task.owner)) do
             = image_tag task.owner.image_url
+        - if task.owner.guest_user
+          = image_tag 'guest_user.png'
       %div.col-xs-10
         - if task.owner.twitter_user
           = link_to(url_for_twitter(task.owner)) do
             %strong
               = task.owner.username
-        - else
+        - if task.owner.guest_user
           %strong
             = task.owner.username
         %br
