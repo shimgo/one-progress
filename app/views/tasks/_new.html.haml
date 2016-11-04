@@ -7,8 +7,9 @@
             = msg
   %div.form-group
     = f.label :content
-    = f.text_field :content, class: 'form-control'
+    = f.text_area :content, class: 'form-control', rows: 4
   %div.form-group
     = f.label :target_time
     = f.datetime_select :target_time, discard_year: true, discard_month: true, discard_day: true, minute_step: 10, default: {hour: 0, minute: 0}
-  = f.submit '作成', class: 'btn btn-default', data: {disable_with: '作成中'}
+  %div.text-right
+    = f.submit '作成', class: 'btn btn-default btn-primary', data: {disable_with: '作成中'}

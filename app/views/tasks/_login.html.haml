@@ -1,0 +1,5 @@
+= form_for(:session, url: login_path, class:'form-horizontal', role: 'form') do |f|
+  %div.form-group
+    = f.label :name
+    = f.text_field :username, class: 'form-control'
+  = f.submit 'ログイン', class: 'btn btn-default', data: {disable_with: 'ログイン中'}

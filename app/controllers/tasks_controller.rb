@@ -26,12 +26,17 @@ class TasksController < ApplicationController
   end
   
   def index
-    user = current_user || User.new
+    user = current_user
+    if user
+      log_in(user)
+      @untouched_tasks       = user.created_tasks.untouched
+      @suspended_tasks       = user.created_tasks.suspended
+      @task                  = user.created_tasks.new
+    else
+      @user = User.new
+    end
 
     @all_tasks_in_progress = Task.in_progress
-    @untouched_tasks       = user.created_tasks.untouched
-    @suspended_tasks       = user.created_tasks.suspended
-    @task                  = user.created_tasks.new
   end
 
   def resume

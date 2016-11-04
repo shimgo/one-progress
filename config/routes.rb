@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   end
   root to: 'tasks#index'
   get '/auth/:provider/callback' => 'sessions#create'
+  post '/login' => 'sessions#create'
   get '/logout' => 'sessions#destroy', as: :logout
 end
