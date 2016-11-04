@@ -66,6 +66,10 @@ class Task < ActiveRecord::Base
     )
   end
 
+  def owner?(user)
+    owner.id == user.id
+  end
+
   private
 
   def calculate_elapsed_time(called_at)

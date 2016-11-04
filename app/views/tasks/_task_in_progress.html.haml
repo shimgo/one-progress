@@ -27,5 +27,6 @@
             目標: 
             = task.finish_targeted_at.strftime("%Y/%m/%d %H:%M")
         %div.col-sm-6.text-right
-          = link_to('中断', suspend_task_path(task), class: "btn btn-primary", method: :patch)
-          = link_to('完了', finish_task_path(task), class: "btn btn-primary", method: :patch)
+          - if task.owner?(current_user)
+            = link_to('中断', suspend_task_path(task), class: "btn btn-primary", method: :patch)
+            = link_to('完了', finish_task_path(task), class: "btn btn-primary", method: :patch)
