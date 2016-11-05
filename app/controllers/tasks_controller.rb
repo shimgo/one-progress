@@ -29,14 +29,15 @@ class TasksController < ApplicationController
     user = current_user
     if user
       log_in(user)
-      @untouched_tasks       = user.created_tasks.untouched
-      @suspended_tasks       = user.created_tasks.suspended
-      @task                  = user.created_tasks.new
+      @untouched_tasks        = user.created_tasks.untouched
+      @suspended_tasks        = user.created_tasks.suspended
+      @user_tasks_in_progress = user.created_tasks.in_progress
+      @task                   = user.created_tasks.new
     else
-      @user = User.new
+      user = User.new
     end
 
-    @all_tasks_in_progress = Task.in_progress
+    @all_tasks_in_progress = Task.in_progress.where('user_id <> ?', user.id)
   end
 
   def resume

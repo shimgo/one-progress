@@ -21,6 +21,7 @@
         = render partial: "stopped_task", collection: @suspended_tasks, as: :task
       - else
         %h4 ログイン
-        = render partial: "login", locals: {user: @user}
+        = render partial: "login"
   %div.col-md-9.main
+    = render partial: "task_in_progress", collection: @user_tasks_in_progress, as: :task
     = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task
