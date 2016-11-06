@@ -12,6 +12,6 @@ class TwitterUser < ActiveRecord::Base
       twitter_user.save!
     end
 
-    twitter_user.user
+    twitter_user
   end
 end

@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
 
   def self.find_or_create_from_auth_hash(auth_hash)
     if auth_hash[:provider] == 'twitter'
-      TwitterUser.find_or_create_from_auth_hash(auth_hash)
+      twitter_user = TwitterUser.find_or_create_from_auth_hash(auth_hash)
+      twitter_user.user
     end
   end
 
