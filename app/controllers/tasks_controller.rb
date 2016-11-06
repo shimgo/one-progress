@@ -37,7 +37,7 @@ class TasksController < ApplicationController
       user = User.new
     end
 
-    @all_tasks_in_progress = Task.in_progress.where('user_id <> ?', user.id)
+    @all_tasks_in_progress = Task.in_progress.where('user_id <> ?', user.id || '')
   end
 
   def resume
