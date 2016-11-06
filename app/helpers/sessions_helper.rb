@@ -1,10 +1,14 @@
 module SessionsHelper
   def log_in(user)
+    return if logged_in?
+
     session[:user_id] = user.id
     remember(user)
   end
 
   def log_out
+    return unless logged_in?
+
     forget(current_user)
     session.delete(:user_id)
     @current_user = nil
