@@ -5,6 +5,12 @@
         - if flash[:notice]
           %div.alert.alert-success
             = flash[:notice]
+        - if flash[:alert]
+          %div.alert.alert-danger
+            %ul
+              - flash[:alert].each do |msg|
+                %li
+                  = msg
         - if current_user.twitter_user
           = link_to(url_for_twitter(current_user)) do
             = image_tag current_user.image_url

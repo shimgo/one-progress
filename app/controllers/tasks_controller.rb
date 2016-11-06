@@ -5,7 +5,7 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to root_path, notice: 'タスクを作成しました'
     else
-      render root_path
+      redirect_to root_path, alert: @task.errors.full_messages
     end
   end
 
