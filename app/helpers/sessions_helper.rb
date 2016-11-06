@@ -23,7 +23,7 @@ module SessionsHelper
   end
 
   def logged_in?
-    !!session[:user_id]
+    !!(session[:user_id] && cookies[:user_id])
   end
 
   private
