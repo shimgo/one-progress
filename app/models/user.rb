@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   default_value_for :is_active, true
   default_value_for :image_url, ''
 
+  validates :username, presence: true, length: { maximum: 20 }
+
   def self.find_or_create_from_auth_hash(auth_hash)
     if auth_hash[:provider] == 'twitter'
       TwitterUser.find_or_create_from_auth_hash(auth_hash)
