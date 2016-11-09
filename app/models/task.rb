@@ -16,6 +16,7 @@ class Task < ActiveRecord::Base
   validates :target_time, presence: true
 
   scope :in_progress, -> { where(status: statuses.values_at(:started, :resumed)) }
+  scope :owned, -> { where(user_id: owner.user_id) }
 
   def finish(called_at = Time.zone.now)
     unless ['started', 'resumed'].include?(self.status)
@@ -64,6 +65,11 @@ class Task < ActiveRecord::Base
       suspended_at: called_at,
       elapsed_time: calculate_elapsed_time(called_at)
     )
+  end
+
+  def owner?(user)
+    return false if user.nil?
+    owner.id == user.id
   end
 
   private

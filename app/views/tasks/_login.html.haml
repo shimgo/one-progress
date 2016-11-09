@@ -1,0 +1,11 @@
+= form_for(User.new, url: login_path, class:'form-horizontal', role: 'form') do |f|
+  - if flash[:alert]
+    %div.alert.alert-danger
+      %ul
+        - flash[:alert].each do |msg|
+          %li
+            = msg
+  %div.form-group
+    = f.label :username
+    = f.text_field :username, class: 'form-control', size: 20
+  = f.submit 'ログイン', class: 'btn btn-primary', data: {disable_with: 'ログイン中'}

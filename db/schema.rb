@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161023102127) do
+ActiveRecord::Schema.define(version: 20161103111903) do
+
+  create_table "guest_users", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "guest_users", ["user_id"], name: "fk_rails_eb86c8dbd1", using: :btree
 
   create_table "tasks", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -30,16 +38,26 @@ ActiveRecord::Schema.define(version: 20161023102127) do
 
   add_index "tasks", ["user_id"], name: "index_tasks_on_user_id", using: :btree
 
-  create_table "users", force: :cascade do |t|
-    t.string   "provider",   limit: 255, null: false
+  create_table "twitter_users", force: :cascade do |t|
     t.string   "uid",        limit: 255, null: false
-    t.string   "nickname",   limit: 255, null: false
-    t.string   "image_url",  limit: 255, null: false
+    t.integer  "user_id",    limit: 4,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "users", ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
+  add_index "twitter_users", ["uid"], name: "index_twitter_users_on_uid", using: :btree
+  add_index "twitter_users", ["user_id"], name: "fk_rails_64c2b91021", using: :btree
 
+  create_table "users", force: :cascade do |t|
+    t.string   "username",        limit: 255, null: false
+    t.string   "image_url",       limit: 255, null: false
+    t.boolean  "is_active",                   null: false
+    t.string   "remember_digest", limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_foreign_key "guest_users", "users"
   add_foreign_key "tasks", "users"
+  add_foreign_key "twitter_users", "users"
 end

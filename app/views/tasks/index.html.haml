@@ -1,13 +1,33 @@
 %div.row
   %div.col-md-3.sidebar
     %div.nav.nav-sidebar
-      - if flash[:notice]
-        %div.alert.alert-success
-          = flash[:notice]
-      = render partial: "new", locals: {task: @task}
-      %h4 未着手
-      = render partial: "stopped_task", collection: @untouched_tasks, as: :task
-      %h4 保留中
-      = render partial: "stopped_task", collection: @suspended_tasks, as: :task
+      - if logged_in?
+        - if flash[:notice]
+          %div.alert.alert-success
+            = flash[:notice]
+        - if flash[:alert]
+          %div.alert.alert-danger
+            %ul
+              - flash[:alert].each do |msg|
+                %li
+                  = msg
+        - if current_user.twitter_user
+          = link_to(url_for_twitter(current_user)) do
+            = image_tag current_user.image_url
+            %strong
+              = current_user.username
+        - else
+          = image_tag 'guest_user.png'
+          %strong
+            = current_user.username
+        = render partial: "new", locals: {task: @task}
+        %h4 未着手
+        = render partial: "stopped_task", collection: @untouched_tasks, as: :task
+        %h4 保留中
+        = render partial: "stopped_task", collection: @suspended_tasks, as: :task
+      - else
+        %h4 ログイン
+        = render partial: "login"
   %div.col-md-9.main
+    = render partial: "task_in_progress", collection: @user_tasks_in_progress, as: :task
     = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task

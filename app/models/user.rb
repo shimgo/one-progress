@@ -1,15 +1,43 @@
 class User < ActiveRecord::Base
+  attr_accessor :remember_token
+
   has_many :created_tasks, class_name: 'Task', foreign_key: 'user_id'
+  has_one :twitter_user, :dependent => :destroy
+  has_one :guest_user, :dependent => :destroy
+
+  default_value_for :is_active, true
+  default_value_for :image_url, ''
+
+  validates :username, presence: true, length: { maximum: 20 }
 
   def self.find_or_create_from_auth_hash(auth_hash)
-    provider  = auth_hash[:provider]
-    uid       = auth_hash[:uid]
-    nickname  = auth_hash[:info][:nickname]
-    image_url = auth_hash[:info][:image]
-
-    User.find_or_create_by(provider: provider, uid: uid) do |user|
-      user.nickname  = nickname
-      user.image_url = image_url
+    if auth_hash[:provider] == 'twitter'
+      twitter_user = TwitterUser.find_or_create_from_auth_hash(auth_hash)
+      twitter_user.user
     end
+  end
+
+  def self.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+                                                  BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
+
+  def self.new_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def remember
+    remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(remember_token))
+  end
+
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
+
+  def authenticated?(remember_token)
+    return false if remember_digest.nil?
+    BCrypt::Password.new(remember_digest).is_password?(remember_token)
   end
 end
