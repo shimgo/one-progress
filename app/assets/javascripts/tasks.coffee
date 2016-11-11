@@ -19,8 +19,6 @@ $(document).on 'ajax:error', '.updateTask', (xhr, data, status) ->
     div.append(ul)
     form.prepend(div)
 
-$("#all-tasks").append("<tbody class='page'><%= escape_javascript(render(@posts)) %></tbody>");
-
 $ ->
   $("#all-tasks .page").infinitescroll
     loading: {

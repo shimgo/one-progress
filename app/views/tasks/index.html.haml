@@ -30,4 +30,8 @@
         = render partial: "login"
   %div.col-md-9.main
     = render partial: "task_in_progress", collection: @user_tasks_in_progress, as: :task
-    = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task
+    %div#all-tasks
+      %div.page
+        = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task
+%div.hidden
+  = paginate @all_tasks_in_progress
