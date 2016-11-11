@@ -20,7 +20,7 @@ class TasksController < ApplicationController
     if @task.finish
       redirect_to root_path, notice: "タスクを完了しました"
     else
-      render json: { messages: task.errors.full_messages }, 
+      render json: { messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
   end
@@ -45,7 +45,7 @@ class TasksController < ApplicationController
     if @task.resume
       redirect_to root_path, notice: 'タスクを再開しました'
     else
-      render json: { messages: task.errors.full_messages }, 
+      render json: { messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
   end
@@ -55,7 +55,7 @@ class TasksController < ApplicationController
     if @task.start
       redirect_to root_path, notice: 'タスクを開始しました'
     else
-      render json: { messages: task.errors.full_messages }, 
+      render json: { messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
   end
@@ -65,7 +65,7 @@ class TasksController < ApplicationController
     if @task.suspend
       redirect_to root_path, notice: 'タスクを中断しました'
     else
-      render json: { messages: task.errors.full_messages }, 
+      render json: { messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
   end
@@ -76,7 +76,7 @@ class TasksController < ApplicationController
       flash[:notice] = 'タスクを更新しました'
       head :ok
     else
-      render json: { messages: task.errors.full_messages }, 
+      render json: { id: @task.id, messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
   end

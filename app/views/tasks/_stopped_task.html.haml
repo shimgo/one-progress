@@ -36,7 +36,7 @@
           %div.modal-footer
             %button.btn.btn-default{'type' => "button", 'data-dismiss' => "modal"}
               キャンセル
-            = f.button('更新', id: 'updateTask', class: 'btn btn-primary', data: {disable_with: '更新中...'})
+            = f.button('更新', class: 'btn btn-primary', data: {disable_with: '更新中...'})
 
 %div.modal.fade.deleteTask{'id' => "deleteTask_#{task.id.to_s}", 'tabindex' => "-1", 'role' => "dialog", 'aria-labelledby' => "dialogHeader", 'aria-hidden' => "true"}
   %div.modal-dialog.modal-sm
