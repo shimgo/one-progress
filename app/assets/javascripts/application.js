@@ -15,4 +15,5 @@
 //= require bootstrap
 //= require turbolinks
 //= require jquery.infinitescroll
+//= require masonry.pkgd.min.js
 //= require_tree .
