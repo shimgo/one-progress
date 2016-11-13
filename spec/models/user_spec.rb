@@ -69,8 +69,9 @@ RSpec.describe User, :type => :model do
   end
 
   describe '::new_token' do
-    it '長さ22の文字列を返すこと' do
-      expect(User.new_token.length).to eq 22
+    it 'SecureRandomによるURL-safe base64文字列を返すこと' do
+      allow(SecureRandom).to receive(:urlsafe_base64).and_return('test')
+      expect(User.new_token).to eq 'test'
     end
   end
 
