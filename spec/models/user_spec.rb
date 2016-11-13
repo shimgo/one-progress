@@ -81,6 +81,13 @@ RSpec.describe User, :type => :model do
       updated_user = User.find_by(username: 'user_remember_test')
       expect(updated_user.remember_digest.length).to eq 60
     end
+
+    it '#remember_tokenにUser::new_tokenの値がセットされること' do
+      allow(User).to receive(:new_token).and_return('test')
+      user = User.create(username: 'user_remember_test')
+      user.remember
+      expect(user.remember_token).to eq 'test'
+    end
   end
 
   describe '#forget' do
