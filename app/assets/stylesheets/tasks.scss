@@ -5,3 +5,12 @@
   text-align:center;
   margin:0 auto;
 }
+
+.break-word {
+  word-wrap:break-word
+}
+
+.no-gutter > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}

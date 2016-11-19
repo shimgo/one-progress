@@ -1,32 +1,34 @@
-%div.col-md-6.task
+%div.col-xs-12.col-md-6.task
   %div.panel.panel-default
     %div.panel-body
-      %div.col-xs-2
-        - if task.owner.twitter_user
-          = link_to(url_for_twitter(task.owner)) do
-            = image_tag task.owner.image_url
-        - if task.owner.guest_user
-          = image_tag 'guest_user.png'
-      %div.col-xs-10
-        - if task.owner.twitter_user
-          = link_to(url_for_twitter(task.owner)) do
+      %div.row
+        %div.col-xs-2.text-center.no-gutter
+          - if task.owner.twitter_user
+            = link_to(url_for_twitter(task.owner)) do
+              = image_tag task.owner.image_url
+          - if task.owner.guest_user
+            = image_tag 'guest_user.png'
+        %div.col-xs-10.no-gutter
+          - if task.owner.twitter_user
+            = link_to(url_for_twitter(task.owner)) do
+              %strong
+                = task.owner.username
+          - if task.owner.guest_user
             %strong
               = task.owner.username
-        - if task.owner.guest_user
-          %strong
-            = task.owner.username
-        %br
-        = task.content
+          %br
+          %span.break-word
+            = task.content
     %div.panel-footer
       %div.row
-        %div.col-sm-6
+        %div.col-xs-6
           %div.small.text-muted
             開始:  
             = task.started_at.strftime("%Y/%m/%d %H:%M") 
             %br
             目標: 
             = task.finish_targeted_at.strftime("%Y/%m/%d %H:%M")
-        %div.col-sm-6.text-right
+        %div.col-xs-6.text-right
           - if task.owner?(current_user)
             = link_to('中断', suspend_task_path(task), class: "btn btn-primary", method: :patch)
             = link_to('完了', finish_task_path(task), class: "btn btn-primary", method: :patch)

@@ -25,23 +25,22 @@ $ ->
     ->
       $container.masonry({
         itemSelector: '.task',
-        isFitWidth: true,
-        isAnimated: true,
-        isResizable: true
+        columnWidth: '.task',
+        isAnimated: true
       })
   )
 
   $container.infinitescroll(
     {
-      navSelector: "#page-bottom",
-      nextSelector: ".pagination a[rel=next]",
+      navSelector: '#page-bottom',
+      nextSelector: '.pagination a[rel=next]',
       itemSelector : '#all-tasks .task',
       loading: {
-        img: "/assets/loading.gif",
-        msgText: "",
-        finishedMsg: "",
+        img: '/assets/loading.gif',
+        msgText: '',
+        finishedMsg: '',
         speed: 0,
-        selector: "#loading"
+        selector: '#loading'
       }
     },
     (newElements) -> 
