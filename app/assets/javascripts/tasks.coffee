@@ -20,16 +20,34 @@ $(document).on 'ajax:error', '.updateTask', (xhr, data, status) ->
     form.prepend(div)
 
 $ ->
-  $("#all-tasks .page").infinitescroll
-    loading: {
-      img:     "http://www.mytreedb.com/uploads/mytreedb/loader/ajax_loader_blue_48.gif"
-      msgText: "ロード中..."
-    }
-    navSelector: "nav.pagination" # selector for the paged navigation (it will be hidden)
-    nextSelector: "nav.pagination a[rel=next]" # selector for the NEXT link (to page 2)
-    itemSelector: "#all-tasks div.task" # selector for all items you'll retrieve
+  $container = $('#masonry')
+  $container.imagesLoaded(
+    ->
+      $container.masonry({
+        itemSelector: '.task',
+        isFitWidth: true,
+        isAnimated: true,
+        isResizable: true
+      })
+  )
 
-$ ->
-  $('#content').masonry({
-    itemSelector: '.task'
-  })
+  $container.infinitescroll(
+    {
+      navSelector: "#page-bottom",
+      nextSelector: ".pagination a[rel=next]",
+      itemSelector : '#all-tasks .task',
+      loading: {
+        img: "/assets/loading.gif",
+        msgText: "",
+        finishedMsg: "",
+        speed: 0,
+        selector: "#loading"
+      }
+    },
+    (newElements) -> 
+      $newElems = $(newElements)
+      $newElems.imagesLoaded(
+        -> 
+          $container.masonry( 'appended', $newElems, true )
+      )
+  )
