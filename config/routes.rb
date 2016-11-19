@@ -6,6 +6,11 @@ Rails.application.routes.draw do
       patch 'suspend'
     end
   end
+
+  resource :user do
+    get :retire
+  end
+
   root to: 'tasks#index'
   get '/auth/:provider/callback' => 'sessions#create'
   post '/login' => 'sessions#create'

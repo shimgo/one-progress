@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   attr_accessor :remember_token
 
-  has_many :created_tasks, class_name: 'Task', foreign_key: 'user_id'
+  has_many :created_tasks, class_name: 'Task', foreign_key: 'user_id', dependent: :nullify
   has_one :twitter_user, :dependent => :destroy
   has_one :guest_user, :dependent => :destroy
 
@@ -28,8 +28,8 @@ class User < ActiveRecord::Base
   end
 
   def remember
-    remember_token = User.new_token
-    update_attribute(:remember_digest, User.digest(remember_token))
+    @remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(@remember_token))
   end
 
   def forget

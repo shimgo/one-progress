@@ -1,5 +1,5 @@
 %div.row
-  %div.col-md-3.sidebar
+  %div.col-xs-12.col-sm-3.sidebar
     %div.nav.nav-sidebar
       - if logged_in?
         - if flash[:notice]
@@ -28,10 +28,13 @@
       - else
         %h4 ログイン
         = render partial: "login"
-  %div.col-md-9.main
-    = render partial: "task_in_progress", collection: @user_tasks_in_progress, as: :task
-    %div#all-tasks
-      %div.page
+  %div.col-xs-12.col-sm-9
+    %div#masonry
+      = render partial: "task_in_progress", collection: @user_tasks_in_progress, as: :task
+      %span#all-tasks
         = render partial: "task_in_progress", collection: @all_tasks_in_progress, as: :task
-%div.hidden
-  = paginate @all_tasks_in_progress
+    %div.hidden
+      = paginate @all_tasks_in_progress
+    %span#page-bottom
+      &nbsp;
+    %div#loading
