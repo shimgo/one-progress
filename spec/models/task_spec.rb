@@ -57,11 +57,14 @@ RSpec.describe Task, type: :model do
 
   describe '#start' do
     let(:task) do
-      Task.new(
+      task = Task.new(
         content: '内容', 
         status: :untouched,
         target_time: Time.at(3600)
       )
+      allow(task).to receive_message_chain(
+        :owner, :created_tasks, :in_progress, :exists?).and_return(false)
+      task
     end
 
     describe '事前条件の検証' do
@@ -96,6 +99,52 @@ RSpec.describe Task, type: :model do
     it 'started_atに現在日時がセットされること' do
       task.start
       expect(task.started_at).to be_within(1).of(Time.zone.now)
+    end
+
+    describe '同じユーザが所有するタスクが存在する場合' do
+      let(:existing_task) do
+        existing_task = Task.new(
+          content: 'test',
+          target_time: Time.at(1800),
+          user_id: 1
+        )
+        task.user_id = 1
+        allow(task).to receive_message_chain(:owner, :created_tasks)
+          .and_return(Task.where(user_id: 1))
+        existing_task
+      end
+
+      context 'statusが"started"であるタスクが存在する場合' do
+        before do
+          existing_task.status = :started
+          existing_task.save
+        end
+
+        it 'falseを返すこと' do
+          expect(task.start).to eq false
+        end
+
+        it 'errors[:base]にエラーを追加すること' do
+          task.start
+          expect(task.errors[:base]).to be_include '既に作業中のタスクがあります。'
+        end
+      end
+
+      context 'statusが"suspended"であるタスクが存在する場合' do
+        before do
+          existing_task.status = :suspended
+          existing_task.save
+        end
+
+        it 'falseを返すこと' do
+          expect(task.start).to eq false
+        end
+
+        it 'errors[:base]にエラーを追加すること' do
+          task.start
+          expect(task.errors[:base]).to be_include '既に作業中のタスクがあります。'
+        end
+      end
     end
   end
 
@@ -163,12 +212,15 @@ RSpec.describe Task, type: :model do
 
   describe '#resume' do
     let(:task) do
-      Task.new(
+      task = Task.new(
         status: :suspended, 
         content: '内容', 
         target_time: Time.at(3600), 
         started_at: Time.new(2016, 1, 1, 0, 0, 0)
       )
+      allow(task).to receive_message_chain(
+        :owner, :created_tasks, :in_progress, :exists?).and_return(false)
+      task
     end
 
     describe '事前条件の検証' do
@@ -224,6 +276,52 @@ RSpec.describe Task, type: :model do
         task.elapsed_time = Time.at(3000)
         task.resume(Time.new(2016, 1, 1, 0, 0, 0))
         expect(task.finish_targeted_at).to eq Time.new(2016, 1, 1, 0, 10, 0)
+      end
+    end
+
+    describe '同じユーザが所有するタスクが存在する場合' do
+      let(:existing_task) do
+        existing_task = Task.new(
+          content: 'test',
+          target_time: Time.at(1800),
+          user_id: 1
+        )
+        task.user_id = 1
+        allow(task).to receive_message_chain(:owner, :created_tasks)
+          .and_return(Task.where(user_id: 1))
+        existing_task
+      end
+
+      context 'statusが"started"であるタスクが存在する場合' do
+        before do
+          existing_task.status = :started
+          existing_task.save
+        end
+
+        it 'falseを返すこと' do
+          expect(task.start).to eq false
+        end
+
+        it 'errors[:base]にエラーを追加すること' do
+          task.start
+          expect(task.errors[:base]).to be_include '既に作業中のタスクがあります。'
+        end
+      end
+
+      context 'statusが"suspended"であるタスクが存在する場合' do
+        before do
+          existing_task.status = :suspended
+          existing_task.save
+        end
+
+        it 'falseを返すこと' do
+          expect(task.start).to eq false
+        end
+
+        it 'errors[:base]にエラーを追加すること' do
+          task.start
+          expect(task.errors[:base]).to be_include '既に作業中のタスクがあります。'
+        end
       end
     end
   end

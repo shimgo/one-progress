@@ -45,8 +45,7 @@ class TasksController < ApplicationController
     if @task.resume
       redirect_to root_path, notice: 'タスクを再開しました'
     else
-      render json: { messages: @task.errors.full_messages },
-        status: :unprocessable_entity
+      redirect_to root_path, alert: @task.errors.full_messages
     end
   end
 
@@ -55,8 +54,7 @@ class TasksController < ApplicationController
     if @task.start
       redirect_to root_path, notice: 'タスクを開始しました'
     else
-      render json: { messages: @task.errors.full_messages },
-        status: :unprocessable_entity
+      redirect_to root_path, alert: @task.errors.full_messages
     end
   end
 
