@@ -35,6 +35,11 @@ class Task < ActiveRecord::Base
       raise "statusはsuspendedである必要があります。(status: #{self.status})" 
     end
 
+    if owner.created_tasks.in_progress.exists?
+      errors[:base] << '既に作業中のタスクがあります。'
+      return
+    end
+
     remaining_time = target_time - elapsed_time
     update!(
       status: :resumed,
@@ -46,6 +51,11 @@ class Task < ActiveRecord::Base
   def start(called_at = Time.zone.now)
     unless ['untouched', 'suspended'].include?(self.status)
       raise "statusはuntouchedまたはsuspendedである必要があります。(status: #{self.status})" 
+    end
+
+    if owner.created_tasks.in_progress.exists?
+      errors[:base] << '既に作業中のタスクがあります。'
+      return false
     end
 
     update!(
@@ -82,5 +92,4 @@ class Task < ActiveRecord::Base
   def to_duration(time)
     Time.at(time.hour * 3600 + time.min * 60 + time.sec).to_i
   end
-
 end

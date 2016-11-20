@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     member do
       patch 'finish'
       patch 'start'
+      patch 'resume'
       patch 'suspend'
     end
   end
