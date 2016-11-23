@@ -12,4 +12,6 @@
     = f.label :target_time
     = f.datetime_select :target_time, discard_year: true, discard_month: true, discard_day: true, minute_step: 10, default: {hour: 0, minute: 0}
   %div.text-right
-    = f.submit '作成', class: 'btn btn-primary', data: {disable_with: '作成中'}
+    = button_tag(type: 'submit', class: 'btn btn-primary', data: {disable_with: '作成中'}) do
+      %span.glyphicon.glyphicon-pencil
+      作成
