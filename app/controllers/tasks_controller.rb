@@ -31,6 +31,7 @@ class TasksController < ApplicationController
       log_in(user)
       @untouched_tasks        = user.created_tasks.untouched
       @suspended_tasks        = user.created_tasks.suspended
+      @finished_tasks         = user.created_tasks.finished
       @user_tasks_in_progress = user.created_tasks.in_progress
       @task                   = user.created_tasks.new
     else
