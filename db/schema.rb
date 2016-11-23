@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161103111903) do
+ActiveRecord::Schema.define(version: 20161120211432) do
 
   create_table "guest_users", force: :cascade do |t|
     t.integer  "user_id",    limit: 4, null: false
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20161103111903) do
   create_table "twitter_users", force: :cascade do |t|
     t.string   "uid",        limit: 255, null: false
     t.integer  "user_id",    limit: 4,   null: false
+    t.string   "nickname",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
