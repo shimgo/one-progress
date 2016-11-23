@@ -31,8 +31,8 @@ class Task < ActiveRecord::Base
   end
 
   def resume(called_at = Time.zone.now)
-    unless self.status == 'suspended'
-      raise "statusはsuspendedである必要があります。(status: #{self.status})" 
+    unless ['suspended', 'finished'].include?(self.status)
+      raise "statusはsuspendedまたはfinishedである必要があります。(status: #{self.status})" 
     end
 
     if owner.created_tasks.in_progress.exists?

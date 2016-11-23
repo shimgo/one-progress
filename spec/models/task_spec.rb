@@ -227,19 +227,26 @@ RSpec.describe Task, type: :model do
       context 'statusがsuspendedの場合' do
         it "例外が発生しない" do
           task.status = 'suspended'
-          expect{ task.resume}.not_to raise_error
+          expect{ task.resume }.not_to raise_error
         end
       end
 
-      context'statusがsuspended以外の場合' do
-        excluding_suspended_statuses = 
-          Task.statuses.keys.delete_if{ |s| ['suspended'].include?(s) }
+      context 'statusがfinishedの場合' do
+        it "例外が発生しない" do
+          task.status = 'finished'
+          expect{ task.resume }.not_to raise_error
+        end
+      end
 
-        excluding_suspended_statuses.each do |status|
+      context'statusがsuspended、finished以外の場合' do
+        excluding_suspended_and_finished_statuses = 
+          Task.statuses.keys.delete_if{ |s| ['suspended', 'finished'].include?(s) }
+
+        excluding_suspended_and_finished_statuses.each do |status|
           it "statusが#{status}の場合、例外が発生する" do
             task.status = status
             expect{ task.resume}.to raise_error(
-              /statusはsuspendedである必要があります。/)
+              /statusはsuspendedまたはfinishedである必要があります。/)
           end
         end
       end
