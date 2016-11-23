@@ -24,23 +24,24 @@ RSpec.describe User, :type => :model do
 
   describe '::find_or_create_from_auth_hash' do
     context '引数のキー:providerが"twitter"の場合' do
-      let(:auth_hash){ {provider: 'twitter'} }
-
-      let(:user_mock) do
-        mock = double('User user')
-        allow(mock).to receive(:id).and_return(1)
-        mock
+      let(:auth_hash) do
+        {
+          uid: '1',
+          provider: 'twitter',
+          info: {name: 'ユーザ1', nickname: 'testuser'}
+        }
       end
 
       let(:twitter_user_mock) do
         mock = double('Twitter twitter_user')
-        allow(mock).to receive(:user).and_return(user_mock)
+        allow(mock).to receive(:user).and_return(User.new(username: 'mockuser'))
         mock
       end
 
       it 'TwitterUser::find_or_create_from_auth_hashに引数が渡されること' do
         allow(TwitterUser).to receive(:find_or_create_from_auth_hash)
           .and_return(twitter_user_mock)
+
         User.find_or_create_from_auth_hash(auth_hash)
         expect(TwitterUser).to have_received(:find_or_create_from_auth_hash)
           .with(auth_hash)
@@ -49,7 +50,23 @@ RSpec.describe User, :type => :model do
       it 'TwitterUser#userの結果を返すこと' do
         allow(TwitterUser).to receive(:find_or_create_from_auth_hash)
           .and_return(twitter_user_mock)
-        expect(User.find_or_create_from_auth_hash(auth_hash)).to eq user_mock
+
+        expect(User.find_or_create_from_auth_hash(auth_hash))
+          .to eq twitter_user_mock.user
+      end
+
+      context '引数のユーザ名が登録済みのユーザ名と異なっていたとき'do
+        it 'ユーザ名を引数のユーザ名で更新すること' do
+          origin_user = TwitterUser.new(uid: auth_hash[:uid])
+          origin_user.user = User.new(username: '変更前ユーザ')
+          origin_user.save!
+          allow(TwitterUser).to receive(:find_or_create_from_auth_hash)
+            .and_return(origin_user)
+
+          User.find_or_create_from_auth_hash(auth_hash)
+          user = User.find(origin_user.user.id)
+          expect(user.username).to eq auth_hash[:info][:name]
+        end
       end
     end
 

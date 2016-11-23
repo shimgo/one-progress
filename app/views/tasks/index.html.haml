@@ -12,13 +12,12 @@
                 %li
                   = msg
         - if current_user.twitter_user
-          = link_to(url_for_twitter(current_user)) do
+          = link_to(url_for_twitter(current_user.twitter_user), {class: 'h5 bold'}) do
             = image_tag current_user.image_url
-            %strong
-              = current_user.username
+          = link_twitter_user_name(current_user.twitter_user)
         - else
           = image_tag 'guest_user.png'
-          %strong
+          %span.h5.bold
             = current_user.username
         = render partial: "new", locals: {task: @task}
         %h4 未着手
