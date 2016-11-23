@@ -50,3 +50,14 @@ $ ->
           $container.masonry( 'appended', $newElems, true )
       )
   )
+
+$ ->
+  if Cookies.get("openTag")
+    $('a[data-toggle="tab"]').parent().removeClass('active')
+    $("a[href='##{Cookies.get('openTag')}']").click()
+  $('a[data-toggle="tab"]').on('shown.bs.tab',
+    (e) ->
+      tabName = e.target.href
+      items = tabName.split("#")
+      Cookies.set("openTag",items[1], { expires: 365 * 20 })
+  )
