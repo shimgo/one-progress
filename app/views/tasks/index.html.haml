@@ -11,15 +11,17 @@
               - flash[:alert].each do |msg|
                 %li
                   = msg
-        - if current_user.twitter_user
-          = link_to(url_for_twitter(current_user.twitter_user), {class: 'h5 bold'}) do
-            = image_tag current_user.image_url
-          = link_twitter_user_name(current_user.twitter_user)
-        - else
-          = image_tag 'guest_user.png'
-          %span.h5.bold
-            = current_user.username
+        %p
+          - if current_user.twitter_user
+            = link_to(url_for_twitter(current_user.twitter_user), {class: 'h5 bold'}) do
+              = image_tag current_user.image_url
+            = link_twitter_user_name(current_user.twitter_user)
+          - else
+            = image_tag 'guest_user.png'
+            %span.h5.bold
+              = current_user.username
         = render partial: "new", locals: {task: @task}
+        %br
         %ul.nav.nav-pills
           %li.active
             %a.nav-link{'href' => '#untouched', 'data-toggle' => "tab"}
