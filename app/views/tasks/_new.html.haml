@@ -6,12 +6,11 @@
           %li
             = msg
   %div.form-group
-    = f.label :content
     = f.text_area :content, class: 'form-control', rows: 4, placeholder: ('何をしますか？(例: 参考書の10-30pを読む)')
-  %div.form-group
+  %div.col-xs-8.form-group
     = f.label :target_time
     = f.datetime_select :target_time, discard_year: true, discard_month: true, discard_day: true, minute_step: 10, default: {hour: 0, minute: 0}
-  %div.text-right
+  %div.col-xs-4.text-right
     = button_tag(type: 'submit', class: 'btn btn-primary', data: {disable_with: '作成中'}) do
       %span.glyphicon.glyphicon-pencil
       作成
