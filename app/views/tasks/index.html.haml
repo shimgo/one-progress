@@ -51,6 +51,7 @@
             %br
             = render partial: "stopped_task",
               collection: @finished_tasks, as: :task
+        %p.divider
       - else
         %h4 ログイン
         = render partial: "login"
