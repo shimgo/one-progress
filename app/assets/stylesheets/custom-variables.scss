@@ -1,0 +1,14 @@
+$brand-primary:                   #208DC3 !default;
+
+// navbar
+$navbar-default-bg:               $brand-primary !default;
+$navbar-default-link-color:       #fff !default;
+$navbar-default-brand-color:      $navbar-default-link-color !default;
+$navbar-default-link-hover-color: darken($navbar-default-brand-color, 10%) !default;
+$navbar-border-radius:            0 !default;
+
+// font
+$font-family-sans-serif:          "Helvetica Neue", Helvetica, Arial, "游ゴシック体", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif !default;
+
+// panel
+$panel-border-radius:             0 !default;
