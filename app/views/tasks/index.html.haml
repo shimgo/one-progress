@@ -1,5 +1,5 @@
 %div.row
-  %div.col-xs-12.col-sm-3.sidebar
+  %div.col-xs-12.col-sm-5.col-lg-3.sidebar
     %div.nav.nav-sidebar
       - if logged_in?
         - if flash[:notice]
@@ -19,7 +19,8 @@
           = image_tag 'guest_user.png'
           %span.h5.bold
             = current_user.username
-        = render partial: "new", locals: {task: @task}
+        %p
+          = render partial: "new", locals: {task: @task}
         %ul.nav.nav-pills
           %li.active
             %a.nav-link{'href' => '#untouched', 'data-toggle' => "tab"}
@@ -50,10 +51,11 @@
             %br
             = render partial: "stopped_task",
               collection: @finished_tasks, as: :task
+        %p.divider
       - else
         %h4 ログイン
         = render partial: "login"
-  %div.col-xs-12.col-sm-9
+  %div.col-xs-12.col-sm-7.col-lg-9
     %div#masonry
       = render partial: "task_in_progress",
         collection: @user_tasks_in_progress, as: :task
