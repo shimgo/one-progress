@@ -9,7 +9,7 @@ RSpec.describe Task, type: :model do
 
     describe 'content' do
       it '空であれば無効であること' do
-        task = Task.new(content: nil)
+        task = Task.new(content: nil, target_time: Time.at(0))
         task.valid?
         expect(task.errors[:content]).to include("を入力してください")
       end
@@ -20,7 +20,7 @@ RSpec.describe Task, type: :model do
       end
 
       it '長さが200文字超であれば無効であること' do
-        task = Task.new(content: 'あ' * 201)
+        task = Task.new(content: 'あ' * 201, target_time: Time.at(0))
         task.valid?
         expect(task.errors[:content]).to include("は200文字以内で入力してください")
       end
@@ -32,17 +32,28 @@ RSpec.describe Task, type: :model do
         task.valid?
         expect(task.errors[:target_time]).to include("を入力してください")
       end
+
+      it '60分の場合、有効であること' do
+        task = Task.new(content: 'あ', target_time: Time.at(3600))
+        expect(task).to be_valid
+      end
+
+      it '60分を超える場合、無効であること' do
+        task = Task.new(target_time: Time.at(3601))
+        task.valid?
+        expect(task.errors[:target_time]).to include("は60分以内にしてください")
+      end
     end
   end
 
   describe 'scope' do
     describe 'in_progress' do
       before do
-        @untouched_task = Task.create(status: :untouched, content: 'test', target_time: Time.new)
-        @started_task   = Task.create(status: :started,   content: 'test', target_time: Time.new)
-        @suspended_task = Task.create(status: :suspended, content: 'test', target_time: Time.new)
-        @resumed_task   = Task.create(status: :resumed,   content: 'test', target_time: Time.new)
-        @finished_task  = Task.create(status: :finished,  content: 'test', target_time: Time.new)
+        @untouched_task = Task.create(status: :untouched, content: 'test', target_time: Time.at(600))
+        @started_task   = Task.create(status: :started,   content: 'test', target_time: Time.at(600))
+        @suspended_task = Task.create(status: :suspended, content: 'test', target_time: Time.at(600))
+        @resumed_task   = Task.create(status: :resumed,   content: 'test', target_time: Time.at(600))
+        @finished_task  = Task.create(status: :finished,  content: 'test', target_time: Time.at(600))
       end
 
       it 'statusがstartedとresumedのタスクが含まれていること' do
