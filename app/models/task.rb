@@ -14,6 +14,13 @@ class Task < ActiveRecord::Base
 
   validates :content, length: { maximum: 200 }, presence: true
   validates :target_time, presence: true
+  validate do
+    next unless target_time
+
+    if to_duration(target_time) > 3600
+      errors.add(:target_time, 'は60分以内にしてください')
+    end
+  end
 
   scope :in_progress, -> { where(status: statuses.values_at(:started, :resumed)) }
   scope :owned, -> { where(user_id: owner.user_id) }
@@ -90,6 +97,6 @@ class Task < ActiveRecord::Base
   end
 
   def to_duration(time)
-    Time.at(time.hour * 3600 + time.min * 60 + time.sec).to_i
+    Time.at(time.utc.hour * 3600 + time.utc.min * 60 + time.utc.sec).to_i
   end
 end

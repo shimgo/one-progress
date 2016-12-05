@@ -83,7 +83,9 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:content, :target_time)
+    converted_params = params.require(:task).permit(:content, :target_time)
+    converted_params[:target_time] = Time.at(params[:task][:target_time].to_i)
+    converted_params
   end
 
 end
