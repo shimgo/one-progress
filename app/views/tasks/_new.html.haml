@@ -11,7 +11,8 @@
     %div.col-xs-8.form-group
       = f.label :target_time
       \:
-      = f.select :target_time, [10, 20, 30, 40, 50, 60].map{|t| [t, t * 60]}
+      = f.select :target_time, [10, 20, 30, 40, 50, 60].map{|t| [t, t * 60]},
+        {selected: task.target_time.to_i - Time.utc(2000, 1, 1, 0, 0, 0).to_i}
       分
     %div.col-xs-4.text-right
       = button_tag(type: 'submit', class: 'btn btn-primary', data: {disable_with: '作成中'}) do
