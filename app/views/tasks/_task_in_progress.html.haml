@@ -10,7 +10,7 @@
             = image_tag 'guest_user.png'
         %div.col-xs-10.no-gutter
           - if task.owner.twitter_user
-            = link_twitter_user_name(current_user.twitter_user)
+            = link_twitter_user_name(task.owner.twitter_user)
           - if task.owner.guest_user
             %span.h5.bold
               = task.owner.username

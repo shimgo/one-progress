@@ -5,7 +5,17 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to root_path, notice: 'タスクを作成しました'
     else
-      redirect_to root_path, alert: @task.errors.full_messages
+      if current_user
+        @untouched_tasks        = current_user.created_tasks.untouched.order('created_at DESC')
+        @suspended_tasks        = current_user.created_tasks.suspended.order('created_at DESC')
+        @finished_tasks         = current_user.created_tasks.finished.order('created_at DESC')
+        @user_tasks_in_progress = current_user.created_tasks.in_progress.order('created_at DESC')
+        @all_tasks_in_progress  = Task.in_progress
+          .where('user_id <> ?', current_user.id || '').order('created_at DESC')
+          .page(params[:page]).per(20)
+      end
+
+      render action: :index
     end
   end
 
@@ -29,16 +39,18 @@ class TasksController < ApplicationController
     user = current_user
     if user
       log_in(user)
-      @untouched_tasks        = user.created_tasks.untouched
-      @suspended_tasks        = user.created_tasks.suspended
-      @finished_tasks         = user.created_tasks.finished
-      @user_tasks_in_progress = user.created_tasks.in_progress
+      @untouched_tasks        = user.created_tasks.untouched.order('created_at DESC')
+      @suspended_tasks        = user.created_tasks.suspended.order('created_at DESC')
+      @finished_tasks         = user.created_tasks.finished.order('created_at DESC')
+      @user_tasks_in_progress = user.created_tasks.in_progress.order('created_at DESC')
       @task                   = user.created_tasks.new
     else
       user = User.new
     end
 
-    @all_tasks_in_progress = Task.in_progress.where('user_id <> ?', user.id || '').page(params[:page]).per(20)
+    @all_tasks_in_progress = Task.in_progress
+      .where('user_id <> ?', user.id || '').order('created_at DESC')
+      .page(params[:page]).per(20)
   end
 
   def resume
@@ -84,7 +96,7 @@ class TasksController < ApplicationController
 
   def task_params
     converted_params = params.require(:task).permit(:content, :target_time)
-    converted_params[:target_time] = Time.at(params[:task][:target_time].to_i)
+    converted_params[:target_time] = Time.utc(2000, 1, 1, 0, 0, 0) + params[:task][:target_time].to_i
     converted_params
   end
 
