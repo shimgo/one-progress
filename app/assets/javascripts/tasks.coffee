@@ -33,7 +33,7 @@ $ ->
   $container.infinitescroll(
     {
       navSelector: '#page-bottom',
-      nextSelector: '.pagination a[rel=next]',
+      nextSelector: '#infinite-scroll-pagination .pagination a[rel=next]',
       itemSelector : '#all-tasks .task',
       loading: {
         img: '/assets/loading.gif',
@@ -41,7 +41,7 @@ $ ->
         finishedMsg: '',
         speed: 0,
         selector: '#loading'
-      }
+      },
     },
     (newElements) -> 
       $newElems = $(newElements)
@@ -61,3 +61,8 @@ $ ->
       items = tabName.split("#")
       Cookies.set("openTag",items[1], { expires: 365 * 20 })
   )
+
+$ ->
+  $(".pagination").on 'ajax:send', (xhr) ->
+    $('#container').infinitescroll('update', {currPage: 1})
+    location.href = xhr.target.href
