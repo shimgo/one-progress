@@ -1,15 +1,15 @@
 module Loggable
   extend ActiveSupport::Concern
 
-  def info_started_log
+  def write_started_log
     Rails.logger.info("START #{format_request(request)}")
   end
 
-  def info_finished_log
+  def write_finished_log
     Rails.logger.info("FINISH #{format_request(request)}")
   end
 
-  def warn_failure_log(message)
+  def write_failure_log(message)
     Rails.logger.warn("FAILURE #{format_request(request)}, #{message}")
   end
 

@@ -5,6 +5,6 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   include Loggable
 
-  before_action :info_started_log
-  after_action :info_finished_log
+  before_action :write_started_log
+  after_action :write_finished_log
 end
