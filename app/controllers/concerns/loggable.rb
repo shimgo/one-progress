@@ -13,6 +13,10 @@ module Loggable
     Rails.logger.warn("FAILURE #{format_request(request)}, #{message}")
   end
 
+  def write_information_log(message)
+    Rails.logger.info("#{format_request(request)}, #{message}")
+  end
+
   private
 
   def format_request(request)
