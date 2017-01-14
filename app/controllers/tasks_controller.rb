@@ -5,6 +5,8 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to root_path, notice: 'タスクを作成しました'
     else
+      write_information_log(@task.errors.full_messages)
+
       if current_user
         @untouched_tasks = current_user.created_tasks.untouched.order('created_at DESC')
           .page(params[:untouched_tasks_page]).per(STOPPED_TASKS_PER_PAGE)
@@ -29,8 +31,12 @@ class TasksController < ApplicationController
 
   def destroy
     @task = current_user.created_tasks.find(params[:id])
-    @task.destroy!
-    redirect_to root_path, notice: 'タスクを削除しました'
+    if @task.destroy
+      redirect_to root_path, notice: 'タスクを削除しました'
+    else
+      write_failure_log(@task.errors.full_messages)
+      redirect_to root_path, alert: @task.errors.full_messages
+    end
   end
 
   def finish
@@ -38,8 +44,8 @@ class TasksController < ApplicationController
     if @task.finish
       redirect_to root_path, notice: "タスクを完了しました"
     else
-      render json: { messages: @task.errors.full_messages },
-        status: :unprocessable_entity
+      write_failure_log(@task.errors.full_messages)
+      redirect_to root_path, alert: @task.errors.full_messages
     end
   end
   
@@ -74,6 +80,7 @@ class TasksController < ApplicationController
     if @task.resume
       redirect_to root_path, notice: 'タスクを再開しました'
     else
+      write_information_log(@task.errors.full_messages)
       redirect_to root_path, alert: @task.errors.full_messages
     end
   end
@@ -83,6 +90,7 @@ class TasksController < ApplicationController
     if @task.start
       redirect_to root_path, notice: 'タスクを開始しました'
     else
+      write_information_log(@task.errors.full_messages)
       redirect_to root_path, alert: @task.errors.full_messages
     end
   end
@@ -92,8 +100,8 @@ class TasksController < ApplicationController
     if @task.suspend
       redirect_to root_path, notice: 'タスクを中断しました'
     else
-      render json: { messages: @task.errors.full_messages },
-        status: :unprocessable_entity
+      write_failure_log(@task.errors.full_messages)
+      redirect_to root_path, alert: @task.errors.full_messages
     end
   end
 
@@ -103,6 +111,7 @@ class TasksController < ApplicationController
       flash[:notice] = 'タスクを更新しました'
       head :ok
     else
+      write_information_log(@task.errors.full_messages)
       render json: { id: @task.id, messages: @task.errors.full_messages },
         status: :unprocessable_entity
     end
