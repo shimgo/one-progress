@@ -43,6 +43,7 @@ gem 'omniauth', '~> 1.3.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 
 group :development, :test do
+  gem 'backport_new_renderer', '~> 1.0.0'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.5.0'
