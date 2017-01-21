@@ -1,0 +1,37 @@
+version: "2"
+services:
+  mysql:
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    build: containers/mysql
+    image: one-progress_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'pass'
+    ports:
+      - '3306:3306'
+
+  rails:
+    container_name: rails
+    hostname: rails
+    restart: always
+    build: containers/rails
+    image: one-progress_rails
+    ports:
+      - '3000:3000'
+    environment:
+      RAILS_ENV: development
+      MYSQL_ROOT_PASSWORD: 'pass'
+      DATABASE_URL_DEVELOPMENT: mysql2://root:pass@mysql:3306
+      DATABASE_URL_TEST: mysql2://root:pass@mysql:3306
+      DATABASE_URL_PRODUCTION: mysql2://root:pass@mysql:3306
+      SECRET_KEY_BASE: hogehoge
+
+  nginx:
+    restart: always
+    container_name: nginx
+    hostname: nginx
+    build: containers/nginx
+    image: one-progress_nginx
+    ports:
+      - '8080:80'
