@@ -65,7 +65,7 @@ class TasksController < ApplicationController
 
       @user_tasks_in_progress = user.created_tasks.in_progress.order('created_at DESC')
 
-      @task = user.created_tasks.new
+      @task = Task.new
     else
       user = User.new
     end
