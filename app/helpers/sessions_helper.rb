@@ -1,7 +1,5 @@
 module SessionsHelper
   def log_in(user)
-    return if logged_in?
-
     session[:user_id] = user.id
     remember(user)
   end
@@ -32,7 +30,7 @@ cookieのユーザIDがnilの場合はセッションのユーザIDもnilであ�
   end
 
   def logged_in?
-    !!(session[:user_id] && cookies[:user_id])
+    !current_user.nil?
   end
 
   private

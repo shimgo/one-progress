@@ -47,11 +47,6 @@ RSpec.describe SessionsHelper, type: :helper do
         helper.log_in(user_mock)
         expect(cookies[:remember_token]).to eq 'foo'
       end
-
-      it 'ユーザのrememberメソッドが呼び出されないこと' do
-        helper.log_in(user_mock)
-        expect(user_mock).not_to have_received(:remember)
-      end
     end
 
     context 'ログインしていない場合' do
@@ -105,10 +100,10 @@ RSpec.describe SessionsHelper, type: :helper do
     end
 
     context 'ログインしていない場合' do
-      it 'ユーザのforgetメソッドが呼び出されないこと' do
-        allow(helper).to receive(:current_user).and_return(user_mock)
+      it 'forgetメソッドが呼び出されないこと' do
+        allow(helper).to receive(:forget)
         helper.log_out
-        expect(user_mock).not_to have_received(:forget)
+        expect(helper).not_to have_received(:forget)
       end
 
       it 'エラーなく終了すること' do
@@ -223,37 +218,19 @@ RSpec.describe SessionsHelper, type: :helper do
   end
 
   describe '#logged_in?' do
-    context 'セッションにユーザIDが存在する場合' do
-      before{ session[:user_id] = 1 }
-
-      context 'cookieにユーザIDが存在する場合' do
-        before{ cookies.signed[:user_id] = 1 }
-
-        it 'trueを返すこと' do
-          expect(helper.logged_in?).to eq true
-        end
-      end
-
-      context 'cookieにユーザIDが存在しない場合' do
-        it 'falseを返すこと' do
-          expect(helper.logged_in?).to eq false
-        end
+    context 'current_userがnilの場合' do
+      before {allow(helper).to receive(:current_user).and_return(nil)}
+      
+      it 'falseを返すこと' do
+        expect(helper.logged_in?).to eq false
       end
     end
 
-    context 'セッションにユーザIDが存在しない場合' do
-      context 'cookieにユーザIDが存在する場合' do
-        before{ cookies.signed[:user_id] = 1 }
-
-        it 'falseを返すこと' do
-          expect(helper.logged_in?).to eq false
-        end
-      end
-
-      context 'cookieにユーザIDが存在しない場合' do
-        it 'falseを返すこと' do
-          expect(helper.logged_in?).to eq false
-        end
+    context 'current_userがnil以外の場合' do
+      before {allow(helper).to receive(:current_user).and_return('foo')}
+      
+      it 'trueを返すこと' do
+        expect(helper.logged_in?).to eq true
       end
     end
   end
