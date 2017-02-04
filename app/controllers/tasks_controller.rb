@@ -1,5 +1,7 @@
 class TasksController < ApplicationController
 
+  before_action :authenticate, except: [:index]
+
   def create
     @task = current_user.created_tasks.new(task_params)
     if @task.save
