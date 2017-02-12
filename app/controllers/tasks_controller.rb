@@ -32,12 +32,12 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.destroy
+    task = current_user.created_tasks.find(params[:id])
+    if task
+      task.destroy!
       redirect_to root_path, notice: 'タスクを削除しました'
     else
-      write_failure_log(@task.errors.full_messages)
-      redirect_to root_path, alert: @task.errors.full_messages
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
     end
   end
 
