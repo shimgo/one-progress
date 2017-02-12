@@ -80,43 +80,62 @@ class TasksController < ApplicationController
   end
 
   def resume
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.resume
+    begin
+      task = current_user.created_tasks.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      write_failure_log(e.message)
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+    end
+
+    if task.resume
       redirect_to root_path, notice: 'タスクを再開しました'
     else
-      write_information_log(@task.errors.full_messages)
-      redirect_to root_path, alert: @task.errors.full_messages
+      write_information_log(task.errors.full_messages)
+      redirect_to root_path, alert: task.errors.full_messages
     end
   end
 
   def start
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.start
+    begin
+      task = current_user.created_tasks.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      write_failure_log(e.message)
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+    end
+
+    if task.start
       redirect_to root_path, notice: 'タスクを開始しました'
     else
-      write_information_log(@task.errors.full_messages)
-      redirect_to root_path, alert: @task.errors.full_messages
+      write_information_log(task.errors.full_messages)
+      redirect_to root_path, alert: task.errors.full_messages
     end
   end
 
   def suspend
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.suspend
+    begin
+      task = current_user.created_tasks.find(params[:id])
+      task.suspend
       redirect_to root_path, notice: 'タスクを中断しました'
-    else
-      write_failure_log(@task.errors.full_messages)
-      redirect_to root_path, alert: @task.errors.full_messages
+    rescue ActiveRecord::RecordNotFound => e
+      write_failure_log(e.message)
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
     end
   end
 
   def update
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.update(task_params)
+    begin
+      task = current_user.created_tasks.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      write_failure_log(e.message)
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+    end
+
+    if task.update(task_params)
       flash[:notice] = 'タスクを更新しました'
       head :ok
     else
-      write_information_log(@task.errors.full_messages)
-      render json: { id: @task.id, messages: @task.errors.full_messages },
+      write_information_log(task.errors.full_messages)
+      render json: { id: task.id, messages: task.errors.full_messages },
         status: :unprocessable_entity
     end
   end
