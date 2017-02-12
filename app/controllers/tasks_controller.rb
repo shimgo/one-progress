@@ -43,12 +43,12 @@ class TasksController < ApplicationController
   end
 
   def finish
-    @task = current_user.created_tasks.find(params[:id])
-    if @task.finish
+    task = current_user.created_tasks.find(params[:id])
+    if task.finish
       redirect_to root_path, notice: "タスクを完了しました"
     else
-      write_failure_log(@task.errors.full_messages)
-      redirect_to root_path, alert: @task.errors.full_messages
+      write_failure_log(task.errors.full_messages)
+      redirect_to root_path, alert: task.errors.full_messages
     end
   end
   
