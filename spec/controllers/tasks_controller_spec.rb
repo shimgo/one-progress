@@ -1,6 +1,76 @@
 require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
+  describe '#before_action' do
+    before do
+      allow(controller).to receive(:authenticate)
+    end
+
+    let(:user) do
+      FactoryGirl.create(:user, :with_untouched_task)
+    end
+
+    it '#createアクション実行時にauthenticateを呼び出すこと' do
+      allow(controller).to receive(:current_user).and_return(user)
+      post :create, task: FactoryGirl.attributes_for(:task)
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#destroyアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      delete :destroy, id: task
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#finishアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task, :started_task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      patch :finish, id: task
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#indexアクション実行時にauthenticateを呼び出さないこと' do
+      allow(controller).to receive(:current_user).and_return(user)
+      get :index
+      expect(controller).not_to have_received(:authenticate)
+    end
+
+    it '#resumeアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task, :suspended_task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      patch :resume, id: task
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#startアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      patch :start, id: task
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#suspendアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task, :started_task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      patch :suspend, id: task
+      expect(controller).to have_received(:authenticate)
+    end
+
+    it '#updateアクション実行時にauthenticateを呼び出すこと' do
+      task = FactoryGirl.create(:task)
+      allow(controller).to receive_message_chain(:current_user, :created_tasks)
+        .and_return(Task.where(id: task))
+      patch :update, id: task, task: task.attributes
+      expect(controller).to have_received(:authenticate)
+    end
+  end
+
   describe 'GET #index' do
     it ':indexテンプレートを表示すること' do
       get :index
