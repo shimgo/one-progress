@@ -43,12 +43,13 @@ class TasksController < ApplicationController
   end
 
   def finish
-    task = current_user.created_tasks.find(params[:id])
-    if task.finish
+    begin
+      task = current_user.created_tasks.find(params[:id])
+      task.finish
       redirect_to root_path, notice: "タスクを完了しました"
-    else
-      write_failure_log(task.errors.full_messages)
-      redirect_to root_path, alert: task.errors.full_messages
+    rescue ActiveRecord::RecordNotFound => e
+      write_failure_log(e.message)
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
     end
   end
   
