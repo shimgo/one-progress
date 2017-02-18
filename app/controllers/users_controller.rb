@@ -8,6 +8,7 @@ class UsersController < ApplicationController
       redirect_to root_path, notice: '退会完了しました'
     else
       raise '認証に失敗しました'
+      write_failure_log('authentication failed.')
     end
   end
 end
