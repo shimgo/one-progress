@@ -496,4 +496,105 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #start' do
+    context 'ログインしている場合' do
+      context '指定したタスクが存在している場合' do
+        it 'root_pathにリダイレクトすること' do
+          task = FactoryGirl.create(:task)
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: task))
+
+          patch :start, id: task
+          expect(response).to redirect_to root_path
+        end
+
+        it 'flash[:notice]に\'タスクを開始しました\'メッセージをセットすること' do
+          task = FactoryGirl.create(:task)
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: task))
+
+          patch :start, id: task
+          expect(flash[:notice]).to eq 'タスクを開始しました'
+        end
+
+        it 'Task#startメソッドを呼び出すこと' do
+          task = FactoryGirl.create(:task)
+          allow(task).to receive(:start)
+          allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
+            .and_return(task)
+
+          patch :start, id: task
+          expect(task).to have_received(:start)
+        end
+
+        context '既に作業中のタスクがある場合' do
+          before do
+            FactoryGirl.create(:task, :started_task)
+          end
+
+          let(:task) do
+            task = FactoryGirl.create(:task)
+            allow(task).to receive_message_chain(:errors, :full_messages).and_return(['messages'])
+            allow(task).to receive(:start).and_return(false)
+            task
+          end
+
+          it 'root_pathにリダイレクトすること' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
+              .and_return(task)
+
+            patch :start, id: task
+            expect(response).to redirect_to root_path
+          end
+
+          it 'flash[:alert]にタスクのエラーメッセージがセットされること' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
+              .and_return(task)
+
+            patch :start, id: 9999
+            expect(flash[:alert]).to eq(task.errors.full_messages)
+          end
+
+          it 'Taskモデルのエラーメッセージを引数にしてwrite_information_logメソッドを呼び出していること' do
+            allow(controller).to receive(:write_information_log)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
+              .and_return(task)
+
+            patch :start, id: 9999
+            expect(controller).to have_received(:write_information_log).with(task.errors.full_messages)
+          end
+        end
+      end
+
+      context '指定したタスクが存在しない場合' do
+        it 'flash[:alert]に\'タスクが見つかりませんでした\'メッセージを含む配列がセットされること' do
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :start, id: 9999
+          expect(flash[:alert]).to eq ['タスクが見つかりませんでした']
+        end
+
+        it 'root_pathにリダイレクトすること' do
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :start, id: 9999
+          expect(response).to redirect_to root_path
+        end
+
+        it 'ActiveRecord::RecordNotFound例外のメッセージを引数にしてwrite_failure_logメソッドを呼び出していること' do
+          allow(controller).to receive(:write_failure_log)
+          allow_any_instance_of(ActiveRecord::RecordNotFound)
+            .to receive(:message).and_return('messages')
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :start, id: 9999
+          expect(controller).to have_received(:write_failure_log).with('messages')
+        end
+      end
+    end
+  end
 end
