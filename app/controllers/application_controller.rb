@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
 
   before_action :write_started_log
   after_action :write_finished_log
+
+  def authenticate
+    redirect_to root_path, alert: ['ログインしてください'] unless logged_in?
+  end
 end
