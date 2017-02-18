@@ -85,6 +85,7 @@ class TasksController < ApplicationController
     rescue ActiveRecord::RecordNotFound => e
       write_failure_log(e.message)
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
     end
 
     if task.resume
@@ -101,6 +102,7 @@ class TasksController < ApplicationController
     rescue ActiveRecord::RecordNotFound => e
       write_failure_log(e.message)
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
     end
 
     if task.start
@@ -128,6 +130,7 @@ class TasksController < ApplicationController
     rescue ActiveRecord::RecordNotFound => e
       write_failure_log(e.message)
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
     end
 
     if task.update(task_params)
