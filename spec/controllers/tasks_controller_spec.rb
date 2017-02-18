@@ -658,4 +658,193 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context 'ログインしている場合' do
+      context '指定したタスクが存在している場合' do
+        it 'Task#updateメソッドを呼び出すこと' do
+          task = FactoryGirl.create(:task, :started_task)
+          allow(task).to receive(:update)
+          allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
+            .and_return(task)
+
+          patch :update, id: task, task: FactoryGirl.attributes_for(:task)
+          expect(task).to have_received(:update)
+        end
+
+        context '入力が有効の場合' do
+          it 'httpステータスコード200を返すこと' do
+            task = FactoryGirl.create(:task)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: task))
+
+            patch :update, id: task, task: FactoryGirl.attributes_for(:task)
+            expect(response).to have_http_status(200)
+          end
+
+          it 'レスポンスのbodyが空であること' do
+            task = FactoryGirl.create(:task)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: task))
+
+            patch :update, id: task, task: FactoryGirl.attributes_for(:task)
+            expect(response.body).to be_empty
+          end
+
+          it 'contentを更新すること' do
+            task = FactoryGirl.create(:task)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: task))
+
+            patch :update, id: task, task: FactoryGirl.attributes_for(
+              :task, content: '更新後タスク')
+            task.reload
+            expect(task.content).to eq '更新後タスク'
+          end
+
+          it 'target_timeを更新すること' do
+            task = FactoryGirl.create(:task)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: task))
+
+            patch :update, id: task, task: FactoryGirl.attributes_for(
+              :task, target_time: 1800)
+            task.reload
+            expect(task.target_time).to eq Time.utc(2000,1,1,0,30,0)
+          end
+
+          it 'flash[:notice]に\'タスクを更新しました\'メッセージをセットすること' do
+            task = FactoryGirl.create(:task, :started_task)
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: task))
+
+            patch :update, id: task, task: FactoryGirl.attributes_for(:task)
+            expect(flash[:notice]).to eq 'タスクを更新しました'
+          end
+
+          context '更新を許可しない属性のパラメータが送られてきた場合' do
+            it '更新を許可しない属性が更新されないこと' do
+              task = FactoryGirl.create(:task)
+              allow(controller).to receive_message_chain(:current_user, :created_tasks)
+                .and_return(Task.where(id: task))
+
+              attributes = { 
+                user_id: 9999,
+                status: :started,
+                elapsed_time: 900,
+                suspended_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                resumed_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                started_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                finished_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                finish_targeted_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                created_at: Time.utc(2017, 1, 1, 0, 0, 0),
+                updated_at: Time.utc(2017, 1, 1, 0, 0, 0)
+              }
+
+              patch :update, id: task, task: attributes
+              task.reload
+              expect(task.user_id).not_to eq attributes[:user_id]
+              expect(task.status).not_to eq attributes[:status]
+              expect(task.elapsed_time).not_to eq attributes[:elapsed_time]
+              expect(task.suspended_at).not_to eq attributes[:suspended_at]
+              expect(task.resumed_at).not_to eq attributes[:resumed_at]
+              expect(task.started_at).not_to eq attributes[:started_at]
+              expect(task.finished_at).not_to eq attributes[:finished_at]
+              expect(task.finish_targeted_at).not_to eq attributes[:finish_targeted_at]
+              expect(task.created_at).not_to eq attributes[:created_at]
+              expect(task.updated_at).not_to eq attributes[:updated_at]
+            end
+          end
+        end
+
+        context '入力が無効の場合' do
+          let(:valid_task) do
+            FactoryGirl.create(:task)
+          end
+
+          let(:invalid_task) do
+            FactoryGirl.build(:task, :invalid_task)
+          end
+
+          it 'Taskモデルの属性が更新されないこと' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: valid_task))
+
+            patch :update, id: valid_task,
+              task: FactoryGirl.attributes_for(:task, content: '', target_time: 3600)
+            valid_task.reload
+            expect(valid_task.content).not_to eq('')
+            expect(valid_task.target_time).not_to eq(Time.utc(2000,1,1,1,0,0))
+          end
+          it 'Taskモデルのエラーメッセージを引数にしてwrite_information_logを呼び出していること' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: valid_task))
+
+            invalid_task.valid?
+            allow(controller).to receive(:write_information_log)
+
+            patch :update, id: valid_task, task: invalid_task.attributes
+            expect(controller).to have_received(:write_information_log)
+              .with(invalid_task.errors.full_messages)
+          end
+
+          it 'JSON形式でidキーにタスクのIDをセットすること' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: valid_task))
+
+            patch :update, id: valid_task, task: invalid_task.attributes
+            json = JSON.parse(response.body)
+            expect(json["id"]).to eq valid_task.id
+          end
+
+          it 'JSON形式でmessagesキーにTaskモデルのエラーメッセージをセットすること' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: valid_task))
+
+            patch :update, id: valid_task, task: invalid_task.attributes
+            json = JSON.parse(response.body)
+            invalid_task.valid?
+            expect(json["messages"]).to eq invalid_task.errors.full_messages
+          end
+
+          it 'httpステータスコード422を返すこと' do
+            allow(controller).to receive_message_chain(:current_user, :created_tasks)
+              .and_return(Task.where(id: valid_task))
+
+            patch :update, id: valid_task, task: invalid_task.attributes
+            expect(response).to have_http_status(422)
+          end
+        end
+      end
+
+      context '指定したタスクが存在しない場合' do
+        it 'flash[:alert]に\'タスクが見つかりませんでした\'メッセージを含む配列がセットされること' do
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :update, id: 9999
+          expect(flash[:alert]).to eq ['タスクが見つかりませんでした']
+        end
+
+        it 'root_pathにリダイレクトすること' do
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :update, id: 9999
+          expect(response).to redirect_to root_path
+        end
+
+        it 'ActiveRecord::RecordNotFound例外のメッセージを引数にしてwrite_failure_logメソッドを呼び出していること' do
+          allow(controller).to receive(:write_failure_log)
+          allow_any_instance_of(ActiveRecord::RecordNotFound)
+            .to receive(:message).and_return('messages')
+          allow(controller).to receive_message_chain(:current_user, :created_tasks)
+            .and_return(Task.where(id: 9999))
+
+          patch :update, id: 9999
+          expect(controller).to have_received(:write_failure_log).with('messages')
+        end
+      end
+    end
+  end
 end
