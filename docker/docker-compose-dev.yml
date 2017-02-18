@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  nginx:
+    volumes:
+      - nginx_log:/var/www/hoge/log
+  mysql:
+    volumes:
+      - mysql_root:/var/lib/mysql
+
+volumes:
+  nginx_log:
+    external: true
+  mysql_root:
+    external: true
