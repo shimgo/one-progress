@@ -354,13 +354,12 @@ RSpec.describe TasksController, type: :controller do
 
         it 'Task#finishメソッドを呼び出すこと' do
           task = FactoryGirl.create(:task, :started_task)
-          task_mock = Task.find(task)
-          allow(task_mock).to receive(:finish)
+          allow(task).to receive(:finish)
           allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
-            .and_return(task_mock)
+            .and_return(task)
 
           patch :finish, id: task
-          expect(task_mock).to have_received(:finish)
+          expect(task).to have_received(:finish)
         end
       end
 
@@ -418,13 +417,12 @@ RSpec.describe TasksController, type: :controller do
 
         it 'Task#resumeメソッドを呼び出すこと' do
           task = FactoryGirl.create(:task, :suspended_task)
-          task_mock = Task.find(task)
-          allow(task_mock).to receive(:resume)
+          allow(task).to receive(:resume)
           allow(controller).to receive_message_chain(:current_user, :created_tasks, :find)
-            .and_return(task_mock)
+            .and_return(task)
 
           patch :resume, id: task
-          expect(task_mock).to have_received(:resume)
+          expect(task).to have_received(:resume)
         end
 
         context '既に作業中のタスクがある場合' do
