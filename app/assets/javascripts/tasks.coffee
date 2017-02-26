@@ -19,7 +19,7 @@ $(document).on 'ajax:error', '.updateTask', (xhr, data, status) ->
     div.append(ul)
     form.prepend(div)
 
-$ ->
+$(document).on 'turbolinks:load', ->
   $container = $('#masonry')
   $container.imagesLoaded(
     ->
@@ -51,7 +51,7 @@ $ ->
       )
   )
 
-$ ->
+$(document).on 'turbolinks:load', ->
   if Cookies.get("openTag")
     $('a[data-toggle="tab"]').parent().removeClass('active')
     $("a[href='##{Cookies.get('openTag')}']").click()
@@ -62,7 +62,7 @@ $ ->
       Cookies.set("openTag",items[1], { expires: 365 * 20 })
   )
 
-$ ->
+$(document).on 'turbolinks:load', ->
   $(".pagination").on 'ajax:send', (xhr) ->
     $('#container').infinitescroll('update', {currPage: 1})
     location.href = xhr.target.href
