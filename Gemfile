@@ -36,7 +36,6 @@ gem 'unicorn'
 gem 'bootstrap-sass', '3.2.0.0'
 gem "default_value_for", "~> 3.0.0"
 gem 'haml-rails', '0.9.0'
-gem 'jquery-turbolinks', '~>2.1.0'
 gem 'kaminari', '~> 0.17.0'
 gem 'kaminari-bootstrap', '~> 3.0.1'
 gem 'omniauth', '~> 1.3.0'
