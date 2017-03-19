@@ -27,6 +27,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 OmniAuth.config.test_mode = true
+Capybara.javascript_driver = :webkit
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -97,5 +98,4 @@ RSpec.configure do |config|
   config.append_after(:each) do
     DatabaseCleaner.clean
   end
-  Capybara.javascript_driver = :webkit
 end
