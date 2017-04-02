@@ -101,4 +101,8 @@ RSpec.configure do |config|
   end
 
   config.include(LoginMacro)
+
+  config.after(:example) do
+    Timecop.return
+  end
 end

@@ -65,4 +65,5 @@ group :test do
   gem 'launchy', '~> 2.4.2'
   gem 'selenium-webdriver', '~> 2.43.0'
   gem 'capybara-webkit', '~> 1.12.0'
+  gem 'timecop', '~> 0.8.0'
 end
