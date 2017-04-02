@@ -103,6 +103,10 @@ RSpec.configure do |config|
 
   config.include(LoginMacro)
 
+  config.before(:example) do
+    OmniAuth.config.mock_auth[:twitter] = nil
+  end
+
   config.after(:example) do
     Timecop.return
   end
