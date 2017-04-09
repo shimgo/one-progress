@@ -17,5 +17,9 @@ FactoryGirl.define do
         user.created_tasks << FactoryGirl.build(:task, status: :untouched)
       end
     end
+
+    trait :with_twitter_user do
+      twitter_user
+    end
   end
 end
