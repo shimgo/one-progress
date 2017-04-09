@@ -211,6 +211,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    settingslogic (2.0.0)
     sexp_processor (4.7.0)
     slop (3.6.0)
     spring (2.0.0)
@@ -280,6 +281,7 @@ DEPENDENCIES
   rspec-rails (~> 3.5.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  settingslogic (= 2.0.0)
   spring
   therubyracer
   timecop (~> 0.8.0)
