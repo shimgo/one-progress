@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   root to: 'tasks#index'
   get '/auth/:provider/callback' => 'sessions#create'
+  get '/auth/failure' => 'sessions#failure'
   post '/login' => 'sessions#create'
   get '/logout' => 'sessions#destroy', as: :logout
 end

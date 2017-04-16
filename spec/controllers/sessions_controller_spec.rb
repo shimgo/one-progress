@@ -91,4 +91,16 @@ RSpec.describe SessionsController, type: :controller do
       expect(response).to redirect_to root_path
     end
   end
+
+  describe 'GET #failure' do
+    it '\'認証に失敗しました\'メッセージを含む配列をflash[:alert]にセットすること' do
+      get :failure
+      expect(flash[:alert]).to eq ['認証に失敗しました']
+    end
+
+    it 'root_pathにリダイレクトすること' do
+      get :failure
+      expect(response).to redirect_to root_path
+    end
+  end
 end

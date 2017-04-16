@@ -38,7 +38,7 @@ gem "default_value_for", "~> 3.0.0"
 gem 'haml-rails', '0.9.0'
 gem 'kaminari', '~> 0.17.0'
 gem 'kaminari-bootstrap', '~> 3.0.1'
-gem 'omniauth', '~> 1.3.0'
+gem 'omniauth', '~> 1.6.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 
 group :development, :test do
@@ -47,6 +47,7 @@ group :development, :test do
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.5.0'
+  gem 'settingslogic', '2.0.0'
   gem 'yard'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -60,8 +61,9 @@ end
 
 group :test do
   gem 'faker', '~> 1.4.3'
-  gem 'capybara', '~> 2.4.3'
+  gem 'capybara', '~> 2.12.0'
   gem 'database_cleaner', '~> 1.3.0'
   gem 'launchy', '~> 2.4.2'
-  gem 'selenium-webdriver', '~> 2.43.0'
+  gem 'poltergeist', '~> 1.14.0'
+  gem 'timecop', '~> 0.8.0'
 end

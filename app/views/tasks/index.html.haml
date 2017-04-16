@@ -58,7 +58,7 @@
       - else
         %h4 ログイン
         = render partial: "login"
-  %div.col-xs-12.col-sm-7.col-lg-9
+  %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9
     %div#masonry
       = render partial: "task_in_progress",
         collection: @user_tasks_in_progress, as: :task
