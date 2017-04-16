@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 feature 'ユーザ関連の操作' do
+  scenario 'ユーザ名を入れずにログインボタンを押す', js: true do
+    visit root_path
+    find_button('ログイン').click
+    expect(page).to have_content('ユーザー名を入力してください')
+  end
+
   scenario 'ゲストユーザでログインしてからログアウト', js: true do
     user = FactoryGirl.build(:user, username: 'feature_test')
     visit root_path
