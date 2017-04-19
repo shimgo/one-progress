@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
+  let(:user) do
+    FactoryGirl.create(:user)
+  end
+
   describe 'validation' do
     it 'contentとtarget_timeが空でなければ有効であること' do
       task = Task.new(content: 'タスク内容', target_time: Time.at(0))
@@ -71,7 +75,8 @@ RSpec.describe Task, type: :model do
       task = Task.new(
         content: '内容', 
         status: :untouched,
-        target_time: Time.at(3600)
+        target_time: Time.at(3600),
+        owner: user
       )
       allow(task).to receive_message_chain(
         :owner, :created_tasks, :in_progress, :exists?).and_return(false)
@@ -117,11 +122,10 @@ RSpec.describe Task, type: :model do
         existing_task = Task.new(
           content: 'test',
           target_time: Time.at(1800),
-          user_id: 1
+          owner: user
         )
-        task.user_id = 1
         allow(task).to receive_message_chain(:owner, :created_tasks)
-          .and_return(Task.where(user_id: 1))
+          .and_return(Task.where(owner: user))
         existing_task
       end
 
@@ -141,9 +145,9 @@ RSpec.describe Task, type: :model do
         end
       end
 
-      context 'statusが"suspended"であるタスクが存在する場合' do
+      context 'statusが"resumed"であるタスクが存在する場合' do
         before do
-          existing_task.status = :suspended
+          existing_task.status = :resumed
           existing_task.save
         end
 
@@ -227,7 +231,8 @@ RSpec.describe Task, type: :model do
         status: :suspended, 
         content: '内容', 
         target_time: Time.at(3600), 
-        started_at: Time.new(2016, 1, 1, 0, 0, 0)
+        started_at: Time.new(2016, 1, 1, 0, 0, 0),
+        owner: user
       )
       allow(task).to receive_message_chain(
         :owner, :created_tasks, :in_progress, :exists?).and_return(false)
@@ -302,11 +307,10 @@ RSpec.describe Task, type: :model do
         existing_task = Task.new(
           content: 'test',
           target_time: Time.at(1800),
-          user_id: 1
+          owner: user
         )
-        task.user_id = 1
         allow(task).to receive_message_chain(:owner, :created_tasks)
-          .and_return(Task.where(user_id: 1))
+          .and_return(Task.where(owner: user))
         existing_task
       end
 
@@ -326,9 +330,9 @@ RSpec.describe Task, type: :model do
         end
       end
 
-      context 'statusが"suspended"であるタスクが存在する場合' do
+      context 'statusが"resumed"であるタスクが存在する場合' do
         before do
-          existing_task.status = :suspended
+          existing_task.status = :resumed
           existing_task.save
         end
 
