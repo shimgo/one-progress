@@ -61,9 +61,9 @@ group :development do
 end
 
 group :test do
-  gem 'faker', '~> 1.4.3'
   gem 'capybara', '~> 2.12.0'
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'faker', '~> 1.4.3'
   gem 'launchy', '~> 2.4.2'
   gem 'poltergeist', '~> 1.14.0'
   gem 'timecop', '~> 0.8.0'
