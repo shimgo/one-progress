@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token
 
   has_many :created_tasks, class_name: 'Task', foreign_key: 'user_id', dependent: :nullify
-  has_one :twitter_user, :dependent => :destroy
-  has_one :guest_user, :dependent => :destroy
+  has_one :twitter_user, dependent: :destroy
+  has_one :guest_user, dependent: :destroy
 
   default_value_for :is_active, true
   default_value_for :image_url, ''

@@ -17,9 +17,7 @@ class Task < ActiveRecord::Base
   validate do
     next unless target_time
 
-    if to_duration(target_time) > 3600
-      errors.add(:target_time, 'は60分以内にしてください')
-    end
+    errors.add(:target_time, 'は60分以内にしてください') if to_duration(target_time) > 3600
   end
 
   scope :in_progress, -> { where(status: statuses.values_at(:started, :resumed)) }
