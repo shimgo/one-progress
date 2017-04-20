@@ -139,7 +139,7 @@ class TasksController < ApplicationController
     else
       write_information_log(task.errors.full_messages)
       render json: { id: task.id, messages: task.errors.full_messages },
-        status: :unprocessable_entity
+             status: :unprocessable_entity
     end
   end
 

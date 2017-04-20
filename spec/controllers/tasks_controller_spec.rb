@@ -771,7 +771,7 @@ RSpec.describe TasksController, type: :controller do
               .and_return(Task.where(id: valid_task))
 
             patch :update, id: valid_task,
-              task: FactoryGirl.attributes_for(:task, content: '', target_time: 3600)
+                           task: FactoryGirl.attributes_for(:task, content: '', target_time: 3600)
             valid_task.reload
             expect(valid_task.content).not_to eq('')
             expect(valid_task.target_time).not_to eq(Time.utc(2000,1,1,1,0,0))
