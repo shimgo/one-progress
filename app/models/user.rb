@@ -11,15 +11,15 @@ class User < ActiveRecord::Base
   validates :username, presence: true, length: { maximum: 20 }
 
   def self.find_or_create_from_auth_hash(auth_hash)
-    if auth_hash[:provider] == 'twitter'
-      twitter_user = TwitterUser.find_or_create_from_auth_hash(auth_hash)
+    return unless auth_hash[:provider] == 'twitter'
 
-      if twitter_user.user.username != auth_hash[:info][:name]
-        twitter_user.user.update(username: auth_hash[:info][:name])
-      end
+    twitter_user = TwitterUser.find_or_create_from_auth_hash(auth_hash)
 
-      twitter_user.user
+    if twitter_user.user.username != auth_hash[:info][:name]
+      twitter_user.user.update(username: auth_hash[:info][:name])
     end
+
+    twitter_user.user
   end
 
   def self.digest(string)
