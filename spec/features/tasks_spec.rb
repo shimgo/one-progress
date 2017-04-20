@@ -8,7 +8,7 @@ feature 'タスク管理' do
           :task, owner: user, content: '最初に作ったタスク',
           status: :untouched, created_at: 10.minute.ago
         )
-        Settings.stopped_tasks_per_page.times do |i|
+        Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user)
         end
       end
@@ -27,7 +27,7 @@ feature 'タスク管理' do
           :task, owner: user, content: '最初に作ったタスク',
           status: :suspended, created_at: 10.minute.ago
         )
-        Settings.stopped_tasks_per_page.times do |i|
+        Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user, status: :suspended)
         end
       end
@@ -46,7 +46,7 @@ feature 'タスク管理' do
           :task, owner: user, content: '最初に作ったタスク',
           status: :finished, created_at: 10.minute.ago
         )
-        Settings.stopped_tasks_per_page.times do |i|
+        Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user, status: :finished)
         end
       end
