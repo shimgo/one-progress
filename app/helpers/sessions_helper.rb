@@ -21,11 +21,7 @@ cookieのユーザIDがnilの場合はセッションのユーザIDもnilであ�
     if (user_id = session[:user_id])
       @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id])
-      user = User.find_by(id: user_id)
-      if user && user.authenticated?(cookies[:remember_token])
-        log_in(user)
-        @current_user = user
-      end
+      @current_user = authenticated_user(user_id)
     end
   end
 
@@ -47,4 +43,11 @@ cookieのユーザIDがnilの場合はセッションのユーザIDもnilであ�
     cookies.delete(:remember_token)
   end
 
+  def authenticated_user(user_id)
+    user = User.find_by(id: user_id)
+    return unless user && user.authenticated?(cookies[:remember_token])
+
+    log_in(user)
+    user
+  end
 end
