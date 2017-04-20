@@ -50,7 +50,7 @@ RSpec.describe UsersController, type: :controller do
 
       it '400エラーページに遷移すること' do
         delete :destroy
-        expect(response).to render_template({file: "#{Rails.root}/public/400.html"})
+        expect(response).to render_template(file: Rails.root.join('public', '400.html').to_s)
       end
 
       it 'httpステータスコード:unauthorized(401)を返すこと' do
