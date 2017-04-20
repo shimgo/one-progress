@@ -8,30 +8,11 @@ class TasksController < ApplicationController
     else
       write_information_log(@task.errors.full_messages)
 
-      if current_user
-        @untouched_tasks = 
-          current_user.created_tasks.untouched.order('created_at DESC')
-                      .page(params[:untouched_tasks_page])
-                      .per(Settings.stopped_tasks_per_page)
-
-        @suspended_tasks =
-          current_user.created_tasks.suspended.order('created_at DESC')
-                      .page(params[:suspended_tasks_page])
-                      .per(Settings.stopped_tasks_per_page)
-
-        @finished_tasks = 
-          current_user.created_tasks.finished.order('created_at DESC')
-                      .page(params[:finished_tasks_page])
-                      .per(Settings.stopped_tasks_per_page)
-
-        @user_tasks_in_progress = 
-          current_user.created_tasks.in_progress.order('created_at DESC')
-
-        @all_tasks_in_progress = 
-          Task.in_progress
-              .where('user_id <> ?', current_user.id || '').order('created_at DESC')
-              .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
-      end
+      @untouched_tasks        = current_user_untouched_tasks
+      @suspended_tasks        = current_user_suspended_tasks
+      @finished_tasks         = current_user_finished_tasks
+      @user_tasks_in_progress = current_user_tasks_in_progress
+      @all_tasks_in_progress  = all_tasks_in_progress
 
       render action: :index
     end
@@ -60,32 +41,12 @@ class TasksController < ApplicationController
   end
   
   def index
-    user = current_user
-    if user
-      log_in(user)
-
-      @untouched_tasks = user.created_tasks.untouched.order('created_at DESC')
-                             .page(params[:untouched_tasks_page])
-                             .per(Settings.stopped_tasks_per_page)
-
-      @suspended_tasks = user.created_tasks.suspended.order('created_at DESC')
-                             .page(params[:suspended_tasks_page])
-                             .per(Settings.stopped_tasks_per_page)
-
-      @finished_tasks = user.created_tasks.finished.order('created_at DESC')
-                            .page(params[:finished_tasks_page])
-                            .per(Settings.stopped_tasks_per_page)
-
-      @user_tasks_in_progress = user.created_tasks.in_progress.order('created_at DESC')
-
-      @task = Task.new
-    else
-      user = User.new
-    end
-
-    @all_tasks_in_progress = 
-      Task.in_progress.where('user_id <> ?', user.id || '').order('created_at DESC')
-          .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
+    @untouched_tasks        = current_user_untouched_tasks
+    @suspended_tasks        = current_user_suspended_tasks
+    @finished_tasks         = current_user_finished_tasks
+    @user_tasks_in_progress = current_user_tasks_in_progress
+    @all_tasks_in_progress  = all_tasks_in_progress
+    @task                   = Task.new
   end
 
   def resume
@@ -158,5 +119,37 @@ class TasksController < ApplicationController
     converted_params = params.require(:task).permit(:content, :target_time)
     converted_params[:target_time] = Time.utc(2000, 1, 1, 0, 0, 0) + params[:task][:target_time].to_i
     converted_params
+  end
+
+  def all_tasks_in_progress
+    Task.in_progress
+        .where('user_id <> ?', current_user || '').order('created_at DESC')
+        .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
+  end
+
+  def current_user_tasks_in_progress
+    return unless current_user
+    current_user.created_tasks.in_progress.order('created_at DESC')
+  end
+
+  def current_user_finished_tasks
+    return unless current_user
+    current_user.created_tasks.finished.order('created_at DESC')
+                .page(params[:finished_tasks_page])
+                .per(Settings.stopped_tasks_per_page)
+  end
+
+  def current_user_suspended_tasks
+    return unless current_user
+    current_user.created_tasks.suspended.order('created_at DESC')
+                .page(params[:suspended_tasks_page])
+                .per(Settings.stopped_tasks_per_page)
+  end
+
+  def current_user_untouched_tasks
+    return unless current_user
+    current_user.created_tasks.untouched.order('created_at DESC')
+                .page(params[:untouched_tasks_page])
+                .per(Settings.stopped_tasks_per_page)
   end
 end
