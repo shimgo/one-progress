@@ -61,8 +61,8 @@ RSpec.describe SessionsController, type: :controller do
           end
 
           it 'root_pathにリダイレクトすること' do
-              post :create, user: FactoryGirl.attributes_for(:user, :invalid_user)
-              expect(response).to redirect_to root_path
+            post :create, user: FactoryGirl.attributes_for(:user, :invalid_user)
+            expect(response).to redirect_to root_path
           end
 
           it 'flash[:alert]にUserモデルのエラーメッセージをセットすること' do

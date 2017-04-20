@@ -695,7 +695,8 @@ RSpec.describe TasksController, type: :controller do
               .and_return(Task.where(id: task))
 
             patch :update, id: task, task: FactoryGirl.attributes_for(
-              :task, content: '更新後タスク')
+              :task, content: '更新後タスク'
+            )
             task.reload
             expect(task.content).to eq '更新後タスク'
           end
@@ -706,7 +707,8 @@ RSpec.describe TasksController, type: :controller do
               .and_return(Task.where(id: task))
 
             patch :update, id: task, task: FactoryGirl.attributes_for(
-              :task, target_time: 1800)
+              :task, target_time: 1800
+            )
             task.reload
             expect(task.target_time).to eq Time.utc(2000,1,1,0,30,0)
           end

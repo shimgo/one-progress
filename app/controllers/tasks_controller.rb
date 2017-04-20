@@ -9,21 +9,28 @@ class TasksController < ApplicationController
       write_information_log(@task.errors.full_messages)
 
       if current_user
-        @untouched_tasks = current_user.created_tasks.untouched.order('created_at DESC')
-          .page(params[:untouched_tasks_page]).per(Settings.stopped_tasks_per_page)
+        @untouched_tasks = 
+          current_user.created_tasks.untouched.order('created_at DESC')
+                      .page(params[:untouched_tasks_page])
+                      .per(Settings.stopped_tasks_per_page)
 
-        @suspended_tasks = current_user.created_tasks.suspended.order('created_at DESC')
-          .page(params[:suspended_tasks_page]).per(Settings.stopped_tasks_per_page)
+        @suspended_tasks =
+          current_user.created_tasks.suspended.order('created_at DESC')
+                      .page(params[:suspended_tasks_page])
+                      .per(Settings.stopped_tasks_per_page)
 
-        @finished_tasks = current_user.created_tasks.finished.order('created_at DESC')
-          .page(params[:finished_tasks_page]).per(Settings.stopped_tasks_per_page)
+        @finished_tasks = 
+          current_user.created_tasks.finished.order('created_at DESC')
+                      .page(params[:finished_tasks_page])
+                      .per(Settings.stopped_tasks_per_page)
 
-        @user_tasks_in_progress = current_user.created_tasks
-          .in_progress.order('created_at DESC')
+        @user_tasks_in_progress = 
+          current_user.created_tasks.in_progress.order('created_at DESC')
 
-        @all_tasks_in_progress = Task.in_progress
-          .where('user_id <> ?', current_user.id || '').order('created_at DESC')
-          .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
+        @all_tasks_in_progress = 
+          Task.in_progress
+              .where('user_id <> ?', current_user.id || '').order('created_at DESC')
+              .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
       end
 
       render action: :index
@@ -58,13 +65,16 @@ class TasksController < ApplicationController
       log_in(user)
 
       @untouched_tasks = user.created_tasks.untouched.order('created_at DESC')
-        .page(params[:untouched_tasks_page]).per(Settings.stopped_tasks_per_page)
+                             .page(params[:untouched_tasks_page])
+                             .per(Settings.stopped_tasks_per_page)
 
       @suspended_tasks = user.created_tasks.suspended.order('created_at DESC')
-        .page(params[:suspended_tasks_page]).per(Settings.stopped_tasks_per_page)
+                             .page(params[:suspended_tasks_page])
+                             .per(Settings.stopped_tasks_per_page)
 
       @finished_tasks = user.created_tasks.finished.order('created_at DESC')
-        .page(params[:finished_tasks_page]).per(Settings.stopped_tasks_per_page)
+                            .page(params[:finished_tasks_page])
+                            .per(Settings.stopped_tasks_per_page)
 
       @user_tasks_in_progress = user.created_tasks.in_progress.order('created_at DESC')
 
@@ -73,9 +83,9 @@ class TasksController < ApplicationController
       user = User.new
     end
 
-    @all_tasks_in_progress = Task.in_progress
-      .where('user_id <> ?', user.id || '').order('created_at DESC')
-      .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
+    @all_tasks_in_progress = 
+      Task.in_progress.where('user_id <> ?', user.id || '').order('created_at DESC')
+          .page(params[:all_tasks_in_progress_page]).per(Settings.all_tasks_per_page)
   end
 
   def resume

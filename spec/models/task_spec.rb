@@ -79,7 +79,8 @@ RSpec.describe Task, type: :model do
         owner: user
       )
       allow(task).to receive_message_chain(
-        :owner, :created_tasks, :in_progress, :exists?).and_return(false)
+        :owner, :created_tasks, :in_progress, :exists?
+      ).and_return(false)
       task
     end
 
@@ -101,7 +102,8 @@ RSpec.describe Task, type: :model do
           it "statusが#{status}の場合、例外が発生する" do
             task.status = status
             expect{ task.start}.to raise_error(
-              /statusはuntouchedまたはsuspendedである必要があります。/)
+              /statusはuntouchedまたはsuspendedである必要があります。/
+            )
           end
         end
       end
@@ -191,7 +193,8 @@ RSpec.describe Task, type: :model do
           it "statusが#{status}の場合、例外が発生する" do
             task.status = status
             expect{ task.finish }.to raise_error(
-              /statusはstartedまたはresumedである必要があります。/)
+              /statusはstartedまたはresumedである必要があります。/
+            )
           end
         end
       end
@@ -235,7 +238,8 @@ RSpec.describe Task, type: :model do
         owner: user
       )
       allow(task).to receive_message_chain(
-        :owner, :created_tasks, :in_progress, :exists?).and_return(false)
+        :owner, :created_tasks, :in_progress, :exists?
+      ).and_return(false)
       task
     end
 
@@ -262,7 +266,8 @@ RSpec.describe Task, type: :model do
           it "statusが#{status}の場合、例外が発生する" do
             task.status = status
             expect{ task.resume}.to raise_error(
-              /statusはsuspendedまたはfinishedである必要があります。/)
+              /statusはsuspendedまたはfinishedである必要があります。/
+            )
           end
         end
       end
@@ -376,7 +381,8 @@ RSpec.describe Task, type: :model do
           it "statusが#{status}の場合、例外が発生する" do
             task.status = status
             expect{ task.suspend}.to raise_error(
-              /statusはstartedまたはresumedである必要があります。/)
+              /statusはstartedまたはresumedである必要があります。/
+            )
           end
         end
       end
