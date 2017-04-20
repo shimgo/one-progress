@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
   }
 
   default_value_for :status, :untouched
-  default_value_for :elapsed_time, Time.at(0)
+  default_value_for :elapsed_time, Time.zone.at(0)
 
   belongs_to :owner, class_name: 'User', foreign_key: 'user_id'
 
@@ -92,11 +92,11 @@ class Task < ActiveRecord::Base
   private
 
   def calculate_elapsed_time(called_at)
-    self.elapsed_time ||= Time.at(0)
+    self.elapsed_time ||= Time.zone.at(0)
     self.elapsed_time + (called_at - (resumed_at || started_at)).to_i
   end
 
   def to_duration(time)
-    Time.at(time.utc.hour * 3600 + time.utc.min * 60 + time.utc.sec).to_i
+    Time.zone.at(time.utc.hour * 3600 + time.utc.min * 60 + time.utc.sec).to_i
   end
 end

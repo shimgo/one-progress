@@ -7,24 +7,24 @@ RSpec.describe Task, type: :model do
 
   describe 'validation' do
     it 'contentとtarget_timeが空でなければ有効であること' do
-      task = Task.new(content: 'タスク内容', target_time: Time.at(0))
+      task = Task.new(content: 'タスク内容', target_time: Time.zone.at(0))
       expect(task).to be_valid
     end
 
     describe 'content' do
       it '空であれば無効であること' do
-        task = Task.new(content: nil, target_time: Time.at(0))
+        task = Task.new(content: nil, target_time: Time.zone.at(0))
         task.valid?
         expect(task.errors[:content]).to include("を入力してください")
       end
 
       it '長さが200文字以内であれば有効であること' do
-        task = Task.new(content: 'あ' * 200, target_time: Time.at(0))
+        task = Task.new(content: 'あ' * 200, target_time: Time.zone.at(0))
         expect(task).to be_valid
       end
 
       it '長さが200文字超であれば無効であること' do
-        task = Task.new(content: 'あ' * 201, target_time: Time.at(0))
+        task = Task.new(content: 'あ' * 201, target_time: Time.zone.at(0))
         task.valid?
         expect(task.errors[:content]).to include("は200文字以内で入力してください")
       end
@@ -38,12 +38,12 @@ RSpec.describe Task, type: :model do
       end
 
       it '60分の場合、有効であること' do
-        task = Task.new(content: 'あ', target_time: Time.at(3600))
+        task = Task.new(content: 'あ', target_time: Time.zone.at(3600))
         expect(task).to be_valid
       end
 
       it '60分を超える場合、無効であること' do
-        task = Task.new(target_time: Time.at(3601))
+        task = Task.new(target_time: Time.zone.at(3601))
         task.valid?
         expect(task.errors[:target_time]).to include("は60分以内にしてください")
       end
@@ -53,11 +53,11 @@ RSpec.describe Task, type: :model do
   describe 'scope' do
     describe 'in_progress' do
       before do
-        @untouched_task = Task.create(status: :untouched, content: 'test', target_time: Time.at(600))
-        @started_task   = Task.create(status: :started,   content: 'test', target_time: Time.at(600))
-        @suspended_task = Task.create(status: :suspended, content: 'test', target_time: Time.at(600))
-        @resumed_task   = Task.create(status: :resumed,   content: 'test', target_time: Time.at(600))
-        @finished_task  = Task.create(status: :finished,  content: 'test', target_time: Time.at(600))
+        @untouched_task = Task.create(status: :untouched, content: 'test', target_time: Time.zone.at(600))
+        @started_task   = Task.create(status: :started,   content: 'test', target_time: Time.zone.at(600))
+        @suspended_task = Task.create(status: :suspended, content: 'test', target_time: Time.zone.at(600))
+        @resumed_task   = Task.create(status: :resumed,   content: 'test', target_time: Time.zone.at(600))
+        @finished_task  = Task.create(status: :finished,  content: 'test', target_time: Time.zone.at(600))
       end
 
       it 'statusがstartedとresumedのタスクが含まれていること' do
@@ -75,7 +75,7 @@ RSpec.describe Task, type: :model do
       task = Task.new(
         content: '内容', 
         status: :untouched,
-        target_time: Time.at(3600),
+        target_time: Time.zone.at(3600),
         owner: user
       )
       allow(task).to receive_message_chain(
@@ -121,7 +121,7 @@ RSpec.describe Task, type: :model do
       let(:existing_task) do
         existing_task = Task.new(
           content: 'test',
-          target_time: Time.at(1800),
+          target_time: Time.zone.at(1800),
           owner: user
         )
         allow(task).to receive_message_chain(:owner, :created_tasks)
@@ -168,8 +168,8 @@ RSpec.describe Task, type: :model do
       Task.new(
         status: :started, 
         content: '内容', 
-        target_time: Time.at(3600), 
-        started_at: Time.new(2016, 1, 1, 0, 0, 0)
+        target_time: Time.zone.at(3600), 
+        started_at: Time.zone.local(2016, 1, 1, 0, 0, 0)
       )
     end
 
@@ -209,18 +209,18 @@ RSpec.describe Task, type: :model do
 
     context 'resumed_atに時間がセットされている場合' do
       it 'resumed_atから現在日時までの経過時間がelapsed_timeに加算されること' do
-        task.resumed_at   = Time.new(2016, 1, 1, 10, 30, 0)
-        task.elapsed_time = Time.at(3600)
+        task.resumed_at   = Time.zone.local(2016, 1, 1, 10, 30, 0)
+        task.elapsed_time = Time.zone.at(3600)
 
-        task.finish(Time.new(2016, 1, 1, 11, 30, 0))
-        expect(task.elapsed_time).to eq Time.at(7200)
+        task.finish(Time.zone.local(2016, 1, 1, 11, 30, 0))
+        expect(task.elapsed_time).to eq Time.zone.at(7200)
       end
     end
 
     context 'resumed_atに時間がセットされていない場合' do
       it 'started_atから現在日時までの経過時間がelapsed_timeにセットされること' do
-        task.finish(Time.new(2016, 1, 1, 0, 30, 0))
-        expect(task.elapsed_time).to eq Time.at(1800)
+        task.finish(Time.zone.local(2016, 1, 1, 0, 30, 0))
+        expect(task.elapsed_time).to eq Time.zone.at(1800)
       end
     end
   end
@@ -230,8 +230,8 @@ RSpec.describe Task, type: :model do
       task = Task.new(
         status: :suspended, 
         content: '内容', 
-        target_time: Time.at(3600), 
-        started_at: Time.new(2016, 1, 1, 0, 0, 0),
+        target_time: Time.zone.at(3600), 
+        started_at: Time.zone.local(2016, 1, 1, 0, 0, 0),
         owner: user
       )
       allow(task).to receive_message_chain(
@@ -280,7 +280,7 @@ RSpec.describe Task, type: :model do
 
     context 'elapsed_timeがtarget_timeを超えている場合' do
       it 'finish_targeted_atに現在日時がセットされること' do
-        task.elapsed_time = Time.at(7200)
+        task.elapsed_time = Time.zone.at(7200)
         task.resume
         expect(task.finish_targeted_at).to within(1).of(Time.zone.now)
       end
@@ -288,17 +288,17 @@ RSpec.describe Task, type: :model do
 
     context 'elapsed_timeがtarget_timeと同値の場合' do
       it 'finish_targeted_atに、現在日時がセットされること' do
-        task.elapsed_time = Time.at(3600)
-        task.resume(Time.new(2016, 1, 2, 0, 0, 0))
-        expect(task.finish_targeted_at).to eq Time.new(2016, 1, 2, 0, 0, 0)
+        task.elapsed_time = Time.zone.at(3600)
+        task.resume(Time.zone.local(2016, 1, 2, 0, 0, 0))
+        expect(task.finish_targeted_at).to eq Time.zone.local(2016, 1, 2, 0, 0, 0)
       end
     end
 
     context 'elapsed_timeがtarget_time未満の場合' do
       it 'finish_targeted_atに、現在日時に残り時間(target_time - elapsed_time)を加算した日時がセットされること' do
-        task.elapsed_time = Time.at(3000)
-        task.resume(Time.new(2016, 1, 1, 0, 0, 0))
-        expect(task.finish_targeted_at).to eq Time.new(2016, 1, 1, 0, 10, 0)
+        task.elapsed_time = Time.zone.at(3000)
+        task.resume(Time.zone.local(2016, 1, 1, 0, 0, 0))
+        expect(task.finish_targeted_at).to eq Time.zone.local(2016, 1, 1, 0, 10, 0)
       end
     end
 
@@ -306,7 +306,7 @@ RSpec.describe Task, type: :model do
       let(:existing_task) do
         existing_task = Task.new(
           content: 'test',
-          target_time: Time.at(1800),
+          target_time: Time.zone.at(1800),
           owner: user
         )
         allow(task).to receive_message_chain(:owner, :created_tasks)
@@ -353,8 +353,8 @@ RSpec.describe Task, type: :model do
       Task.new(
         status: :started, 
         content: '内容', 
-        target_time: Time.at(3600), 
-        started_at: Time.new(2016, 1, 1, 0, 0, 0)
+        target_time: Time.zone.at(3600), 
+        started_at: Time.zone.local(2016, 1, 1, 0, 0, 0)
       )
     end
 
@@ -394,18 +394,18 @@ RSpec.describe Task, type: :model do
 
     context 'resumed_atに時間がセットされている場合' do
       it 'resumed_atから現在日時までの経過時間がelapsed_timeに加算されること' do
-        task.resumed_at   = Time.new(2016, 1, 1, 10, 30, 0)
-        task.elapsed_time = Time.at(3600)
+        task.resumed_at   = Time.zone.local(2016, 1, 1, 10, 30, 0)
+        task.elapsed_time = Time.zone.at(3600)
 
-        task.suspend(Time.new(2016, 1, 1, 11, 30, 0))
-        expect(task.elapsed_time).to eq Time.at(7200)
+        task.suspend(Time.zone.local(2016, 1, 1, 11, 30, 0))
+        expect(task.elapsed_time).to eq Time.zone.at(7200)
       end
     end
 
     context 'resumed_atに時間がセットされていない場合' do
       it 'started_atから現在日時までの経過時間がelapsed_timeにセットされること' do
-        task.suspend(Time.new(2016, 1, 1, 0, 30, 0))
-        expect(task.elapsed_time).to eq Time.at(1800)
+        task.suspend(Time.zone.local(2016, 1, 1, 0, 30, 0))
+        expect(task.elapsed_time).to eq Time.zone.at(1800)
       end
     end
   end

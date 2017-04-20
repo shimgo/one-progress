@@ -89,7 +89,7 @@ feature 'タスク管理' do
         visit root_path
         Timecop.freeze do
           find_link('開始').click
-          started_at = Time.now
+          started_at = Time.zone.now
           target_time = started_at + 20.minutes
           expect(page).to have_content('タスクを開始しました')
           within('div#tasks-in-progress') do
@@ -137,7 +137,7 @@ feature 'タスク管理' do
 
         Timecop.freeze do
           find_link('開始').click
-          started_at = Time.now
+          started_at = Time.zone.now
           target_time = started_at + 30.minutes
           expect(page).to have_content('タスクを開始しました')
           within('div#tasks-in-progress') do
@@ -169,7 +169,7 @@ feature 'タスク管理' do
         expect(page).to have_link '0', href: '#finished'
 
         Timecop.freeze do
-          started_at = Time.now
+          started_at = Time.zone.now
           target_time = started_at + elapsed_time.minute
           find_link('開始').click
           expect(page).to have_content('タスクを再開しました')
