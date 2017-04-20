@@ -88,34 +88,30 @@ RSpec.describe TasksController, type: :controller do
 
       it 'ログインユーザの未着手タスクを@untouched_tasksに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :untouched)
-        allow(user.created_tasks).to receive(:untouched).and_return(user.created_tasks)
 
         get :index
-        expect(assigns(:untouched_tasks)).to match(user.created_tasks.order('created_at DESC').to_a) 
+        expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
       end
 
       it 'ログインユーザの保留タスクを@suspended_tasksに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :suspended)
-        allow(user.created_tasks).to receive(:suspended).and_return(user.created_tasks)
 
         get :index
-        expect(assigns(:suspended_tasks)).to match(user.created_tasks.order('created_at DESC').to_a) 
+        expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
       end
 
       it 'ログインユーザの完了タスクを@finished_tasksに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :finished)
-        allow(user.created_tasks).to receive(:finished).and_return(user.created_tasks)
 
         get :index
-        expect(assigns(:finished_tasks)).to match(user.created_tasks.order('created_at DESC')) 
+        expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
       end
 
       it 'ログインユーザの進行中タスクを@user_tasks_in_progressに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :started)
-        allow(user.created_tasks).to receive(:in_progress).and_return(user.created_tasks)
 
         get :index
-        expect(assigns(:user_tasks_in_progress)).to match(user.created_tasks.order('created_at DESC').to_a) 
+        expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC')) 
       end
 
       it 'ログインユーザ以外のすべてのユーザのタスクを@all_tasks_in_progresに作成日が新しい順に格納すること' do
@@ -126,7 +122,7 @@ RSpec.describe TasksController, type: :controller do
         allow(Task).to receive(:in_progress).and_return(all_tasks_including_logged_in_user)
 
         get :index
-        expect(assigns(:all_tasks_in_progress)).to match(other_user_tasks_in_progress.order('created_at DESC').to_a)
+        expect(assigns(:all_tasks_in_progress)).to eq(other_user_tasks_in_progress.order('created_at DESC').to_a)
       end
     end
 
@@ -161,7 +157,7 @@ RSpec.describe TasksController, type: :controller do
         allow(Task).to receive(:in_progress).and_return(other_user_tasks_in_progress)
 
         get :index
-        expect(assigns(:all_tasks_in_progress)).to match(other_user_tasks_in_progress.order('created_at DESC').to_a)
+        expect(assigns(:all_tasks_in_progress)).to eq(other_user_tasks_in_progress.order('created_at DESC').to_a)
       end
     end
   end
@@ -211,34 +207,30 @@ RSpec.describe TasksController, type: :controller do
 
         it 'ログインユーザの未着手タスクを@untouched_tasksに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :untouched)
-          allow(user.created_tasks).to receive(:untouched).and_return(user.created_tasks)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:untouched_tasks)).to match(user.created_tasks.order('created_at DESC').to_a) 
+          expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
         end
 
         it 'ログインユーザの保留タスクを@suspended_tasksに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :suspended)
-          allow(user.created_tasks).to receive(:suspended).and_return(user.created_tasks)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:suspended_tasks)).to match(user.created_tasks.order('created_at DESC').to_a) 
+          expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
         end
 
         it 'ログインユーザの完了タスクを@finished_tasksに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :finished)
-          allow(user.created_tasks).to receive(:finished).and_return(user.created_tasks)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:finished_tasks)).to match(user.created_tasks.order('created_at DESC')) 
+          expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
         end
 
         it 'ログインユーザの進行中タスクを@user_tasks_in_progressに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :started)
-          allow(user.created_tasks).to receive(:in_progress).and_return(user.created_tasks)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:user_tasks_in_progress)).to match(user.created_tasks.order('created_at DESC').to_a) 
+          expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC')) 
         end
 
         it 'ログインユーザ以外のすべてのユーザのタスクを@all_tasks_in_progresに作成日が新しい順に格納すること' do
@@ -249,7 +241,7 @@ RSpec.describe TasksController, type: :controller do
           allow(Task).to receive(:in_progress).and_return(all_tasks_including_logged_in_user)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:all_tasks_in_progress)).to match(other_user_tasks_in_progress.order('created_at DESC').to_a)
+          expect(assigns(:all_tasks_in_progress)).to eq(other_user_tasks_in_progress.order('created_at DESC').to_a)
         end
       end
     end
