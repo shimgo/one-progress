@@ -56,9 +56,8 @@ RSpec.describe SessionsController, type: :controller do
 
         context '入力が無効の場合' do
           it 'usersテーブルにレコード追加されないこと' do 
-            expect{
-              post :create, user: FactoryGirl.attributes_for(:user, :invalid_user)
-            }.not_to change(User, :count)
+            expect{ post :create, user: FactoryGirl.attributes_for(:user, :invalid_user) }
+              .not_to change(User, :count)
           end
 
           it 'root_pathにリダイレクトすること' do

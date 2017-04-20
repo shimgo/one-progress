@@ -183,9 +183,8 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'tasksテーブルにレコードを1件追加すること' do
-          expect{
-            post :create, task: FactoryGirl.attributes_for(:task)
-          }.to change(Task, :count).by(1)
+          expect{ post :create, task: FactoryGirl.attributes_for(:task) }
+            .to change(Task, :count).by(1)
         end
       end
 
@@ -206,9 +205,8 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'tasksテーブルにレコードが追加されないこと' do
-          expect{
-            post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          }.not_to change(Task, :count)
+          expect{ post :create, task: FactoryGirl.attributes_for(:task, :invalid_task) }
+            .not_to change(Task, :count)
         end
 
         it 'ログインユーザの未着手タスクを@untouched_tasksに作成日が新しい順に格納していること' do

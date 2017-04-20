@@ -15,9 +15,8 @@ feature 'ユーザ関連の操作' do
     expect(page).not_to have_link 'ログアウト'
     expect(page).to have_link 'ログイン'
 
-    expect {
-      login_as_guest_user(user.username)
-    }.to change{[User.count, GuestUser.count]}.by([1, 1])
+    expect { login_as_guest_user(user.username) }
+      .to change{[User.count, GuestUser.count]}.by([1, 1])
     expect(page).to have_content user.username
     expect(page).not_to have_link 'ログイン'
 
@@ -42,9 +41,7 @@ feature 'ユーザ関連の操作' do
     expect(page).not_to have_content('ログアウト')
     expect(page).to have_link('Twitterでログイン')
 
-    expect {
-      login_as_twitter_user(twitter_user)
-    }.to change(User, :count).by(1)
+    expect { login_as_twitter_user(twitter_user) }.to change(User, :count).by(1)
       .and change(TwitterUser, :count).by(1)
     expect(page).to have_content('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
@@ -57,9 +54,7 @@ feature 'ユーザ関連の操作' do
     expect(page).not_to have_link(twitter_user.user.username)
     expect(page).not_to have_link(twitter_user.nickname)
 
-    expect {
-      login_as_twitter_user(twitter_user)
-    }.to change(User, :count).by(0)
+    expect { login_as_twitter_user(twitter_user) }.to change(User, :count).by(0)
       .and change(TwitterUser, :count).by(0)
     expect(page).to have_content('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
@@ -83,13 +78,13 @@ feature 'ユーザ関連の操作' do
     expect(page).to have_content('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
 
-    expect {
+    expect do
       find_link('退会').click
       find_button('退会する').click
       find('.modal-header', text: '退会しますか？')
       find_link('退会', {class: 'btn-danger'}).click
       expect(page).to have_content('退会完了しました')
-    }.to change(User, :count).by(-1)
+    end.to change(User, :count).by(-1)
       .and change(TwitterUser, :count).by(-1)
     expect(page).not_to have_content('ログアウト')
     expect(page).to have_link('Twitterでログイン')
