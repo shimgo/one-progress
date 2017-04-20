@@ -34,3 +34,7 @@ Metrics/MethodLength:
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'app/models/task.rb'
+
+# ドキュメントを書くほどのアプリではないので除外
+Style/Documentation:
+    Enabled: false
