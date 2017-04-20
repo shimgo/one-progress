@@ -29,3 +29,8 @@ Metrics/LineLength:
 # デフォルトの10では厳しいので緩和
 Metrics/MethodLength:
   Max: 20
+
+# ラムダをパラメータにした際に違反とみなされるRuboCopの不具合を回避するため
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'app/models/task.rb'
