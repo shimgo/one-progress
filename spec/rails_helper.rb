@@ -60,9 +60,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-	config.before(:suite) do
-   if config.use_transactional_fixtures?
-     raise(<<-MSG)
+  config.before(:suite) do
+    if config.use_transactional_fixtures?
+      raise(<<-MSG)
         Delete line `config.use_transactional_fixtures = true` from rails_helper.rb
         (or set it to false) to prevent uncommitted transactions being used in
         JavaScript-dependent specs.
@@ -72,9 +72,9 @@ RSpec.configure do |config|
         the spec. The app's database connection would not be able to access
         uncommitted transaction data setup over the spec's database connection.
       MSG
-   end
+    end
     DatabaseCleaner.clean_with(:truncation)
- end
+  end
 
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
