@@ -27,7 +27,7 @@ RSpec.describe UsersController, type: :controller do
       it 'root_pathにリダイレクトすること' do
         delete :destroy
         expect(response).to redirect_to root_path
-     end
+      end
 
       it 'flash[:notice]に\'退会完了しました\'メッセージがセットされること' do
         delete :destroy
