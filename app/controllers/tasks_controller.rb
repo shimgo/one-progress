@@ -1,5 +1,4 @@
 class TasksController < ApplicationController
-
   before_action :authenticate, except: [:index]
 
   def create
@@ -150,5 +149,4 @@ class TasksController < ApplicationController
     converted_params[:target_time] = Time.utc(2000, 1, 1, 0, 0, 0) + params[:task][:target_time].to_i
     converted_params
   end
-
 end
