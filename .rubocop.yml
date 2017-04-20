@@ -12,3 +12,7 @@ AllCops:
     - 'config/**/*'
     - 'script/**/*'
     - 'vendor/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
