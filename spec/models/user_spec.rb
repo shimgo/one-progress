@@ -128,8 +128,7 @@ RSpec.describe User, :type => :model do
         user = User.create(username: 'test')
         token = SecureRandom.urlsafe_base64
         user.remember_token = token
-        user.update_attribute(:remember_digest, 
-                              User.digest(user.remember_token))
+        user.update_attributes(remember_digest: User.digest(user.remember_token))
         expect(user.authenticated?(token)).to eq true
       end
     end
@@ -138,8 +137,7 @@ RSpec.describe User, :type => :model do
       it 'falseを返すこと' do
         user = User.create(username: 'test')
         user.remember_token = SecureRandom.urlsafe_base64
-        user.update_attribute(:remember_digest, 
-                              User.digest(user.remember_token))
+        user.update_attributes(remember_digest: User.digest(user.remember_token))
         expect(user.authenticated?('test')).to eq false
       end
     end
