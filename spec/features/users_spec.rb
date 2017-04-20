@@ -82,7 +82,7 @@ feature 'ユーザ関連の操作' do
       find_link('退会').click
       find_button('退会する').click
       find('.modal-header', text: '退会しますか？')
-      find_link('退会', {class: 'btn-danger'}).click
+      find_link('退会', class: 'btn-danger').click
       expect(page).to have_content('退会完了しました')
     end.to change(User, :count).by(-1)
       .and change(TwitterUser, :count).by(-1)
