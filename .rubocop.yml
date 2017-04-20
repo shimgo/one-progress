@@ -23,3 +23,7 @@ ClassLength:
 # 基本80までで120超は禁止のイメージ
 Metrics/LineLength:
   Max: 120
+
+# デフォルトの10では厳しいので緩和
+Metrics/MethodLength:
+  Max: 20
