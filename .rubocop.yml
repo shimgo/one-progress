@@ -19,3 +19,7 @@ Metrics/BlockLength:
 
 ClassLength:
   Enabled: false
+
+# 基本80までで120超は禁止のイメージ
+Metrics/LineLength:
+  Max: 120
