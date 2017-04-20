@@ -6,7 +6,7 @@ feature 'タスク管理' do
       background do
         FactoryGirl.create(
           :task, owner: user, content: '最初に作ったタスク',
-          status: :untouched, created_at: 10.minute.ago
+          status: :untouched, created_at: 10.minutes.ago
         )
         Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user)
@@ -25,7 +25,7 @@ feature 'タスク管理' do
       background do
         FactoryGirl.create(
           :task, owner: user, content: '最初に作ったタスク',
-          status: :suspended, created_at: 10.minute.ago
+          status: :suspended, created_at: 10.minutes.ago
         )
         Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user, status: :suspended)
@@ -44,7 +44,7 @@ feature 'タスク管理' do
       background do
         FactoryGirl.create(
           :task, owner: user, content: '最初に作ったタスク',
-          status: :finished, created_at: 10.minute.ago
+          status: :finished, created_at: 10.minutes.ago
         )
         Settings.stopped_tasks_per_page.times do
           FactoryGirl.create(:task, owner: user, status: :finished)
@@ -90,7 +90,7 @@ feature 'タスク管理' do
         Timecop.freeze do
           find_link('開始').click
           started_at = Time.now
-          target_time = started_at + 20.minute
+          target_time = started_at + 20.minutes
           expect(page).to have_content('タスクを開始しました')
           within('div#tasks-in-progress') do
             expect(page).to have_content '参考書の1章を読み終える'
@@ -138,7 +138,7 @@ feature 'タスク管理' do
         Timecop.freeze do
           find_link('開始').click
           started_at = Time.now
-          target_time = started_at + 30.minute
+          target_time = started_at + 30.minutes
           expect(page).to have_content('タスクを開始しました')
           within('div#tasks-in-progress') do
             expect(page).to have_content '参考書の2章を読み終える'
