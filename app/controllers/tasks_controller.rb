@@ -19,21 +19,23 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    task = current_user.created_tasks.find(params[:id])
+    unless (task = find_target_task(params[:id]))
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
+    end
+
     task.destroy!
     redirect_to root_path, notice: 'タスクを削除しました'
-  rescue ActiveRecord::RecordNotFound => e
-    write_failure_log(e.message)
-    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
 
   def finish
-    task = current_user.created_tasks.find(params[:id])
+    unless (task = find_target_task(params[:id]))
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
+    end
+
     task.finish
     redirect_to root_path, notice: 'タスクを完了しました'
-  rescue ActiveRecord::RecordNotFound => e
-    write_failure_log(e.message)
-    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
 
   def index
@@ -46,10 +48,7 @@ class TasksController < ApplicationController
   end
 
   def resume
-    begin
-      task = current_user.created_tasks.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
+    unless (task = find_target_task(params[:id]))
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
       return
     end
@@ -63,10 +62,7 @@ class TasksController < ApplicationController
   end
 
   def start
-    begin
-      task = current_user.created_tasks.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
+    unless (task = find_target_task(params[:id]))
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
       return
     end
@@ -80,19 +76,17 @@ class TasksController < ApplicationController
   end
 
   def suspend
-    task = current_user.created_tasks.find(params[:id])
+    unless (task = find_target_task(params[:id]))
+      redirect_to root_path, alert: ['タスクが見つかりませんでした']
+      return
+    end
+
     task.suspend
     redirect_to root_path, notice: 'タスクを中断しました'
-  rescue ActiveRecord::RecordNotFound => e
-    write_failure_log(e.message)
-    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
 
   def update
-    begin
-      task = current_user.created_tasks.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
+    unless (task = find_target_task(params[:id]))
       redirect_to root_path, alert: ['タスクが見つかりませんでした']
       return
     end
@@ -101,8 +95,9 @@ class TasksController < ApplicationController
       flash[:notice] = 'タスクを更新しました'
       head :ok
     else
-      write_information_log(task.errors.full_messages)
-      render json: { id: task.id, messages: task.errors.full_messages },
+      error_messages = task.errors.full_messages
+      write_information_log(error_messages)
+      render json: { id: task.id, messages: error_messages },
              status: :unprocessable_entity
     end
   end
@@ -145,5 +140,12 @@ class TasksController < ApplicationController
     current_user.created_tasks.untouched.order('created_at DESC')
                 .page(params[:untouched_tasks_page])
                 .per(Settings.stopped_tasks_per_page)
+  end
+
+  def find_target_task(id)
+    current_user.created_tasks.find(id)
+  rescue ActiveRecord::RecordNotFound => e
+    write_failure_log(e.message)
+    return
   end
 end
