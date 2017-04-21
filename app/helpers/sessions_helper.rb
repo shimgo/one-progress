@@ -13,15 +13,18 @@ module SessionsHelper
   end
 
   def current_user
-    raise <<-EOS.strip_heredoc if cookies.signed[:user_id].nil? && session[:user_id]
+    user_id_in_cookies = cookies.signed[:user_id]
+    user_id_in_session = session[:user_id]
+
+    raise <<-EOS.strip_heredoc if user_id_in_cookies.nil? && user_id_in_session
       cookieのユーザIDがnilの場合はセッションのユーザIDもnilである必要があります。\n
-      (session[:user_id]: #{session[:user_id]})
+      (session[:user_id]: #{user_id_in_session})
     EOS
 
-    if (user_id = session[:user_id])
-      @current_user ||= User.find_by(id: user_id)
-    elsif (user_id = cookies.signed[:user_id])
-      @current_user = authenticated_user(user_id)
+    if user_id_in_session
+      @current_user ||= User.find_by(id: user_id_in_session)
+    elsif user_id_in_cookies
+      @current_user ||= authenticated_user(user_id_in_cookies)
     end
   end
 
