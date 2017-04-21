@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate, except: [:index]
 
   def create
-    @task = current_user.created_tasks.new(task_params)
+    @task = build_current_user_task
     if @task.save
       redirect_to root_path, notice: 'タスクを作成しました'
     else
@@ -56,8 +56,9 @@ class TasksController < ApplicationController
     if task.resume
       redirect_to root_path, notice: 'タスクを再開しました'
     else
-      write_information_log(task.errors.full_messages)
-      redirect_to root_path, alert: task.errors.full_messages
+      error_messages = task.errors.full_messages
+      write_information_log(error_messages)
+      redirect_to root_path, alert: error_messages
     end
   end
 
@@ -70,8 +71,9 @@ class TasksController < ApplicationController
     if task.start
       redirect_to root_path, notice: 'タスクを開始しました'
     else
-      write_information_log(task.errors.full_messages)
-      redirect_to root_path, alert: task.errors.full_messages
+      error_messages = task.errors.full_messages
+      write_information_log(error_messages)
+      redirect_to root_path, alert: error_messages
     end
   end
 
@@ -147,5 +149,9 @@ class TasksController < ApplicationController
   rescue ActiveRecord::RecordNotFound => e
     write_failure_log(e.message)
     return
+  end
+
+  def build_current_user_task
+    current_user.created_tasks.new(task_params) if current_user
   end
 end
