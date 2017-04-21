@@ -105,5 +105,4 @@ class Task < ActiveRecord::Base
     remaining_time = target_time - elapsed_time
     remaining_time < 0 ? 0 : remaining_time
   end
-
 end
