@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    sequence(:username) {|n| "ユーザ#{n}"}
+    sequence(:username) { |n| "ユーザ#{n}" }
 
     trait :invalid_user do
       username ''

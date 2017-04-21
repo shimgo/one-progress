@@ -33,7 +33,7 @@ gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap-sass', '3.2.0.0'
-gem "default_value_for", "~> 3.0.0"
+gem 'default_value_for', '~> 3.0.0'
 gem 'haml-rails', '0.9.0'
 gem 'kaminari', '~> 0.17.0'
 gem 'kaminari-bootstrap', '~> 3.0.1'

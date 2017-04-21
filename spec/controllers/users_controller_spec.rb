@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   describe 'DELETE #destroy' do
-    let(:user) do 
+    let(:user) do
       FactoryGirl.build(:user)
     end
 
@@ -40,7 +40,7 @@ RSpec.describe UsersController, type: :controller do
         allow(user).to receive(:authenticated?).and_return(false)
         allow(controller).to receive(:current_user).and_return(user)
       end
-      
+
       it '\'authentication failed. [クラス名] id:[ユーザID]\'メッセージを引数にしてwrite_failure_logメソッドを呼び出していること' do
         allow(controller).to receive(:write_failure_log)
         delete :destroy

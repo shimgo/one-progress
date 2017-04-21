@@ -13,7 +13,7 @@ module SessionsHelper
   end
 
   def current_user
-    raise <<-EOS.strip_heredoc if (cookies.signed[:user_id].nil? && session[:user_id])
+    raise <<-EOS.strip_heredoc if cookies.signed[:user_id].nil? && session[:user_id]
       cookieのユーザIDがnilの場合はセッションのユーザIDもnilである必要があります。\n
       (session[:user_id]: #{session[:user_id]})
     EOS

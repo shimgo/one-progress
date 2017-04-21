@@ -1,5 +1,5 @@
 class Task < ActiveRecord::Base
-  enum status: { 
+  enum status: {
     untouched: 0,
     started:   1,
     suspended: 2,
@@ -24,20 +24,20 @@ class Task < ActiveRecord::Base
   scope :owned, -> { where(user_id: owner.user_id) }
 
   def finish(called_at = Time.zone.now)
-    unless ['started', 'resumed'].include?(self.status)
-      raise "statusはstartedまたはresumedである必要があります。(status: #{self.status})" 
+    unless %w[started resumed].include?(status)
+      raise "statusはstartedまたはresumedである必要があります。(status: #{status})"
     end
 
     update!(
-      status: :finished, 
+      status: :finished,
       finished_at: called_at,
       elapsed_time: calculate_elapsed_time(called_at)
     )
   end
 
   def resume(called_at = Time.zone.now)
-    unless ['suspended', 'finished'].include?(self.status)
-      raise "statusはsuspendedまたはfinishedである必要があります。(status: #{self.status})" 
+    unless %w[suspended finished].include?(status)
+      raise "statusはsuspendedまたはfinishedである必要があります。(status: #{status})"
     end
 
     if owner.created_tasks.in_progress.exists?
@@ -54,8 +54,8 @@ class Task < ActiveRecord::Base
   end
 
   def start(called_at = Time.zone.now)
-    unless ['untouched', 'suspended'].include?(self.status)
-      raise "statusはuntouchedまたはsuspendedである必要があります。(status: #{self.status})" 
+    unless %w[untouched suspended].include?(status)
+      raise "statusはuntouchedまたはsuspendedである必要があります。(status: #{status})"
     end
 
     if owner.created_tasks.in_progress.exists?
@@ -65,18 +65,18 @@ class Task < ActiveRecord::Base
 
     update!(
       status: :started,
-      started_at: called_at, 
+      started_at: called_at,
       finish_targeted_at: called_at + to_duration(target_time)
     )
   end
 
   def suspend(called_at = Time.zone.now)
-    unless ['started', 'resumed'].include?(self.status)
-      raise "statusはstartedまたはresumedである必要があります。(status: #{self.status})" 
+    unless %w[started resumed].include?(status)
+      raise "statusはstartedまたはresumedである必要があります。(status: #{status})"
     end
 
     update!(
-      status: :suspended, 
+      status: :suspended,
       suspended_at: called_at,
       elapsed_time: calculate_elapsed_time(called_at)
     )

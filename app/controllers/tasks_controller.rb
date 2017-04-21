@@ -19,27 +19,23 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    begin
-      task = current_user.created_tasks.find(params[:id])
-      task.destroy!
-      redirect_to root_path, notice: 'タスクを削除しました'
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
-      redirect_to root_path, alert: ['タスクが見つかりませんでした']
-    end
+    task = current_user.created_tasks.find(params[:id])
+    task.destroy!
+    redirect_to root_path, notice: 'タスクを削除しました'
+  rescue ActiveRecord::RecordNotFound => e
+    write_failure_log(e.message)
+    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
 
   def finish
-    begin
-      task = current_user.created_tasks.find(params[:id])
-      task.finish
-      redirect_to root_path, notice: "タスクを完了しました"
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
-      redirect_to root_path, alert: ['タスクが見つかりませんでした']
-    end
+    task = current_user.created_tasks.find(params[:id])
+    task.finish
+    redirect_to root_path, notice: 'タスクを完了しました'
+  rescue ActiveRecord::RecordNotFound => e
+    write_failure_log(e.message)
+    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
-  
+
   def index
     @untouched_tasks        = current_user_untouched_tasks
     @suspended_tasks        = current_user_suspended_tasks
@@ -84,14 +80,12 @@ class TasksController < ApplicationController
   end
 
   def suspend
-    begin
-      task = current_user.created_tasks.find(params[:id])
-      task.suspend
-      redirect_to root_path, notice: 'タスクを中断しました'
-    rescue ActiveRecord::RecordNotFound => e
-      write_failure_log(e.message)
-      redirect_to root_path, alert: ['タスクが見つかりませんでした']
-    end
+    task = current_user.created_tasks.find(params[:id])
+    task.suspend
+    redirect_to root_path, notice: 'タスクを中断しました'
+  rescue ActiveRecord::RecordNotFound => e
+    write_failure_log(e.message)
+    redirect_to root_path, alert: ['タスクが見つかりませんでした']
   end
 
   def update

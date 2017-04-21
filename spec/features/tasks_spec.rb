@@ -242,7 +242,7 @@ feature 'タスク管理' do
   end
 
   context 'Twitterユーザの場合' do
-    let(:twitter_user) {FactoryGirl.create(:twitter_user, :with_user)} 
+    let(:twitter_user) { FactoryGirl.create(:twitter_user, :with_user) }
 
     background do
       visit root_path
@@ -252,7 +252,7 @@ feature 'タスク管理' do
     it_behaves_like 'タスクを操作する'
 
     it_behaves_like '目的のタスクを探し出す' do
-      let(:user) {twitter_user.user} 
+      let(:user) { twitter_user.user }
     end
   end
 
@@ -265,7 +265,7 @@ feature 'タスク管理' do
     it_behaves_like 'タスクを操作する'
 
     it_behaves_like '目的のタスクを探し出す' do
-      let(:user) {User.find_by(username: 'guest')} 
+      let(:user) { User.find_by(username: 'guest') }
     end
   end
 end

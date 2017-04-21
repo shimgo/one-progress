@@ -90,28 +90,28 @@ RSpec.describe TasksController, type: :controller do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :untouched)
 
         get :index
-        expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+        expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC'))
       end
 
       it 'ログインユーザの保留タスクを@suspended_tasksに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :suspended)
 
         get :index
-        expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+        expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC'))
       end
 
       it 'ログインユーザの完了タスクを@finished_tasksに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :finished)
 
         get :index
-        expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+        expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC'))
       end
 
       it 'ログインユーザの進行中タスクを@user_tasks_in_progressに作成日が新しい順に格納していること' do
         user.created_tasks << FactoryGirl.build_list(:task, 5, status: :started)
 
         get :index
-        expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC')) 
+        expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC'))
       end
 
       it 'ログインユーザ以外のすべてのユーザのタスクを@all_tasks_in_progresに作成日が新しい順に格納すること' do
@@ -179,7 +179,7 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'tasksテーブルにレコードを1件追加すること' do
-          expect{ post :create, task: FactoryGirl.attributes_for(:task) }
+          expect { post :create, task: FactoryGirl.attributes_for(:task) }
             .to change(Task, :count).by(1)
         end
       end
@@ -201,7 +201,7 @@ RSpec.describe TasksController, type: :controller do
         end
 
         it 'tasksテーブルにレコードが追加されないこと' do
-          expect{ post :create, task: FactoryGirl.attributes_for(:task, :invalid_task) }
+          expect { post :create, task: FactoryGirl.attributes_for(:task, :invalid_task) }
             .not_to change(Task, :count)
         end
 
@@ -209,28 +209,28 @@ RSpec.describe TasksController, type: :controller do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :untouched)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+          expect(assigns(:untouched_tasks)).to eq(user.created_tasks.order('created_at DESC'))
         end
 
         it 'ログインユーザの保留タスクを@suspended_tasksに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :suspended)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+          expect(assigns(:suspended_tasks)).to eq(user.created_tasks.order('created_at DESC'))
         end
 
         it 'ログインユーザの完了タスクを@finished_tasksに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :finished)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC')) 
+          expect(assigns(:finished_tasks)).to eq(user.created_tasks.order('created_at DESC'))
         end
 
         it 'ログインユーザの進行中タスクを@user_tasks_in_progressに作成日が新しい順に格納していること' do
           user.created_tasks << FactoryGirl.build_list(:task, 5, status: :started)
 
           post :create, task: FactoryGirl.attributes_for(:task, :invalid_task)
-          expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC')) 
+          expect(assigns(:user_tasks_in_progress)).to eq(user.created_tasks.order('created_at DESC'))
         end
 
         it 'ログインユーザ以外のすべてのユーザのタスクを@all_tasks_in_progresに作成日が新しい順に格納すること' do
@@ -280,7 +280,7 @@ RSpec.describe TasksController, type: :controller do
           task = FactoryGirl.create(:task)
           allow(controller).to receive_message_chain(:current_user, :created_tasks)
             .and_return(Task.where(id: task))
-          expect{delete :destroy, id: task}.to change(Task, :count).by(-1)
+          expect { delete :destroy, id: task }.to change(Task, :count).by(-1)
         end
       end
 
@@ -702,7 +702,7 @@ RSpec.describe TasksController, type: :controller do
               :task, target_time: 1800
             )
             task.reload
-            expect(task.target_time).to eq Time.utc(2000,1,1,0,30,0)
+            expect(task.target_time).to eq Time.utc(2000, 1, 1, 0, 30, 0)
           end
 
           it 'flash[:notice]に\'タスクを更新しました\'メッセージをセットすること' do
@@ -720,7 +720,7 @@ RSpec.describe TasksController, type: :controller do
               allow(controller).to receive_message_chain(:current_user, :created_tasks)
                 .and_return(Task.where(id: task))
 
-              attributes = { 
+              attributes = {
                 user_id: 9999,
                 status: :started,
                 elapsed_time: 900,
@@ -766,7 +766,7 @@ RSpec.describe TasksController, type: :controller do
                            task: FactoryGirl.attributes_for(:task, content: '', target_time: 3600)
             valid_task.reload
             expect(valid_task.content).not_to eq('')
-            expect(valid_task.target_time).not_to eq(Time.utc(2000,1,1,1,0,0))
+            expect(valid_task.target_time).not_to eq(Time.utc(2000, 1, 1, 1, 0, 0))
           end
           it 'Taskモデルのエラーメッセージを引数にしてwrite_information_logを呼び出していること' do
             allow(controller).to receive_message_chain(:current_user, :created_tasks)
@@ -786,7 +786,7 @@ RSpec.describe TasksController, type: :controller do
 
             patch :update, id: valid_task, task: invalid_task.attributes
             json = JSON.parse(response.body)
-            expect(json["id"]).to eq valid_task.id
+            expect(json['id']).to eq valid_task.id
           end
 
           it 'JSON形式でmessagesキーにTaskモデルのエラーメッセージをセットすること' do
@@ -796,7 +796,7 @@ RSpec.describe TasksController, type: :controller do
             patch :update, id: valid_task, task: invalid_task.attributes
             json = JSON.parse(response.body)
             invalid_task.valid?
-            expect(json["messages"]).to eq invalid_task.errors.full_messages
+            expect(json['messages']).to eq invalid_task.errors.full_messages
           end
 
           it 'httpステータスコード422を返すこと' do

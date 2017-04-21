@@ -17,8 +17,8 @@ RSpec.describe TwitterUser, type: :model do
   describe '::find_or_create_from_auth_hash' do
     let(:auth_hash) do
       {
-        uid: 'test', 
-        info: {nickname: 'testuser', image: 'http://test', name: 'ユーザ1'}
+        uid: 'test',
+        info: { nickname: 'testuser', image: 'http://test', name: 'ユーザ1' }
       }
     end
 

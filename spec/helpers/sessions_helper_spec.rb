@@ -30,7 +30,7 @@ RSpec.describe SessionsHelper, type: :helper do
       end
 
       it 'エラーなく終了すること' do
-        expect{ helper.log_in(user_mock) }.not_to raise_error
+        expect { helper.log_in(user_mock) }.not_to raise_error
       end
 
       it 'セッションにユーザIDが保存されたままであること' do
@@ -107,7 +107,7 @@ RSpec.describe SessionsHelper, type: :helper do
       end
 
       it 'エラーなく終了すること' do
-        expect{ helper.log_out }.not_to raise_error
+        expect { helper.log_out }.not_to raise_error
       end
     end
   end
@@ -202,7 +202,7 @@ RSpec.describe SessionsHelper, type: :helper do
         before { session[:user_id] = 1 }
 
         it '例外が発生すること' do
-          expect{ helper.current_user }.to raise_error(
+          expect { helper.current_user }.to raise_error(
             /cookieのユーザIDがnilの場合はセッションのユーザIDもnilである必要があります。/
           )
         end
@@ -219,16 +219,16 @@ RSpec.describe SessionsHelper, type: :helper do
 
   describe '#logged_in?' do
     context 'current_userがnilの場合' do
-      before {allow(helper).to receive(:current_user).and_return(nil)}
-      
+      before { allow(helper).to receive(:current_user).and_return(nil) }
+
       it 'falseを返すこと' do
         expect(helper.logged_in?).to eq false
       end
     end
 
     context 'current_userがnil以外の場合' do
-      before {allow(helper).to receive(:current_user).and_return('foo')}
-      
+      before { allow(helper).to receive(:current_user).and_return('foo') }
+
       it 'trueを返すこと' do
         expect(helper.logged_in?).to eq true
       end

@@ -16,7 +16,7 @@ feature 'ユーザ関連の操作' do
     expect(page).to have_link 'ログイン'
 
     expect { login_as_guest_user(user.username) }
-      .to change{[User.count, GuestUser.count]}.by([1, 1])
+      .to change { [User.count, GuestUser.count] }.by([1, 1])
     expect(page).to have_content user.username
     expect(page).not_to have_link 'ログイン'
 

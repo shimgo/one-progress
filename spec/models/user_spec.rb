@@ -28,7 +28,7 @@ RSpec.describe User, type: :model do
         {
           uid: '1',
           provider: 'twitter',
-          info: {name: 'ユーザ1', nickname: 'testuser'}
+          info: { name: 'ユーザ1', nickname: 'testuser' }
         }
       end
 
@@ -55,7 +55,7 @@ RSpec.describe User, type: :model do
           .to eq twitter_user_mock.user
       end
 
-      context '引数のユーザ名が登録済みのユーザ名と異なっていたとき'do
+      context '引数のユーザ名が登録済みのユーザ名と異なっていたとき' do
         it 'ユーザ名を引数のユーザ名で更新すること' do
           origin_user = TwitterUser.new(uid: auth_hash[:uid])
           origin_user.user = User.new(username: '変更前ユーザ')
@@ -71,7 +71,7 @@ RSpec.describe User, type: :model do
     end
 
     context '引数のキー:providerが"twitter"以外の場合' do
-      let(:auth_hash){ {provider: 'other'} }
+      let(:auth_hash) { { provider: 'other' } }
 
       it 'nilを返すこと' do
         expect(User.find_or_create_from_auth_hash(auth_hash)).to be_nil

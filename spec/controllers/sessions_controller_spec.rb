@@ -4,7 +4,7 @@ RSpec.describe SessionsController, type: :controller do
   describe 'POST create' do
     context 'リクエストヘッダ\'omniauth.auth\'がセットされている場合' do
       let(:omniauth_env) do
-        {uid: 'sample'}
+        { uid: 'sample' }
       end
 
       before do
@@ -50,13 +50,13 @@ RSpec.describe SessionsController, type: :controller do
 
         context '入力が有効の場合' do
           it 'usersテーブルにレコードを1件追加すること' do
-            expect{post :create, user: FactoryGirl.attributes_for(:user)}.to change(User, :count).by(1)
+            expect { post :create, user: FactoryGirl.attributes_for(:user) }.to change(User, :count).by(1)
           end
         end
 
         context '入力が無効の場合' do
-          it 'usersテーブルにレコード追加されないこと' do 
-            expect{ post :create, user: FactoryGirl.attributes_for(:user, :invalid_user) }
+          it 'usersテーブルにレコード追加されないこと' do
+            expect { post :create, user: FactoryGirl.attributes_for(:user, :invalid_user) }
               .not_to change(User, :count)
           end
 
@@ -67,7 +67,7 @@ RSpec.describe SessionsController, type: :controller do
 
           it 'flash[:alert]にUserモデルのエラーメッセージをセットすること' do
             user = FactoryGirl.build(:user, :invalid_user)
-            
+
             post :create, user: user.attributes
             user.invalid?
             expect(flash[:alert]).to eq user.errors.full_messages
