@@ -40,16 +40,15 @@ class Task < ActiveRecord::Base
       raise "statusはsuspendedまたはfinishedである必要があります。(status: #{status})"
     end
 
-    if owner.created_tasks.in_progress.exists?
+    if tasks_already_in_progress_exists?
       errors[:base] << '既に作業中のタスクがあります。'
       return
     end
 
-    remaining_time = target_time - elapsed_time
     update!(
       status: :resumed,
       resumed_at: called_at,
-      finish_targeted_at: remaining_time < 0 ? called_at : called_at + remaining_time
+      finish_targeted_at: called_at + remaining_time
     )
   end
 
@@ -58,7 +57,7 @@ class Task < ActiveRecord::Base
       raise "statusはuntouchedまたはsuspendedである必要があります。(status: #{status})"
     end
 
-    if owner.created_tasks.in_progress.exists?
+    if tasks_already_in_progress_exists?
       errors[:base] << '既に作業中のタスクがあります。'
       return false
     end
@@ -97,4 +96,14 @@ class Task < ActiveRecord::Base
   def to_duration(time)
     Time.zone.at(time.utc.hour * 3600 + time.utc.min * 60 + time.utc.sec).to_i
   end
+
+  def tasks_already_in_progress_exists?
+    owner.created_tasks.in_progress.exists?
+  end
+
+  def remaining_time
+    remaining_time = target_time - elapsed_time
+    remaining_time < 0 ? 0 : remaining_time
+  end
+
 end
