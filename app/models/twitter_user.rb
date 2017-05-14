@@ -9,7 +9,7 @@ class TwitterUser < ActiveRecord::Base
     if twitter_user.new_record?
       twitter_user.nickname = auth_hash[:info][:nickname]
       twitter_user.user = User.new(
-        username: auth_hash[:info][:name], 
+        username: auth_hash[:info][:name],
         image_url: auth_hash[:info][:image]
       )
       twitter_user.save!

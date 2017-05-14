@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     else
       write_failure_log("authentication failed. #{user.class} id:#{user.id}")
       render file: 'public/400.html', layout: false, content_type: 'text/html',
-        status: :unauthorized
+             status: :unauthorized
     end
   end
 end

@@ -20,9 +20,9 @@ module Loggable
   private
 
   def format_request(request)
-    "url: #{request.fullpath}, " + 
-    "method: #{request.request_method}, " +
-    "action: #{action_name}, " +
+    "url: #{request.fullpath}, " \
+    "method: #{request.request_method}, " \
+    "action: #{action_name}, " \
     "ip: #{request.remote_ip}"
   end
 end

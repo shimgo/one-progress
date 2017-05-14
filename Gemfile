@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+# gem 'sqlite3'
 gem 'mysql2', '~> 0.3.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -34,7 +33,7 @@ gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap-sass', '3.2.0.0'
-gem "default_value_for", "~> 3.0.0"
+gem 'default_value_for', '~> 3.0.0'
 gem 'haml-rails', '0.9.0'
 gem 'kaminari', '~> 0.17.0'
 gem 'kaminari-bootstrap', '~> 3.0.1'
@@ -55,14 +54,15 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rubocop', require: false
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 end
 
 group :test do
-  gem 'faker', '~> 1.4.3'
   gem 'capybara', '~> 2.12.0'
   gem 'database_cleaner', '~> 1.3.0'
+  gem 'faker', '~> 1.4.3'
   gem 'launchy', '~> 2.4.2'
   gem 'poltergeist', '~> 1.14.0'
   gem 'timecop', '~> 0.8.0'

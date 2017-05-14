@@ -17,15 +17,15 @@ RSpec.describe TwitterUser, type: :model do
   describe '::find_or_create_from_auth_hash' do
     let(:auth_hash) do
       {
-        uid: 'test', 
-        info: {nickname: 'testuser', image: 'http://test', name: 'ユーザ1'}
+        uid: 'test',
+        info: { nickname: 'testuser', image: 'http://test', name: 'ユーザ1' }
       }
     end
 
     context '新規ユーザの場合' do
       it '保存したTwitterUserのインスタンスを返すこと' do
-        expect(TwitterUser.find_or_create_from_auth_hash(auth_hash)
-              ).to eq TwitterUser.find_by(uid: auth_hash[:uid])
+        expect(TwitterUser.find_or_create_from_auth_hash(auth_hash))
+          .to eq TwitterUser.find_by(uid: auth_hash[:uid])
       end
 
       it 'TwitterUser.uidに引数のキー[:uid]の値をセットして保存すること' do
@@ -59,8 +59,7 @@ RSpec.describe TwitterUser, type: :model do
         twitter_user.user = User.new(username: auth_hash[:info][:name],
                                      image_url: auth_hash[:info][:image])
         twitter_user.save!
-        expect(TwitterUser.find_or_create_from_auth_hash(auth_hash)
-              ).to eq twitter_user
+        expect(TwitterUser.find_or_create_from_auth_hash(auth_hash)).to eq twitter_user
       end
     end
   end

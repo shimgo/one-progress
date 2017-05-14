@@ -1,0 +1,40 @@
+Rails:
+  Enabled: true
+
+AllCops:
+  DisplayCopNames: true
+  TargetRailsVersion: 4.2
+  Include:
+    - '**/Rakefile'
+    - '**/Gemfile'
+    - '**/config.ru'
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'vendor/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+ClassLength:
+  Enabled: false
+
+# 基本80までで120超は禁止のイメージ
+Metrics/LineLength:
+  Max: 120
+
+# デフォルトの10では厳しいので緩和
+Metrics/MethodLength:
+  Max: 20
+
+# ラムダをパラメータにした際に違反とみなされるRuboCopの不具合を回避するため
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'app/models/task.rb'
+
+# ドキュメントを書くほどのアプリではないので除外
+Style/Documentation:
+    Enabled: false

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   describe 'DELETE #destroy' do
-    let(:user) do 
+    let(:user) do
       FactoryGirl.build(:user)
     end
 
@@ -27,7 +27,7 @@ RSpec.describe UsersController, type: :controller do
       it 'root_pathにリダイレクトすること' do
         delete :destroy
         expect(response).to redirect_to root_path
-     end
+      end
 
       it 'flash[:notice]に\'退会完了しました\'メッセージがセットされること' do
         delete :destroy
@@ -40,7 +40,7 @@ RSpec.describe UsersController, type: :controller do
         allow(user).to receive(:authenticated?).and_return(false)
         allow(controller).to receive(:current_user).and_return(user)
       end
-      
+
       it '\'authentication failed. [クラス名] id:[ユーザID]\'メッセージを引数にしてwrite_failure_logメソッドを呼び出していること' do
         allow(controller).to receive(:write_failure_log)
         delete :destroy
@@ -50,7 +50,7 @@ RSpec.describe UsersController, type: :controller do
 
       it '400エラーページに遷移すること' do
         delete :destroy
-        expect(response).to render_template({file: "#{Rails.root}/public/400.html"})
+        expect(response).to render_template(file: Rails.root.join('public', '400.html').to_s)
       end
 
       it 'httpステータスコード:unauthorized(401)を返すこと' do
