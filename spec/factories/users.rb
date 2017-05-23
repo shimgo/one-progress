@@ -19,7 +19,9 @@ FactoryGirl.define do
     end
 
     trait :with_twitter_user do
-      twitter_user FactoryGirl.build(:twitter_user)
+      after :build do |user|
+        user.twitter_user = FactoryGirl.build(:twitter_user)
+      end
     end
   end
 end
