@@ -23,5 +23,11 @@ FactoryGirl.define do
         user.twitter_user = FactoryGirl.build(:twitter_user)
       end
     end
+
+    trait :with_guest_user do
+      after :build do |user|
+        user.guest_user = FactoryGirl.build(:guest_user)
+      end
+    end
   end
 end

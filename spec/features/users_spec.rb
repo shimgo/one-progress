@@ -20,10 +20,12 @@ feature 'ユーザ関連の操作' do
     expect(page).to have_content user.username
     expect(page).not_to have_link 'ログイン'
 
-    find_link('ログアウト').click
-    expect(page).not_to have_content user.username
-    expect(page).to have_link 'ログイン'
-    expect(page).not_to have_link 'ログアウト'
+    expect do
+      find_link('ログアウト').click
+      expect(page).not_to have_content user.username
+      expect(page).to have_link 'ログイン'
+      expect(page).not_to have_link 'ログアウト'
+    end.to(change { User.count }.by(-1)) && change { GuestUser.count }.by(-1)
   end
 
   scenario 'ゲストユーザには退会が存在しない', js: true do

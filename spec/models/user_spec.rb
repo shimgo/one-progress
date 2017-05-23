@@ -109,11 +109,35 @@ RSpec.describe User, type: :model do
   end
 
   describe '#forget' do
-    it 'remember_digestがnilで更新されること' do
-      user = User.create(username: 'user_forget_test', remember_digest: 'test')
-      user.forget
-      updated_user = User.find_by(username: 'user_forget_test')
-      expect(updated_user.remember_digest).to be_nil
+    context 'Twitterユーザの場合' do
+      let!(:user) { FactoryGirl.create(:user, :with_twitter_user) }
+
+      it 'remember_digestがnilで更新されること' do
+        user.remember_digest = 'test'
+        user.forget
+        updated_user = User.find(user.id)
+        expect(updated_user.remember_digest).to be_nil
+      end
+
+      it 'Userが削除されないこと' do
+        expect { user.forget }.not_to change(User, :count)
+      end
+
+      it 'TwitterUserが削除されないこと' do
+        expect { user.forget }.not_to change(TwitterUser, :count)
+      end
+    end
+
+    context 'ゲストユーザの場合' do
+      let!(:user) { FactoryGirl.create(:user, :with_guest_user) }
+
+      it 'Userが1件削除されること' do
+        expect { user.forget }.to change { User.count }.by(-1)
+      end
+
+      it 'GuestUserが1件削除されること' do
+        expect { user.forget }.to change { GuestUser.count }.by(-1)
+      end
     end
   end
 

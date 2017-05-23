@@ -38,7 +38,11 @@ class User < ActiveRecord::Base
   end
 
   def forget
-    update_attributes(remember_digest: nil)
+    if guest_user
+      destroy
+    else
+      update_attributes(remember_digest: nil)
+    end
   end
 
   def authenticated?(remember_token)
