@@ -4,7 +4,9 @@ FactoryGirl.define do
     sequence(:nickname) { |n| "nicknamme#{n}" }
 
     trait :with_user do
-      user
+      after :build do |twitter_user|
+        twitter_user.user = FactoryGirl.build(:user)
+      end
     end
   end
 end
