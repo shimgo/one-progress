@@ -56,7 +56,6 @@
             = paginate @finished_tasks, param_name: :finished_tasks_page, remote: true
         %p.divider
       - else
-        %h4 ログイン
         = render partial: "login"
   %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9
     %div#masonry
