@@ -32,6 +32,7 @@ gem 'unicorn'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'font-awesome-sass', '~> 4.7.0'
 gem 'bootstrap-sass', '3.2.0.0'
 gem 'default_value_for', '~> 3.0.0'
 gem 'haml-rails', '0.9.0'
