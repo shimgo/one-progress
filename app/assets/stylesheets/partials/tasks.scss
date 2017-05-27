@@ -40,3 +40,15 @@
     color: #c3c3c3;
   }
 } 
+
+.colored-background {
+  background-color: #dde3f2;
+}
+
+.top-padding {
+  padding-top: 10px;
+}
+
+.full-height {
+    height: calc(100vh - 50px); // ブラウザの表示領域の高さ - navbarの高さ
+} 

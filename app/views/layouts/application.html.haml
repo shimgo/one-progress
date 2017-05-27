@@ -9,22 +9,24 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    %header.navbar.navbar-default{role: "navigation"}
-      .container-fluid
-        .navbar-header
-          %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
-            %span.sr-only Toggle navigation
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          = link_to 'OneProgress', root_path, class: 'navbar-brand', id: 'logo'
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
-          %ul.nav.navbar-nav.navbar-right
-            - if logged_in?
-              - if current_user.twitter_user
-                %li
-                  = link_to '退会', retire_user_path
-              %li
-                = link_to 'ログアウト', logout_path
-    .container-fluid#content
-      = yield
+    %div.container-fluid
+      %div.row.navbar.navbar-default{role: "navigation"}
+        %div.col-xs-12.navbar-header
+          %header
+            %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            = link_to 'OneProgress', root_path, class: 'navbar-brand', id: 'logo'
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse
+              %ul.nav.navbar-nav.navbar-right
+                - if logged_in?
+                  - if current_user.twitter_user
+                    %li
+                      = link_to '退会', retire_user_path
+                  %li
+                    = link_to 'ログアウト', logout_path
+      .row
+        .col-xs-12
+          = yield

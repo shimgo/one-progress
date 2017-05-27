@@ -1,65 +1,65 @@
 %div.row
-  %div.col-xs-12.col-sm-5.col-lg-3.sidebar
-    %p.nav.nav-sidebar
-      - if logged_in?
-        - if flash[:notice]
-          %div.alert.alert-success
-            = flash[:notice]
-        - if flash[:alert]
-          %div.alert.alert-danger
-            %ul
-              - flash[:alert].each do |msg|
-                %li
-                  = msg
-        - if current_user.twitter_user
-          = link_to(url_for_twitter(current_user.twitter_user), {class: 'h5 bold'}) do
-            = image_tag current_user.image_url
-          = link_twitter_user_name(current_user.twitter_user)
-        - else
-          = image_tag 'guest_user.png'
-          %span.h5.bold
-            = current_user.username
-        %p
-          = render partial: "new", locals: {task: @task}
-        %ul.nav.nav-pills
-          %li.active
-            %a.nav-link{'href' => '#untouched', 'data-toggle' => "tab"}
-              未着手
-              %span.badge
-                = @untouched_tasks.total_count
-          %li
-            %a.nav-link{'href' => '#suspended', 'data-toggle' => "tab"}
-              保留中
-              %span.badge
-                = @suspended_tasks.total_count
-          %li
-            %a.nav-link{'href' => '#finished', 'data-toggle' => "tab"}
-              完了
-              %span.badge
-                = @finished_tasks.total_count
-                
-        %div.tab-content
-          %div#untouched.tab-pane.active
-            %br
-            = render partial: "stopped_task",
-              collection: @untouched_tasks, as: :task
-            = paginate @untouched_tasks, param_name: :untouched_tasks_page, remote: true
-          %div#suspended.tab-pane
-            %br
-            = render partial: "stopped_task",
-              collection: @suspended_tasks, as: :task
-            = paginate @suspended_tasks, param_name: :suspended_tasks_page, remote: true
-          %div#finished.tab-pane
-            %br
-            = render partial: "stopped_task",
-              collection: @finished_tasks, as: :task
-            = paginate @finished_tasks, param_name: :finished_tasks_page, remote: true
-        %p.divider
+  %div.col-xs-12.col-sm-5.col-lg-3.top-padding
+    - if logged_in?
+      - if flash[:notice]
+        %div.alert.alert-success
+          = flash[:notice]
+      - if flash[:alert]
+        %div.alert.alert-danger
+          %ul
+            - flash[:alert].each do |msg|
+              %li
+                = msg
+      - if current_user.twitter_user
+        = link_to(url_for_twitter(current_user.twitter_user), {class: 'h5 bold'}) do
+          = image_tag current_user.image_url
+        = link_twitter_user_name(current_user.twitter_user)
       - else
-        = render partial: "login"
-  %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9
-    %div.row
+        = image_tag 'guest_user.png'
+        %span.h5.bold
+          = current_user.username
       %p
+        = render partial: "new", locals: {task: @task}
+      %ul.nav.nav-pills
+        %li.active
+          %a.nav-link{'href' => '#untouched', 'data-toggle' => "tab"}
+            未着手
+            %span.badge
+              = @untouched_tasks.total_count
+        %li
+          %a.nav-link{'href' => '#suspended', 'data-toggle' => "tab"}
+            保留中
+            %span.badge
+              = @suspended_tasks.total_count
+        %li
+          %a.nav-link{'href' => '#finished', 'data-toggle' => "tab"}
+            完了
+            %span.badge
+              = @finished_tasks.total_count
+              
+      %div.tab-content
+        %div#untouched.tab-pane.active
+          %br
+          = render partial: "stopped_task",
+            collection: @untouched_tasks, as: :task
+          = paginate @untouched_tasks, param_name: :untouched_tasks_page, remote: true
+        %div#suspended.tab-pane
+          %br
+          = render partial: "stopped_task",
+            collection: @suspended_tasks, as: :task
+          = paginate @suspended_tasks, param_name: :suspended_tasks_page, remote: true
+        %div#finished.tab-pane
+          %br
+          = render partial: "stopped_task",
+            collection: @finished_tasks, as: :task
+          = paginate @finished_tasks, param_name: :finished_tasks_page, remote: true
+      %p.divider
+    - else
+      = render partial: "login"
+    %br
+  %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9.colored-background.full-height
+    %div.row
+      %div.col-xs-12.top-padding
         %div#masonry
           = render partial: "task_in_progress",
             collection: @user_tasks_in_progress, as: :task
