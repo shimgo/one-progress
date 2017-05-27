@@ -1,6 +1,6 @@
 %div.row
   %div.col-xs-12.col-sm-5.col-lg-3.sidebar
-    %div.nav.nav-sidebar
+    %p.nav.nav-sidebar
       - if logged_in?
         - if flash[:notice]
           %div.alert.alert-success
@@ -58,14 +58,16 @@
       - else
         = render partial: "login"
   %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9
-    %div#masonry
-      = render partial: "task_in_progress",
-        collection: @user_tasks_in_progress, as: :task
-      %span#all-tasks
-        = render partial: "task_in_progress",
-          collection: @all_tasks_in_progress, as: :task
-    %div.hidden#infinite-scroll-pagination
-      = paginate @all_tasks_in_progress, param_name: :all_tasks_in_progress_page
-    %span#page-bottom
-      &nbsp;
-    %div#loading
+    %div.row
+      %p
+        %div#masonry
+          = render partial: "task_in_progress",
+            collection: @user_tasks_in_progress, as: :task
+          %span#all-tasks
+            = render partial: "task_in_progress",
+              collection: @all_tasks_in_progress, as: :task
+        %div.hidden#infinite-scroll-pagination
+          = paginate @all_tasks_in_progress, param_name: :all_tasks_in_progress_page
+        %span#page-bottom
+          &nbsp;
+        %div#loading
