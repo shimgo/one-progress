@@ -12,3 +12,7 @@
     = f.label :username
     = f.text_field :username, class: 'form-control', size: 20
   = f.submit 'ログイン', class: 'btn btn-primary', data: {disable_with: 'ログイン中'}
+%br
+= link_to('/auth/twitter', {class: 'btn btn-primary btn-twitter'}) do
+  = icon('twitter')
+  &nbspTwitterでログイン
