@@ -51,4 +51,17 @@
 
 .full-height {
     height: calc(100vh - 50px); // ブラウザの表示領域の高さ - navbarの高さ
+    position: relative;
 } 
+
+.tasks-not-exists-msg {
+  color: #aaaaaa;
+  position: absolute;
+  width: calc(1em * 17); // 文字サイズ * メッセージの文字数
+  height: 100px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
