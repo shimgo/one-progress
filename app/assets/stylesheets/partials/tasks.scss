@@ -23,3 +23,45 @@
     border-bottom: 1px solid rgba(0,0,0,0.1);
     box-shadow: 0 1px 0 rgba(255,255,255,1);
 }
+
+.text-divider {
+  margin: 2em 0;
+  line-height: 0;
+  text-align: center;
+  &:before {
+    content: " ";
+    display: block;
+    border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #f7f7f7;
+  }
+  span {
+    background-color: #ffffff;
+    padding: 1em;
+    color: #c3c3c3;
+  }
+} 
+
+.colored-background {
+  background-color: #dde3f2;
+}
+
+.top-padding {
+  padding-top: 10px;
+}
+
+.full-height {
+    height: calc(100vh - 50px); // ブラウザの表示領域の高さ - navbarの高さ
+    position: relative;
+} 
+
+.tasks-not-exists-msg {
+  color: #aaaaaa;
+  position: absolute;
+  width: calc(1em * 17); // 文字サイズ * メッセージの文字数
+  height: 100px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
