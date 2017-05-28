@@ -102,7 +102,7 @@ feature 'タスク管理' do
         end
 
         find_link('未着手').click
-        within('.sidebar') do
+        within('#sidebar') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
         expect(page).to have_link '0', href: '#untouched'
@@ -114,7 +114,7 @@ feature 'タスク管理' do
         within('div#tasks-in-progress') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
-        within('.sidebar') do
+        within('#sidebar') do
           find_link('完了').click
           expect(page).to have_content '参考書の1章を読み終える'
           expect(page).to have_content '目標時間: 00:20'
@@ -158,7 +158,7 @@ feature 'タスク管理' do
         within('div#tasks-in-progress') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
-        within('.sidebar') do
+        within('#sidebar') do
           find_link('保留中').click
           expect(page).to have_content '参考書の1章を読み終える'
           expect(page).to have_content '目標時間: 00:20'
@@ -180,7 +180,7 @@ feature 'タスク管理' do
           end
         end
 
-        within('.sidebar') do
+        within('#sidebar') do
           find_link('保留中').click
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
@@ -193,7 +193,7 @@ feature 'タスク管理' do
         find_button('×').click
         expect(page).to have_content '削除しますか？'
         find_link('削除').click
-        within('.sidebar') do
+        within('#sidebar') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
       end
@@ -202,7 +202,7 @@ feature 'タスク管理' do
         find_button('×').click
         expect(page).to have_content '削除しますか？'
         find_button('キャンセル').click
-        within('.sidebar') do
+        within('#sidebar') do
           expect(page).to have_content '参考書の1章を読み終える'
         end
       end
@@ -210,13 +210,13 @@ feature 'タスク管理' do
       scenario 'タスクを完了＞削除' do
         find_link('開始').click
         find_link('完了', class: 'btn-primary').click
-        within('.sidebar') do
+        within('#sidebar') do
           find_link('完了').click
         end
         find_button('×').click
         expect(page).to have_content '削除しますか？'
         find_link('削除').click
-        within('.sidebar') do
+        within('#sidebar') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
       end

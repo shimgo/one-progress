@@ -40,25 +40,25 @@ feature 'ユーザ関連の操作' do
     twitter_user = FactoryGirl.build(:twitter_user, user: user)
     visit root_path
 
-    expect(page).not_to have_content('ログアウト')
+    expect(page).not_to have_link('ログアウト')
     expect(page).to have_link('Twitterでログイン')
 
     expect { login_as_twitter_user(twitter_user) }.to change(User, :count).by(1)
       .and change(TwitterUser, :count).by(1)
-    expect(page).to have_content('ログアウト')
+    expect(page).to have_link('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
     expect(page).to have_link(twitter_user.user.username)
     expect(page).to have_link(twitter_user.nickname)
 
     find_link('ログアウト').click
-    expect(page).not_to have_content('ログアウト')
+    expect(page).not_to have_link('ログアウト')
     expect(page).to have_link('Twitterでログイン')
     expect(page).not_to have_link(twitter_user.user.username)
     expect(page).not_to have_link(twitter_user.nickname)
 
     expect { login_as_twitter_user(twitter_user) }.to change(User, :count).by(0)
       .and change(TwitterUser, :count).by(0)
-    expect(page).to have_content('ログアウト')
+    expect(page).to have_link('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
     expect(page).to have_link(twitter_user.user.username)
     expect(page).to have_link(twitter_user.nickname)
@@ -77,7 +77,7 @@ feature 'ユーザ関連の操作' do
     visit root_path
     login_as_twitter_user
 
-    expect(page).to have_content('ログアウト')
+    expect(page).to have_link('ログアウト')
     expect(page).not_to have_link('Twitterでログイン')
 
     expect do
@@ -88,7 +88,7 @@ feature 'ユーザ関連の操作' do
       expect(page).to have_content('退会完了しました')
     end.to change(User, :count).by(-1)
       .and change(TwitterUser, :count).by(-1)
-    expect(page).not_to have_content('ログアウト')
+    expect(page).not_to have_link('ログアウト')
     expect(page).to have_link('Twitterでログイン')
   end
 end
