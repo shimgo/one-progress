@@ -88,7 +88,9 @@ feature 'タスク管理' do
       scenario 'タスクを開始＞完了' do
         visit root_path
         Timecop.freeze do
+          expect(page).to have_content('現在作業しているユーザーはいません')
           find_link('開始').click
+          expect(page).not_to have_content('現在作業しているユーザーはいません')
           started_at = Time.zone.now
           target_time = started_at + 20.minutes
           expect(page).to have_content('タスクを開始しました')
@@ -111,6 +113,7 @@ feature 'タスク管理' do
 
         find_link('完了', class: 'btn-primary').click
         expect(page).to have_content('タスクを完了しました')
+        expect(page).to have_content('現在作業しているユーザーはいません')
         within('div#tasks-in-progress') do
           expect(page).not_to have_content '参考書の1章を読み終える'
         end
