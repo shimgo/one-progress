@@ -10,26 +10,28 @@
     = csrf_meta_tags
   %body
     %div.container-fluid
-      %div.row.navbar.navbar-default{role: "navigation"}
-        %div.col-xs-12.navbar-header
+      %div.row.no-gutter
+        %div.col-xs-12
           %header
-            %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
-              %span.sr-only Toggle navigation
-              %span.icon-bar
-              %span.icon-bar
-              %span.icon-bar
-            = link_to 'OneProgress', root_path, class: 'navbar-brand', id: 'logo'
-            #bs-example-navbar-collapse-1.collapse.navbar-collapse
-              %ul.nav.navbar-nav.navbar-right
-                %li
-                  %a#help-link.dummy-link
-                    ヘルプ
-                - if logged_in?
-                  - if current_user.twitter_user
-                    %li
-                      = link_to '退会', retire_user_path
+            %nav.navbar.navbar-default{role: "navigation"}
+              %div.navbar-header
+                %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+                  %span.sr-only Toggle navigation
+                  %span.icon-bar
+                  %span.icon-bar
+                  %span.icon-bar
+                = link_to 'OneProgress', root_path, class: 'navbar-brand', id: 'logo'
+              %div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+                %ul.nav.navbar-nav.navbar-right
                   %li
-                    = link_to 'ログアウト', logout_path
+                    %a#help-link.dummy-link
+                      ヘルプ
+                  - if logged_in?
+                    - if current_user.twitter_user
+                      %li
+                        = link_to '退会', retire_user_path
+                    %li
+                      = link_to 'ログアウト', logout_path
       .row#help.help
         .col-xs-12
           %h3
