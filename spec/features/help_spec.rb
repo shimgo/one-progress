@@ -20,7 +20,7 @@ feature 'ヘルプ' do
     find('#help-link', text: 'ヘルプ').click
     expect(page).to have_content(
       'OneProgressは、ひとりで頑張れない人のための作業スペースです')
-    find('#close-help').click
+    find('.glyphicon-chevron-up').click
     expect(page).not_to have_content(
       'OneProgressは、ひとりで頑張れない人のための作業スペースです')
   end
