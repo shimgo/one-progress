@@ -5,18 +5,18 @@ default: &default
 
 development:
   <<: *default
-  database: stack_space_development
+  database: one_progress_development
   timeout: 5000
   url: <%= ENV['DATABASE_URL_DEVELOPMENT'] %>
 
 test:
   <<: *default
-  database: stack_space_test
+  database: one_progress_test
   timeout: 10000
   url: <%= ENV['DATABASE_URL_TEST'] %>
 
 production:
   <<: *default
-  database: stack_space_production
+  database: one_progress_production
   timeout: 5000
   url: <%= ENV['DATABASE_URL_PRODUCTION'] %>
