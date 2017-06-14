@@ -10,6 +10,7 @@ capybara-*.html
 /public/422.html
 /public/500.html
 /public/system
+/public/assets
 /coverage/
 /spec/tmp
 **.orig
