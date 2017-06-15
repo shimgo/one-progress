@@ -31,9 +31,9 @@
             = task.finish_targeted_at.strftime("%Y/%m/%d %H:%M")
         %div.col-xs-6.text-right
           - if task.owner?(current_user)
-            = link_to(suspend_task_path(task), class: "btn btn-primary", method: :patch) do
+            = link_to(suspend_task_path(task), class: "btn btn-primary horizontal-margin", method: :patch) do
               %span.glyphicon.glyphicon-pause
               中断
-            = link_to(finish_task_path(task), class: "btn btn-primary", method: :patch) do
+            = link_to(finish_task_path(task), class: "btn btn-primary horizontal-margin", method: :patch) do
               %span.glyphicon.glyphicon-ok
               完了
