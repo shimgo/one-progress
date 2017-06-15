@@ -32,6 +32,7 @@ gem 'unicorn'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'backport_new_renderer', '~> 1.0.0'
 gem 'font-awesome-sass', '~> 4.7.0'
 gem 'bootstrap-sass', '3.2.0.0'
 gem 'default_value_for', '~> 3.0.0'
@@ -40,14 +41,13 @@ gem 'kaminari', '~> 0.17.0'
 gem 'kaminari-bootstrap', '~> 3.0.1'
 gem 'omniauth', '~> 1.6.0'
 gem 'omniauth-twitter', '~> 1.2.0'
+gem 'settingslogic', '2.0.0'
 
 group :development, :test do
-  gem 'backport_new_renderer', '~> 1.0.0'
   gem 'factory_girl_rails', '~> 4.4.1'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.5.0'
-  gem 'settingslogic', '2.0.0'
   gem 'yard'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

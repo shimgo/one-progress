@@ -57,14 +57,14 @@
     - else
       = render partial: "login"
     %br
-  %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9.colored-background
+  %div#tasks-in-progress.col-xs-12.col-sm-7.col-lg-9
     %div.row
-      %div.col-xs-12.top-padding.full-height
+      %div.col-xs-12.top-padding.full-height.all-users-tasks
         - if @user_tasks_in_progress.to_a.empty? && @all_tasks_in_progress.to_a.empty?
           %div.lead.tasks-not-exists-msg
             現在作業しているユーザーはいません
         - else
-          %div#masonry
+          %div#masonry.all-users-tasks
             = render partial: "task_in_progress",
               collection: @user_tasks_in_progress, as: :task
             %span#all-tasks
