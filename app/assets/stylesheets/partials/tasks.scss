@@ -50,6 +50,7 @@
 }
 
 .full-height {
+    height: 100vh; // phantomjsでは以下のvhを含むcalcが機能しないため明示的に指定
     height: calc(100vh - 50px); // ブラウザの表示領域の高さ - navbarの高さ
     position: relative;
 } 
