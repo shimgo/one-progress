@@ -2,21 +2,21 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: db
 
 development:
   <<: *default
   database: one_progress_development
   timeout: 5000
-  url: <%= ENV['DATABASE_URL_DEVELOPMENT'] %>
 
 test:
   <<: *default
   database: one_progress_test
   timeout: 10000
-  url: <%= ENV['DATABASE_URL_TEST'] %>
 
 production:
   <<: *default
   database: one_progress_production
   timeout: 5000
-  url: <%= ENV['DATABASE_URL_PRODUCTION'] %>
