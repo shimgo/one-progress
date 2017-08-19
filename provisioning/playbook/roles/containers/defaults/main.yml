@@ -1,0 +1,7 @@
+key_file_name: one-progress.key
+crt_file_name: one-progress.crt
+local_certificate_dir: "{{ playbook_dir }}/roles/containers/files/certificate"
+rails_env: production
+db_user: root
+db_password: pass
+version: master

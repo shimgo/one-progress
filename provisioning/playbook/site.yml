@@ -1,0 +1,10 @@
+- hosts: staging
+  become: true
+  user: vagrant
+  pre_tasks:
+    - name: Yum update
+      yum: name=* state=latest
+  roles:
+    - git
+    - docker-engine
+    - containers

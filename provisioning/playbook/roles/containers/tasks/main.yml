@@ -1,0 +1,112 @@
+- name: すべてのコンテナのDockerfileを配置
+  copy:
+    src: containers
+    dest: /vagrant
+
+- name: ソースを取得して配置
+  git:
+    repo: https://github.com/shimgo/one-progress.git
+    dest: /vagrant/containers/rails/one-progress
+    version: "{{ version }}"
+
+- name: DBコンテナのビルド
+  docker_image:
+    path: /vagrant/containers/mysql
+    name: db
+    force: true
+
+- name: DBコンテナの起動
+  docker_container:
+    name: db
+    image: db
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ db_password }}"
+
+- name: アプリケーションコンテナのログフォルダを作成
+  file: 
+    dest: /vagrant/containers/rails/one-progress/log
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: アプリケーションコンテナのビルド
+  docker_image:
+    path: /vagrant/containers/rails
+    name: app
+    force: yes
+
+- name: アプリケーションコンテナの起動
+  docker_container:
+    user: rails
+    name: app
+    image: app
+    links:
+      - db
+    env:
+      RAILS_ENV: "{{ rails_env }}"
+      DB_USER: "{{ db_user }}"
+      DB_PASSWORD: "{{ db_password }}"
+    volumes:
+      - static_files:/var/www/one-progress/public
+    recreate: true
+
+- name: playbook内の秘密鍵ファイルを検索
+  debug:
+    msg: item
+  register: res
+  with_first_found:
+    - files: "{{ local_certificate_dir }}/{{ key_file_name }}"
+      skip: true
+
+- name: 秘密鍵ファイルの検索結果を確認
+  fail:
+    msg: "秘密鍵ファイル{{ local_certificate_dir }}/{{ key_file_name }}が存在しません。"
+  when: res.results == []
+
+- name: 秘密鍵の配置
+  copy:
+    src: certificate/{{ key_file_name }}
+    dest: /vagrant/containers/nginx/{{ key_file_name }}
+
+- name: playbook内の証明書ファイルを検索
+  debug:
+    msg: item
+  register: res
+  with_first_found:
+    - files: "{{ local_certificate_dir }}/{{ crt_file_name }}"
+      skip: true
+
+- name: 証明書ファイルの検索結果を確認
+  fail:
+    msg: "証明書ファイル{{ local_certificate_dir }}/{{ crt_file_name }}が存在しません。"
+  when: res.results == []
+
+- name: 証明書の配置
+  copy:
+    src: certificate/{{ crt_file_name }}
+    dest: /vagrant/containers/nginx/{{ crt_file_name }}
+
+- name: nginx.confの配置
+  template:
+    src: nginx.conf.j2
+    dest: /vagrant/containers/nginx/nginx.conf
+
+- name: Webコンテナのビルド
+  docker_image:
+    path: /vagrant/containers/nginx
+    name: web
+    force: true
+
+- name: Webコンテナの起動
+  docker_container:
+    user: nginx
+    name: web
+    image: web
+    ports:
+      - 443:4443
+    links:
+      - app
+    volumes:
+      - static_files:/var/www/one-progress/public
+    recreate: true

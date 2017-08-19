@@ -1,0 +1,49 @@
+- name: Dockerのインストール確認
+  shell: which docker
+  register: docker_engine_installed
+  check_mode: no
+  failed_when: docker_engine_installed.rc not in [0, 1]
+  changed_when: docker_engine_installed.rc != 0
+
+- name: Dockerのインストールスクリプトをダウンロード
+  get_url:
+    url: https://get.docker.com/
+    dest: /tmp/docker_install.sh
+    mode: u+x
+  when: docker_engine_installed|failed
+
+- name: Dockerをインストール
+  shell: /tmp/docker_install.sh
+  when: docker_engine_installed|failed
+
+- name: Dockerデーモンを起動
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: pipのインストール確認
+  shell: which pip
+  register: pip_installed
+  check_mode: no
+  failed_when: pip_installed.rc not in [0, 1]
+  changed_when: pip_installed.rc != 0
+
+- name: get-pip.pyをダウンロード
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp
+  when: pip_installed|failed
+
+- name: pipをインストール
+  shell: python /tmp/get-pip.py
+  when: pip_installed|failed
+
+- name: ansibleでdockerを利用するための依存モジュールをインストール
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker
+    - docker-py
+

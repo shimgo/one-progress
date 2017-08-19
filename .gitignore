@@ -17,6 +17,9 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 tags
+site.retry
+/.vagrant
+provisioning/playbook/group_vars/production.yml
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
