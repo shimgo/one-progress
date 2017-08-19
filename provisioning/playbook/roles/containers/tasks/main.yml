@@ -47,6 +47,8 @@
       RAILS_ENV: "{{ rails_env }}"
       DB_USER: "{{ db_user }}"
       DB_PASSWORD: "{{ db_password }}"
+      TWITTER_API_KEY_PRODUCTION: "{{ twitter_api_key }}"
+      TWITTER_API_SECRET_KEY_PRODUCTION: "{{ twitter_api_secret }}"
     volumes:
       - static_files:/var/www/one-progress/public
     recreate: true

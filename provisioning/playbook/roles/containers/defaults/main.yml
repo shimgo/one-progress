@@ -5,3 +5,5 @@ rails_env: production
 db_user: root
 db_password: pass
 version: master
+twitter_api_key: test_api_key
+twitter_api_secret: test_api_secret
