@@ -1,17 +1,12 @@
-- name: すべてのコンテナのDockerfileを配置
-  copy:
-    src: containers
-    dest: /vagrant
-
 - name: ソースを取得して配置
   git:
-    repo: https://github.com/shimgo/one-progress.git
-    dest: /vagrant/containers/rails/one-progress
+    repo: "{{ repository }}"
+    dest: "{{ containers_dir }}/rails/one-progress"
     version: "{{ version }}"
 
 - name: DBコンテナのビルド
   docker_image:
-    path: /vagrant/containers/mysql
+    path: "{{ containers_dir }}/mysql"
     name: db
     force: true
 
@@ -24,7 +19,7 @@
 
 - name: アプリケーションコンテナのログフォルダを作成
   file: 
-    dest: /vagrant/containers/rails/one-progress/log
+    dest: "{{ containers_dir }}/rails/one-progress/log"
     state: directory
     owner: root
     group: root
@@ -32,7 +27,7 @@
 
 - name: アプリケーションコンテナのビルド
   docker_image:
-    path: /vagrant/containers/rails
+    path: "{{ containers_dir }}/rails"
     name: app
     force: yes
 
@@ -69,7 +64,7 @@
 - name: 秘密鍵の配置
   copy:
     src: certificate/{{ key_file_name }}
-    dest: /vagrant/containers/nginx/{{ key_file_name }}
+    dest: "{{ containers_dir }}/nginx/{{ key_file_name }}"
 
 - name: playbook内の証明書ファイルを検索
   debug:
@@ -87,16 +82,16 @@
 - name: 証明書の配置
   copy:
     src: certificate/{{ crt_file_name }}
-    dest: /vagrant/containers/nginx/{{ crt_file_name }}
+    dest: "{{ containers_dir }}/nginx/{{ crt_file_name }}"
 
 - name: nginx.confの配置
   template:
     src: nginx.conf.j2
-    dest: /vagrant/containers/nginx/nginx.conf
+    dest: "{{ containers_dir }}/nginx/nginx.conf"
 
 - name: Webコンテナのビルド
   docker_image:
-    path: /vagrant/containers/nginx
+    path: "{{ containers_dir }}/nginx"
     name: web
     force: true
 
