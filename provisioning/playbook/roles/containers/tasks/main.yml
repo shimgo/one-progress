@@ -16,6 +16,8 @@
     image: db
     env:
       MYSQL_ROOT_PASSWORD: "{{ db_password }}"
+    volumes:
+      - data_files:/var/lib/mysql
 
 - name: アプリケーションコンテナのログフォルダを作成
   file: 
