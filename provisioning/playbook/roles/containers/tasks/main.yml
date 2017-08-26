@@ -4,6 +4,11 @@
     dest: "{{ containers_dir }}/rails/one-progress"
     version: "{{ version }}"
 
+- name: my.cnfの配置
+  template:
+    src: my.cnf.j2
+    dest: "{{ containers_dir }}/mysql/my.cnf"
+
 - name: DBコンテナのビルド
   docker_image:
     path: "{{ containers_dir }}/mysql"
