@@ -17,6 +17,7 @@
 
 - name: DBコンテナの起動
   docker_container:
+    user: mysql
     name: db
     image: db
     env:
