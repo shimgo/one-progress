@@ -1,6 +1,8 @@
 [mysqld]
 character-set-server = utf8
-log-error            = /var/log/mysql/error.log
+log-error            = {{ db_error_log }}
+general_log
+general_log_file     = {{ db_general_log }}
 
 [client]
 default-character-set = utf8 

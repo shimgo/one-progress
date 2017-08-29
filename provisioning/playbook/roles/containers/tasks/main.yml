@@ -23,6 +23,7 @@
       MYSQL_ROOT_PASSWORD: "{{ db_password }}"
     volumes:
       - data_files:/var/lib/mysql
+      - db_log:/var/log/mysql
 
 - name: アプリケーションコンテナのログフォルダを作成
   file: 
@@ -53,6 +54,7 @@
       TWITTER_API_SECRET_KEY_PRODUCTION: "{{ twitter_api_secret }}"
     volumes:
       - static_files:/var/www/one-progress/public
+      - app_log:/var/www/one-progress/log
     recreate: true
 
 - name: playbook内の秘密鍵ファイルを検索
@@ -113,4 +115,5 @@
       - app
     volumes:
       - static_files:/var/www/one-progress/public
+      - web_log:/var/log/nginx
     recreate: true
