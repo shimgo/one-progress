@@ -1,5 +1,5 @@
 user  nginx;
-worker_processes  1;
+worker_processes  auto;
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
@@ -39,39 +39,47 @@ http {
 
     # for TCP setups, point these to your backend servers
     # server 192.168.0.7:8080 fail_timeout=0;
-    server rails:3000 fail_timeout=0;
+    server app:3000 fail_timeout=0;
   }
 
   server {
-    listen       80;
+    listen 4443 ssl;
     server_name  localhost;
+    ssl_certificate /etc/nginx/{{ crt_file_name }};
+    ssl_certificate_key /etc/nginx/{{ key_file_name }};
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!MD5;
     client_max_body_size 4G;
     keepalive_timeout 5;
 
     # path for static files
-    root /opt/app/public;
+    root /var/www/one-progress/public;
 
     try_files $uri/index.html $uri.html $uri @app;
 
     location @app {
+      proxy_intercept_errors on;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $http_host;
+      proxy_set_header X-Forwarded-Proto https;
       proxy_redirect off;
       proxy_pass http://app_server;
     }
 
-    # Rails error pages
+    {% if rails_env == "production" %}
+      location ~ ^/assets/ {
+        root /var/www/one-progress/public;
+      }
+    {% endif %}
+
     error_page 500 502 503 504 /500.html;
     location = /500.html {
-      root /opt/app/public;
+      root /var/www/one-progress/public;
     }
+
     error_page 404 /404.html;
     location = /404.html {
-      root /opt/app/public;
-    }
-    error_page 422 /422.html;
-    location = /422.html {
-      root /opt/app/public;
+      root /var/www/one-progress/public;
     }
   }
 }

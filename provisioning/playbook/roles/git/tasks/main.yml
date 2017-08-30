@@ -1,0 +1,33 @@
+- name: Gitをコンパイルするための依存モジュールをインストール
+  yum: 
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - curl-devel
+    - expat-devel
+    - gettext-devel
+    - openssl-devel
+    - zlib-devel
+    - perl-ExtUtils-MakeMaker
+
+- name: ダウンロード用フォルダ作成
+  file:
+    path: /usr/local/src
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+
+- name: Gitのソースコードを解凍
+  unarchive:
+    src: https://www.kernel.org/pub/software/scm/git/git-2.9.4.tar.gz
+    dest: /usr/local/src
+    remote_src: yes
+
+- name: Gitをインストール
+  make:
+    chdir: /usr/local/src/git-2.9.4
+    target: install
+    params: 
+      prefix: /usr/local
+  changed_when: false
