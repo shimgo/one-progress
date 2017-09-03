@@ -36,7 +36,7 @@ $(document).on 'turbolinks:load', ->
       nextSelector: '#infinite-scroll-pagination .pagination a[rel=next]',
       itemSelector : '#all-tasks .task',
       loading: {
-        img: '/assets/loading.gif',
+        img: image_path('/assets/loading.gif')
         msgText: '',
         finishedMsg: '',
         speed: 0,
