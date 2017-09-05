@@ -1,0 +1,7 @@
+- name: アプリの実行に必要な環境変数をexportする設定ファイルを配置
+  template:
+    src: one_progress.sh.j2
+    dest: /etc/profile.d/one_progress.sh
+    owner: vagrant
+    group: vagrant
+    mode: "u+x"
