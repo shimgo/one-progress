@@ -8,3 +8,6 @@
     - git
     - docker-engine
     - containers
+    - hosts
+    - rbenv
+    - envirionments

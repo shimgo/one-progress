@@ -1,0 +1,16 @@
+- name: DBコンテナのIPアドレス取得
+  shell: |
+    {% raw %}
+    docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db
+    {% endraw %}
+  register: db_ip_address
+  changed_when: False
+
+- name: 結果
+  debug: 
+    msg: "{{ db_ip_address.stdout }}"
+
+- name: Generate /etc/hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
