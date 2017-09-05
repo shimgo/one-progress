@@ -9,3 +9,4 @@
     - docker-engine
     - containers
     - hosts
+    - rbenv
