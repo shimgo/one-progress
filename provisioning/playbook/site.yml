@@ -13,6 +13,7 @@
     - name: SELinuxを無効化
       selinux: state=disabled
   roles:
+    - firewall
     - git
     - docker-engine
     - containers
