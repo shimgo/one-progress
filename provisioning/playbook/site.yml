@@ -4,10 +4,23 @@
   pre_tasks:
     - name: Yum update
       yum: name=* state=latest
+
+    - name: policycoreutils-pythonをインストール
+      yum: 
+        name: policycoreutils-python
+        state: latest
+
+    - name: SELinuxを無効化
+      selinux: state=disabled
   roles:
+    - firewall
     - git
     - docker-engine
     - containers
     - hosts
     - rbenv
     - envirionments
+  tasks:
+    - name: SELinuxの有効化
+      selinux: state=enforcing policy=targeted
+

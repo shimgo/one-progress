@@ -1,0 +1,20 @@
+- name: reload firewalld
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+  changed_when: False
+
+- name: HTTPSの有効化
+  firewalld:
+    service: https
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: 3000番ポートを開放
+  firewalld:
+    port: 3000/tcp
+    permanent: true
+    state: enabled
+    immediate: yes
