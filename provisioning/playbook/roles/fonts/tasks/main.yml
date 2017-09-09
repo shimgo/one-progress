@@ -1,0 +1,29 @@
+- name: 日本語フォントディレクトリ作成
+  file:
+    dest: /usr/share/fonts/japanese/TrueType
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: unzipをインストール
+  yum:
+    name: unzip
+    state: present
+
+- name: 日本語フォントをダウンロード
+  unarchive:
+    remote_src: yes
+    src: http://dl.ipafont.ipa.go.jp/IPAexfont/IPAexfont00301.zip
+    dest: /tmp
+    creates: /tmp/IPAexfont00301
+
+- name: 日本語フォントファイルを配置
+  copy:
+    remote_src: yes
+    src: "{{ item }}"
+    dest: /usr/share/fonts/japanese/TrueType
+  with_items:
+    - /tmp/IPAexfont00301/ipaexg.ttf
+    - /tmp/IPAexfont00301/ipaexm.ttf
+

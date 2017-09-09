@@ -20,6 +20,8 @@
     - hosts
     - rbenv
     - envirionments
+    - phantomjs
+    - fonts
   tasks:
     - name: SELinuxの有効化
       selinux: state=enforcing policy=targeted
