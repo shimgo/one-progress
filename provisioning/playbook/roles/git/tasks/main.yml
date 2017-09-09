@@ -23,6 +23,7 @@
     src: https://www.kernel.org/pub/software/scm/git/git-2.9.4.tar.gz
     dest: /usr/local/src
     remote_src: yes
+    creates: /usr/local/src/git-2.9.4
 
 - name: Gitをインストール
   make:
