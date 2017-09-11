@@ -1,4 +1,4 @@
-- hosts: staging
+- hosts: site
   become: true
   user: vagrant
   pre_tasks:
@@ -17,11 +17,11 @@
     - git
     - docker-engine
     - containers
-    - hosts
-    - rbenv
-    - envirionments
-    - phantomjs
-    - fonts
+    - { role: hosts,         when: stage == 'staging' }
+    - { role: rbenv,         when: stage == 'staging' }
+    - { role: envirionments, when: stage == 'staging' }
+    - { role: phantomjs,     when: stage == 'staging' }
+    - { role: fonts,         when: stage == 'staging' }
   tasks:
     - name: SELinuxの有効化
       selinux: state=enforcing policy=targeted

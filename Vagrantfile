@@ -16,8 +16,8 @@ Vagrant.configure(2) do |config|
 
     vb.vm.provision "ansible" do |ansible|
       ansible.playbook       = "provisioning/playbook/site.yml"
-      ansible.inventory_path = "provisioning/playbook/hosts"
-      ansible.limit          = "staging"
+      ansible.inventory_path = "provisioning/playbook/staging"
+      ansible.limit          = "site"
     end
   end
 end
