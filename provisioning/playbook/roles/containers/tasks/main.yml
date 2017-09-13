@@ -1,8 +1,9 @@
-- name: ソースを取得して配置
+- name: ソースを配置
   git:
     repo: "{{ repository }}"
-    dest: "{{ containers_dir }}/rails/one-progress"
+    dest: "{{ repository_dest }}"
     version: "{{ version }}"
+  become: no
 
 - name: my.cnfの配置
   template:
@@ -25,6 +26,13 @@
     volumes:
       - data_files:/var/lib/mysql
       - db_log:/var/log/mysql
+
+- name: アプリケーションコンテナ用のソースを配置
+  git:
+    repo: "{{ repository }}"
+    dest: "{{ containers_dir }}/rails/one-progress"
+    version: "{{ version }}"
+  become: no
 
 - name: アプリケーションコンテナのログフォルダを作成
   file: 
