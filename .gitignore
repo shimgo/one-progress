@@ -21,6 +21,7 @@ site.retry
 .vagrant
 /provisioning/production/config/secrets.yml
 /provisioning/playbook/host_vars/one-progress.yml
+/provisioning/playbook/roles/containers/vars/*
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
@@ -52,3 +53,6 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# 空ディレクトリを登録可能にするためにこの設定は必ず最終行に書くこと
+!.gitkeep
