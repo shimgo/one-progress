@@ -34,14 +34,6 @@
     version: "{{ version }}"
   become: no
 
-- name: アプリケーションコンテナのログフォルダを作成
-  file: 
-    dest: "{{ containers_dir }}/rails/one-progress/log"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-
 - name: アプリケーションコンテナのビルド
   docker_image:
     path: "{{ containers_dir }}/rails"
