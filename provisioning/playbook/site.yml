@@ -16,12 +16,14 @@
     - firewall
     - git
     - docker-engine
+    - { role: certbot,           when: stage == 'production' }
+    - { role: dummy_certificate, when: stage == 'staging' }
     - containers
-    - { role: hosts,         when: stage == 'staging' }
-    - { role: rbenv,         when: stage == 'staging' }
-    - { role: envirionments, when: stage == 'staging' }
-    - { role: phantomjs,     when: stage == 'staging' }
-    - { role: fonts,         when: stage == 'staging' }
+    - { role: hosts,             when: stage == 'staging' }
+    - { role: rbenv,             when: stage == 'staging' }
+    - { role: envirionments,     when: stage == 'staging' }
+    - { role: phantomjs,         when: stage == 'staging' }
+    - { role: fonts,             when: stage == 'staging' }
   tasks:
     - name: SELinuxの有効化
       selinux: state=enforcing policy=targeted

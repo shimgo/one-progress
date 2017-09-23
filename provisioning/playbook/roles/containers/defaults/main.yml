@@ -1,6 +1,5 @@
-key_file_name: one-progress.key
-crt_file_name: one-progress.crt
-local_certificate_dir: "{{ playbook_dir }}/roles/containers/files/certificate"
+certificate_path: "/etc/nginx/certificate/live/{{ domain }}/fullchain.pem"
+certificate__key_path: "/etc/nginx/certificate/live/{{ domain }}/privkey.pem"
 rails_env: production
 db_user: root
 db_password: pass

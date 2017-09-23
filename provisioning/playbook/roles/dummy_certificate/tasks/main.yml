@@ -1,0 +1,17 @@
+- name: 証明書ディレクトリを作成
+  file: 
+    dest: "/home/vagrant/certificate/live/{{ domain }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: ダミーの秘密鍵の配置
+  copy:
+    src: privkey.pem
+    dest: "/home/vagrant/certificate/live/{{ domain }}/privkey.pem"
+
+- name: ダミーの証明書の配置
+  copy:
+    src: fullchain.pem
+    dest: "/home/vagrant/certificate/live/{{ domain }}/fullchain.pem"
