@@ -21,7 +21,7 @@ site.retry
 .vagrant
 /provisioning/production/config/secrets.yml
 /provisioning/playbook/host_vars/one-progress.yml
-/provisioning/playbook/roles/containers/vars/*
+/provisioning/playbook/roles/*/vars/*
 
 # TODO Comment out this rule if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
