@@ -63,6 +63,9 @@
     src: nginx.conf.j2
     dest: "{{ containers_dir }}/nginx/nginx.conf"
 
+- name: DH鍵交換に使用する鍵を生成
+  shell: openssl dhparam 4096 -out "{{ containers_dir }}/nginx/dhparam.pem"
+
 - name: Webコンテナのビルド
   docker_image:
     path: "{{ containers_dir }}/nginx"
