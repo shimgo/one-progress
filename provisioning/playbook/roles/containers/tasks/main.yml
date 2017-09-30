@@ -64,7 +64,7 @@
     dest: "{{ containers_dir }}/nginx/nginx.conf"
 
 - name: DH鍵交換に使用する鍵を生成
-  shell: openssl dhparam 4096 -out "{{ containers_dir }}/nginx/dhparam.pem"
+  shell: openssl dhparam 2048 -out "{{ containers_dir }}/nginx/dhparam.pem"
 
 - name: Webコンテナのビルド
   docker_image:
