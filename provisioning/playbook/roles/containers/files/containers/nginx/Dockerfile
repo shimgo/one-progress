@@ -1,7 +1,7 @@
 FROM nginx:1.12.1
 ADD nginx.conf /etc/nginx/nginx.conf
-ADD one-progress.crt /etc/nginx/one-progress.crt
-ADD one-progress.key /etc/nginx/one-progress.key
+ADD dhparam.pem /etc/nginx/ssl/dhparam.pem
+RUN chown -R nginx:nginx /etc/nginx/ssl/dhparam.pem
 RUN touch /var/run/nginx.pid
 RUN chown -R nginx:nginx /var/run/nginx.pid
 RUN chown -R nginx:nginx /var/cache/nginx

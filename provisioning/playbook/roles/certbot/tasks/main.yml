@@ -1,0 +1,35 @@
+- name: certbot設定ファイルディレクトリを作成
+  file: 
+    dest: "{{ container_dir }}/config"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: cli.iniの配置
+  template:
+    src: cli.ini.j2
+    dest: "{{ container_dir }}/config/cli.ini"
+
+- name: Certbotコンテナの起動
+  docker_container:
+    name: mycertbot
+    image: certbot/certbot:latest
+    recreate: yes
+    command: certonly
+    ports:
+      - 80:80
+    volumes:
+      - certbot_log:/var/log/letsencrypt
+      - /home/vagrant/certificate:/etc/letsencrypt
+      - "{{ container_dir }}/config:/root/.config/letsencrypt"
+
+- name: 証明書ディレクトリの権限変更
+  file: 
+    dest: "{{ item }}"
+    recurse: yes
+    state: directory
+    mode: 0755
+  with_items:
+    - /home/vagrant/certificate/live
+    - /home/vagrant/certificate/archive

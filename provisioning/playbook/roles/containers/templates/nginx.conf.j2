@@ -45,10 +45,11 @@ http {
   server {
     listen 4443 ssl;
     server_name  localhost;
-    ssl_certificate /etc/nginx/{{ crt_file_name }};
-    ssl_certificate_key /etc/nginx/{{ key_file_name }};
+    ssl_certificate     {{ certificate_path }};
+    ssl_certificate_key {{ certificate__key_path }};
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_ciphers 'kEECDH+ECDSA+AES128 kEECDH+ECDSA+AES256 kEECDH+AES128 kEECDH+AES256 kEDH+AES128 kEDH+AES256 DES-CBC3-SHA +SHA !aNULL !eNULL !LOW !kECDH !DSS !MD5 !EXP !PSK !SRP !CAMELLIA !SEED';
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
     client_max_body_size 4G;
     keepalive_timeout 5;
 

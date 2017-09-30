@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'yaml'
+
+FIRST_PROVISIONING_OUTPUT = "../playbook/host_vars/one-progress.yml"
+SECRETS                   = YAML.load_file("config/secrets.yml")
+
+class Plugin < Vagrant.plugin('2')
+  name 'create switch file'
+  action_hook :create_switch_file, :provisioner_run do |hook|
+    hook.after(
+      :run_provisioner,
+      lambda do |env|
+        return unless env[:provisioner_name] == :shell
+
+        File.open(FIRST_PROVISIONING_OUTPUT,"w") do |f| 
+          f.puts("ansible_ssh_port: #{SECRETS["ssh_port"]}")
+        end
+        p "SELinuxの設定を変更しました。再起動してください。"
+      end
+    )
+  end
+end
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+  config.vm.define :one_progress do |vb|
+    vb.vm.box = "tknerr/managed-server-dummy"
+
+    vb.vm.provider :managed do |managed, override|
+      managed.server                = SECRETS["server"]
+      override.ssh.username         = "vagrant"
+      override.ssh.private_key_path = SECRETS["ssh_private_key_path"]
+    end
+
+    if File.exists?(FIRST_PROVISIONING_OUTPUT)
+      puts "SSHポート#{SECRETS["ssh_port"]}で接続"
+      vb.ssh.port = SECRETS["ssh_port"]
+    end
+
+    vb.vm.provision "ansible" do |ansible|
+      ansible.playbook       = "../playbook/site.yml"
+      ansible.inventory_path = "../playbook/production"
+      ansible.limit          = "site"
+    end
+
+    # 初回起動時にだけ必要なプロビジョニング
+    unless File.exists?(FIRST_PROVISIONING_OUTPUT)
+      vb.vm.provision "shell", path: "run_once.sh", args: SECRETS["ssh_port"]
+    end
+  end
+end

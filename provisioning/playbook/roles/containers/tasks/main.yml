@@ -1,8 +1,9 @@
-- name: ソースを取得して配置
+- name: ソースを配置
   git:
     repo: "{{ repository }}"
-    dest: "{{ containers_dir }}/rails/one-progress"
+    dest: "{{ repository_dest }}"
     version: "{{ version }}"
+  become: no
 
 - name: my.cnfの配置
   template:
@@ -26,13 +27,12 @@
       - data_files:/var/lib/mysql
       - db_log:/var/log/mysql
 
-- name: アプリケーションコンテナのログフォルダを作成
-  file: 
-    dest: "{{ containers_dir }}/rails/one-progress/log"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
+- name: アプリケーションコンテナ用のソースを配置
+  git:
+    repo: "{{ repository }}"
+    dest: "{{ containers_dir }}/rails/one-progress"
+    version: "{{ version }}"
+  become: no
 
 - name: アプリケーションコンテナのビルド
   docker_image:
@@ -58,46 +58,13 @@
       - app_log:/var/www/one-progress/log
     recreate: true
 
-- name: playbook内の秘密鍵ファイルを検索
-  debug:
-    msg: item
-  register: res
-  with_first_found:
-    - files: "{{ local_certificate_dir }}/{{ key_file_name }}"
-      skip: true
-
-- name: 秘密鍵ファイルの検索結果を確認
-  fail:
-    msg: "秘密鍵ファイル{{ local_certificate_dir }}/{{ key_file_name }}が存在しません。"
-  when: res.results == []
-
-- name: 秘密鍵の配置
-  copy:
-    src: certificate/{{ key_file_name }}
-    dest: "{{ containers_dir }}/nginx/{{ key_file_name }}"
-
-- name: playbook内の証明書ファイルを検索
-  debug:
-    msg: item
-  register: res
-  with_first_found:
-    - files: "{{ local_certificate_dir }}/{{ crt_file_name }}"
-      skip: true
-
-- name: 証明書ファイルの検索結果を確認
-  fail:
-    msg: "証明書ファイル{{ local_certificate_dir }}/{{ crt_file_name }}が存在しません。"
-  when: res.results == []
-
-- name: 証明書の配置
-  copy:
-    src: certificate/{{ crt_file_name }}
-    dest: "{{ containers_dir }}/nginx/{{ crt_file_name }}"
-
 - name: nginx.confの配置
   template:
     src: nginx.conf.j2
     dest: "{{ containers_dir }}/nginx/nginx.conf"
+
+- name: DH鍵交換に使用する鍵を生成
+  shell: openssl dhparam 2048 -out "{{ containers_dir }}/nginx/dhparam.pem"
 
 - name: Webコンテナのビルド
   docker_image:
@@ -117,4 +84,5 @@
     volumes:
       - static_files:/var/www/one-progress/public:z
       - web_log:/var/log/nginx
+      - /home/vagrant/certificate:/etc/nginx/certificate
     recreate: true
