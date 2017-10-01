@@ -6,8 +6,8 @@ db_password: pass
 version: master
 twitter_api_key: test_api_key
 twitter_api_secret: test_api_secret
+repository: https://github.com/shimgo/one-progress.git
 repository_dest: /home/vagrant/one-progress
-containers_dir: "{{ repository_dest }}/provisioning/playbook/roles/containers/files/containers"
-repository: /vagrant
+containers_dir: /home/vagrant/containers
 db_general_log: /var/log/mysql/general.log
 db_error_log: /var/log/mysql/error.log
