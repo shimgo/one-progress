@@ -65,6 +65,8 @@
 
 - name: DH鍵交換に使用する鍵を生成
   shell: openssl dhparam 2048 -out "{{ containers_dir }}/nginx/dhparam.pem"
+  args:
+    creates: "{{ containers_dir }}/nginx/dhparam.pem"
 
 - name: Webコンテナのビルド
   docker_image:
