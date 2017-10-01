@@ -5,6 +5,12 @@
     version: "{{ version }}"
   become: no
 
+- name: コンテナファイルを配置
+  copy:
+    src: containers
+    dest: /home/vagrant
+  become: no
+
 - name: my.cnfの配置
   template:
     src: my.cnf.j2
