@@ -1,0 +1,23 @@
+%div.text-center
+  %div.lead ログイン
+  = form_for(User.new, url: login_path, class:'form-horizontal', role: 'form') do |f|
+    - if flash[:notice]
+      %div.alert.alert-success
+        = flash[:notice]
+    - if flash[:alert]
+      %div.alert.alert-danger
+        %ul
+          - flash[:alert].each do |msg|
+            %li
+              = msg
+    %div.form-group
+      = f.text_field :username, class: 'form-control', size: 20, placeholder: 'ユーザー名'
+    = f.submit 'ゲストユーザーでログイン', class: 'btn btn-primary btn-block', data: {disable_with: 'ログイン中'}
+    %small.text-muted
+      ※ゲストユーザーはログアウトすると無効になります
+  %h5.text-divider
+    %span
+      または
+  = link_to('/auth/twitter', {class: 'btn btn-primary btn-twitter btn-block'}) do
+    = icon('twitter')
+    &nbspTwitterでログイン

@@ -1,0 +1,17 @@
+%div.page-header
+  %h1
+    退会の確認
+%p
+  退会した場合、ユーザに関するデータが全て削除されます。
+%button.btn.btn-danger{'data-toggle' => "modal", 'data-target' => '#retire'}
+  退会する
+%div.modal.fade{'id' => 'retire', 'tabindex' => "-1", 'role' => "dialog", 'aria-labelledby' => "dialogHeader", 'aria-hidden' => "true"}
+  %div.modal-dialog.modal-sm
+    %div.modal-content
+      %div.modal-header
+        退会しますか？
+      %div.modal-footer
+        %button.btn.btn-default{'type' => "button", 'data-dismiss' => "modal"}
+          キャンセル
+        = link_to('退会', user_path, class: "btn btn-danger bold", method: :delete)
+             

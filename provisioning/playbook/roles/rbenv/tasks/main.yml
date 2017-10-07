@@ -1,0 +1,66 @@
+- name: 依存パッケージのインストール
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - gcc
+    - gcc-c++
+    - zlib-devel
+    - openssl-devel
+    - sqlite
+    - sqlite-devel
+    - mysql-devel
+    - libffi-devel
+    - readline-devel
+
+- name: rbenvをダウンロード
+  git:
+    repo: https://github.com/sstephenson/rbenv.git
+    dest: /home/vagrant/.rbenv/
+
+- name: ruby-buildをダウンロード
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: /home/vagrant/.rbenv/plugins/ruby-build/
+
+- name: rbenv用の初期化スクリプトを配置
+  copy:
+    src: rbenv.sh
+    dest: /etc/profile.d/rbenv.sh
+    owner: vagrant
+    group: vagrant
+    mode: "u+x"
+
+- name: .rbenvディレクトリの所有者を変更
+  file:
+    path: /home/vagrant/.rbenv
+    owner: vagrant
+    group: vagrant
+    state: directory
+    recurse: yes
+
+- name: 目的のバージョンがインストールされているか確認
+  shell: rbenv versions | grep {{ ruby_version }}
+  become: no
+  register: purpose_version_installed
+  failed_when: purpose_version_installed.rc not in [0, 1]
+  changed_when: False
+
+- name: rbenvでrRubyをインストール
+  shell: rbenv install -v {{ ruby_version }}
+  become: no
+  when: purpose_version_installed|failed
+
+- name: rehash
+  shell: rbenv rehash
+  become: no
+
+- name: rbenvでRubyのバージョンを切り替え
+  shell: rbenv global {{ ruby_version }}
+  become: no
+
+- name: bundlerをインストール
+  gem:
+    name: bundler
+    executable: .rbenv/shims/gem
+    user_install: False

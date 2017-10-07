@@ -1,0 +1,4 @@
+[site]
+one-progress ansible_host=160.16.208.50
+[all:vars]
+stage = production

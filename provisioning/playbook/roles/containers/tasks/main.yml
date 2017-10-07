@@ -1,0 +1,96 @@
+- name: ソースを配置
+  git:
+    repo: "{{ repository }}"
+    dest: "{{ repository_dest }}"
+    version: "{{ version }}"
+  become: no
+
+- name: コンテナファイルを配置
+  copy:
+    src: containers
+    dest: /home/vagrant
+  become: no
+
+- name: my.cnfの配置
+  template:
+    src: my.cnf.j2
+    dest: "{{ containers_dir }}/mysql/my.cnf"
+
+- name: DBコンテナのビルド
+  docker_image:
+    path: "{{ containers_dir }}/mysql"
+    name: db
+    force: true
+
+- name: DBコンテナの起動
+  docker_container:
+    user: mysql
+    name: db
+    image: db
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ db_password }}"
+    volumes:
+      - data_files:/var/lib/mysql
+      - db_log:/var/log/mysql
+
+- name: アプリケーションコンテナ用のソースを配置
+  git:
+    repo: "{{ repository }}"
+    dest: "{{ containers_dir }}/rails/one-progress"
+    version: "{{ version }}"
+  become: no
+
+- name: アプリケーションコンテナのビルド
+  docker_image:
+    path: "{{ containers_dir }}/rails"
+    name: app
+    force: yes
+
+- name: アプリケーションコンテナの起動
+  docker_container:
+    user: rails
+    name: app
+    image: app
+    links:
+      - db
+    env:
+      RAILS_ENV: "{{ rails_env }}"
+      DB_USER: "{{ db_user }}"
+      DB_PASSWORD: "{{ db_password }}"
+      TWITTER_API_KEY_PRODUCTION: "{{ twitter_api_key }}"
+      TWITTER_API_SECRET_KEY_PRODUCTION: "{{ twitter_api_secret }}"
+    volumes:
+      - static_files:/var/www/one-progress/public:z
+      - app_log:/var/www/one-progress/log
+    recreate: true
+
+- name: nginx.confの配置
+  template:
+    src: nginx.conf.j2
+    dest: "{{ containers_dir }}/nginx/nginx.conf"
+
+- name: DH鍵交換に使用する鍵を生成
+  shell: openssl dhparam 2048 -out "{{ containers_dir }}/nginx/dhparam.pem"
+  args:
+    creates: "{{ containers_dir }}/nginx/dhparam.pem"
+
+- name: Webコンテナのビルド
+  docker_image:
+    path: "{{ containers_dir }}/nginx"
+    name: web
+    force: true
+
+- name: Webコンテナの起動
+  docker_container:
+    user: nginx
+    name: web
+    image: web
+    ports:
+      - 443:4443
+    links:
+      - app
+    volumes:
+      - static_files:/var/www/one-progress/public:z
+      - web_log:/var/log/nginx
+      - /home/vagrant/certificate:/etc/nginx/certificate
+    recreate: true

@@ -1,0 +1,52 @@
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title OneProgress
+    %meta{charset: "utf-8"}/
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}/
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    %div.container-fluid
+      %div.row.no-gutter
+        %div.col-xs-12
+          %header
+            %nav.navbar.navbar-default{role: "navigation"}
+              %div.navbar-header
+                %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+                  %span.sr-only Toggle navigation
+                  %span.icon-bar
+                  %span.icon-bar
+                  %span.icon-bar
+                = link_to 'OneProgress', root_path, class: 'navbar-brand', id: 'logo'
+              %div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+                %ul.nav.navbar-nav.navbar-right
+                  %li
+                    %a#help-link.dummy-link
+                      ヘルプ
+                  - if logged_in?
+                    - if current_user.twitter_user
+                      %li
+                        = link_to '退会', retire_user_path
+                    %li
+                      = link_to 'ログアウト', logout_path
+      .row#help.help
+        .col-xs-12
+          %h3
+            OneProgressは、ひとりで頑張れない人のための作業スペースです
+          %ul
+            %li
+              まずはタスクを作成しましょう。
+            %li
+              取り組むタスクの開始ボタンを押します。
+            %li
+              開始したタスクはすべてのユーザーに公開されます。人目を気にして頑張りましょう。
+            %li
+              開始状態にできるタスクは1つだけです。中断か完了するまでは他のタスクを開始できません。
+          %div#close-help.h3.text-center
+            %span.glyphicon.glyphicon-chevron-up
+      .row
+        .col-xs-12
+          = yield

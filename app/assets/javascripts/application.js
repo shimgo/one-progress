@@ -12,5 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
 //= require turbolinks
+//= require jquery.infinitescroll
+//= require masonry.pkgd.min.js
+//= require imagesloaded.pkgd.min.js
+//= require js.cookie.js
 //= require_tree .

@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# gem 'sqlite3'
+gem 'mysql2', '~> 0.3.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 gem 'unicorn'
@@ -32,15 +32,39 @@ gem 'unicorn'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-group :development, :test do
-  gem 'rspec-rails', '3.0.0'
-  gem 'pry-rails'
-  gem 'pry-nav'
+gem 'backport_new_renderer', '~> 1.0.0'
+gem 'font-awesome-sass', '~> 4.7.0'
+gem 'bootstrap-sass', '3.2.0.0'
+gem 'default_value_for', '~> 3.0.0'
+gem 'haml-rails', '0.9.0'
+gem 'kaminari', '~> 0.17.0'
+gem 'kaminari-bootstrap', '~> 3.0.1'
+gem 'omniauth', '~> 1.6.0'
+gem 'omniauth-twitter', '~> 1.2.0'
+gem 'settingslogic', '2.0.0'
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+group :development, :test do
+  gem 'factory_girl_rails', '~> 4.4.1'
+  gem 'pry-nav'
+  gem 'pry-rails'
+  gem 'rspec-rails', '~> 3.5.0'
+  gem 'yard'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
 
+group :development do
+  gem 'rubocop', require: false
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+end
+
+group :test do
+  gem 'capybara', '~> 2.12.0'
+  gem 'database_cleaner', '~> 1.3.0'
+  gem 'faker', '~> 1.4.3'
+  gem 'launchy', '~> 2.4.2'
+  gem 'poltergeist', '~> 1.14.0'
+  gem 'timecop', '~> 0.8.0'
+end

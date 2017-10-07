@@ -1,0 +1,39 @@
+%div.col-xs-12.col-lg-6.task
+  %div.panel.panel-default
+    %div.panel-body
+      %div.row
+        %div.col-xs-2.text-center.no-gutter
+          - if task.owner.twitter_user
+            = link_to(url_for_twitter(task.owner.twitter_user)) do
+              = image_tag task.owner.image_url
+          - if task.owner.guest_user
+            = image_tag 'guest_user.png'
+        %div.col-xs-10.no-gutter
+          - if task.owner.twitter_user
+            = link_twitter_user_name(task.owner.twitter_user)
+          - if task.owner.guest_user
+            %span.h5.bold
+              = task.owner.username
+          %br
+          %span.break-word
+            = task.content
+    %div.panel-footer
+      %div.row
+        %div.col-xs-6
+          %div.small.text-muted
+            開始:  
+            - if task.started?
+              = task.started_at.strftime("%Y/%m/%d %H:%M") 
+            - elsif task.resumed?
+              = task.resumed_at.strftime("%Y/%m/%d %H:%M") 
+            %br
+            目標: 
+            = task.finish_targeted_at.strftime("%Y/%m/%d %H:%M")
+        %div.col-xs-6.text-right
+          - if task.owner?(current_user)
+            = link_to(suspend_task_path(task), class: "btn btn-primary horizontal-margin", method: :patch) do
+              %span.glyphicon.glyphicon-pause
+              中断
+            = link_to(finish_task_path(task), class: "btn btn-primary horizontal-margin", method: :patch) do
+              %span.glyphicon.glyphicon-ok
+              完了
