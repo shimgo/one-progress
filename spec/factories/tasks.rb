@@ -20,5 +20,12 @@ FactoryGirl.define do
       started_at Time.now.ago(3600).utc
       suspended_at Time.now.ago(3000).utc
     end
+
+    trait :resumed_task do
+      status :resumed
+      started_at Time.now.ago(3600).utc
+      suspended_at Time.now.ago(3000).utc
+      resumed_at Time.now.ago(2400).utc
+    end
   end
 end
