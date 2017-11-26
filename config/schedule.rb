@@ -20,3 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 #
 set :output, "/var/www/one-purposes/log"
+
+every 1.hours do
+  runner "Batches::TaskMaintainer.suspend_tasks"
+end
