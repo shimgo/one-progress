@@ -42,6 +42,7 @@ gem 'kaminari-bootstrap', '~> 3.0.1'
 gem 'omniauth', '~> 1.6.0'
 gem 'omniauth-twitter', '~> 1.2.0'
 gem 'settingslogic', '2.0.0'
+gem 'whenever', '0.10.0', require: false
 
 group :development, :test do
   gem 'factory_girl_rails', '~> 4.4.1'
