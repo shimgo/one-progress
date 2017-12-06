@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 #
-set :output, "/var/www/one-purposes/log"
+set :output, "/var/www/one-progress/log/batch.log"
 
 every 1.hours do
   runner "Batches::TaskMaintainer.suspend_tasks"
