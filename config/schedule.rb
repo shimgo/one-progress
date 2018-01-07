@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 #
+# cronジョブ実行時は環境変数が引き継がれないのでここで渡す
+ENV.each{|k,v| env k.to_sym, v}
+
 set :output, "/var/www/one-progress/log/batch.log"
 
 every 1.hours do
