@@ -64,6 +64,27 @@
       - app_log:/var/www/one-progress/log
     recreate: true
 
+- name: バッチコンテナのビルド
+  docker_image:
+    path: "{{ containers_dir }}/cron"
+    name: batch
+    force: yes
+    pull: no
+
+- name: バッチコンテナの起動
+  docker_container:
+    name: batch
+    image: batch
+    links:
+      - db
+    env:
+      RAILS_ENV: "{{ rails_env }}"
+      DB_USER: "{{ db_user }}"
+      DB_PASSWORD: "{{ db_password }}"
+    volumes:
+      - batch_log:/var/www/one-progress/log
+    recreate: true
+
 - name: nginx.confの配置
   template:
     src: nginx.conf.j2

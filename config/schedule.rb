@@ -19,4 +19,11 @@
 
 # Learn more: http://github.com/javan/whenever
 #
-set :output, "/var/www/one-purposes/log"
+# cronジョブ実行時は環境変数が引き継がれないのでここで渡す
+ENV.each{|k,v| env k.to_sym, v}
+
+set :output, "/var/www/one-progress/log/batch.log"
+
+every 1.hours do
+  runner "Batches::TaskMaintainer.suspend_tasks"
+end
