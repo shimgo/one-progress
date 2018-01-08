@@ -1,9 +1,9 @@
 FROM app
 
 RUN apt-get update && apt-get install -y cron --no-install-recommends && rm -rf /var/lib/apt/lists/*
-USER rails
-RUN bundle exec whenever --clear-crontab
-RUN bundle exec whenever --update-crontab
-USER root
+WORKDIR /var/www/one-progress
+ADD ./cron.sh ./
+RUN chmod a+x ./cron.sh
+
 ENTRYPOINT [""]
-CMD ["cron", "-f"]
+CMD ["./cron.sh"]
